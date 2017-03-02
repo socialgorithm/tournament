@@ -1,0 +1,27 @@
+{
+  "name": "ultimate-ttt-web",
+  "version": "0.0.1",
+  "description": "Web for Ultimate TTT Battles",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aurbano/ultimate-ttt-web.git"
+  },
+  "keywords": [
+    "ultimate",
+    "tic",
+    "tac",
+    "toe",
+    "algorithm",
+    "client"
+  ],
+  "author": "Alejandro U. Alvarez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aurbano/ultimate-ttt-web/issues"
+  },
+  "homepage": "https://github.com/aurbano/ultimate-ttt-web#readme"
+}
