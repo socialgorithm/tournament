@@ -23,8 +23,16 @@
   },
   "homepage": "https://urbanoalvarez.es/ultimate-ttt-web",
   "dependencies": {
+    "immutable": "^3.8.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-redux": "^5.0.3",
+    "react-router": "^3.0.2",
+    "react-router-redux": "^4.0.8",
+    "react-router-scroll": "^0.4.1",
+    "redux": "^3.6.0",
+    "redux-history-transitions": "^2.2.0",
+    "redux-immutable": "^3.1.0",
     "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.67.0"
   },

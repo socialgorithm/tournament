@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Container, Input } from 'semantic-ui-react';
 
-import './App.css';
+import './index.css';
 
 class App extends Component {
   render() {
@@ -21,7 +21,7 @@ class App extends Component {
           </Menu.Menu>
         </Menu>
         <Container>
-          Things...
+          { React.Children.toArray(this.props.children) }
         </Container>
       </div>
     );
