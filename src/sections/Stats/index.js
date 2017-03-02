@@ -1,12 +1,12 @@
 import React from 'react';
 
-class HomePage extends React.Component {
+class Stats extends React.Component {
   render() {
     return (
       <div>
-        Not found!
+        Home page content
       </div>
     );
   }
 }
-export default HomePage;
+export default Stats;

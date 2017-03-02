@@ -1,23 +1,38 @@
 import App from './sections/App';
-import HomePage from './sections/HomePage';
-import NotFoundPage from './sections/NotFoundPage';
 
 export default function createRoutes() {
-  return [
-    {
-      component: { App },
-      childRoutes: [
-        {
-          path: '/',
-          name: 'home',
-          component: { HomePage },
+  return {
+    path: '/',
+    component: App,
+    indexRoute: { onEnter: (nextState, replace) => replace('/stats') },
+    childRoutes: [
+      {
+        path: '/stats',
+        name: 'stats',
+        getComponent: (nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, require('./sections/Stats'))
+          })
         },
-        {
-          path: '*',
-          name: 'notfound',
-          component: { NotFoundPage },
+      },
+      {
+        path: '/about',
+        name: 'about',
+        getComponent: (nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, require('./sections/About'))
+          })
         },
-      ]
-    },
-  ];
+      },
+      {
+        path: '*',
+        name: 'notfound',
+        getComponent: (nextState, cb) => {
+          require.ensure([], (require) => {
+            cb(null, require('./sections/NotFoundPage'))
+          })
+        },
+      },
+    ],
+  };
 }
