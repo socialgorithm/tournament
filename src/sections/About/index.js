@@ -1,16 +1,12 @@
 import React from 'react';
+import { Header } from 'semantic-ui-react';
 
 class About extends React.Component {
-  constructor(){
-    super();
-    console.log('about');
-  }
-
   render() {
-    console.log('render about');
     return (
       <div>
-        About this
+        <Header>Getting Started</Header>
+        <p>Welcome to the docs, I'm still writing them though!</p>
       </div>
     );
   }
