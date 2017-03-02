@@ -24,7 +24,9 @@
   "homepage": "https://urbanoalvarez.es/ultimate-ttt-web",
   "dependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "semantic-ui-css": "^2.2.9",
+    "semantic-ui-react": "^0.67.0"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0",
