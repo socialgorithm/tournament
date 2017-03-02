@@ -1,11 +1,8 @@
 {
   "name": "ultimate-ttt-web",
-  "version": "0.0.1",
-  "description": "Web for Ultimate TTT Battles",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest"
-  },
+  "version": "0.1.0",
+  "description": "Ultimate Tic Tac Toe Algorithm - Web Client",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aurbano/ultimate-ttt-web.git"
@@ -15,13 +12,27 @@
     "tic",
     "tac",
     "toe",
+    "web",
     "algorithm",
-    "client"
+    "battle"
   ],
   "author": "Alejandro U. Alvarez",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/aurbano/ultimate-ttt-web/issues"
   },
-  "homepage": "https://github.com/aurbano/ultimate-ttt-web#readme"
+  "homepage": "https://github.com/aurbano/ultimate-ttt-web#readme",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
 }
