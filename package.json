@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/aurbano/ultimate-ttt-web/issues"
   },
-  "homepage": "https://urbanoalvarez.es/ultimate-ttt-web",
+  "homepage": "https://uttt.urbanoalvarez.es/",
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.4.2",
