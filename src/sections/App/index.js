@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
+import Socket from '../../containers/SocketContainer';
 
 import './index.css';
 
@@ -10,6 +11,7 @@ class App extends React.Component {
     return (
       <div>
         <Header />
+        <Socket />
         <Container>
           { this.props.children }
         </Container>

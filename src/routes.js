@@ -5,23 +5,23 @@ export default function createRoutes() {
     {
       path: '/',
       component: App,
-      indexRoute: { onEnter: (nextState, replace) => replace('/stats') },
+      indexRoute: { onEnter: (nextState, replace) => replace('/about') },
       childRoutes: [
-        {
-          path: '/stats',
-          name: 'stats',
-          getComponent: (nextState, cb) => {
-            require.ensure([], (require) => {
-              cb(null, require('./sections/Stats').default)
-            })
-          },
-        },
         {
           path: '/about',
           name: 'about',
           getComponent: (nextState, cb) => {
             require.ensure([], (require) => {
               cb(null, require('./sections/About').default)
+            })
+          },
+        },
+        {
+          path: '/stats',
+          name: 'stats',
+          getComponent: (nextState, cb) => {
+            require.ensure([], (require) => {
+              cb(null, require('./sections/Stats').default)
             })
           },
         },

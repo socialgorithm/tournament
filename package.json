@@ -37,7 +37,8 @@
     "reselect": "^2.5.4",
     "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.67.0",
-    "socket.io-client": "^1.7.3"
+    "socket.io-client": "^1.7.3",
+    "ultimate-ttt": "^2.1.2"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0",

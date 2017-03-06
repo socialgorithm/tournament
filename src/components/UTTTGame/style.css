@@ -1,0 +1,46 @@
+.ttt {
+    position: relative;
+}
+
+.ttt-board-row {
+    height: 32%;
+    border-bottom: solid 3px #fff;
+}
+
+.ttt-board-row:last-child {
+    border-bottom: none;
+}
+
+.ttt-board {
+    width: 31%;
+    height: 100%;
+    display: inline-table;
+    border-right: solid 3px #fff;
+    background: #efefef;
+}
+
+.ttt-board:last-child {
+    border-right: none;
+}
+
+.ttt-row {
+    display: table-row;
+}
+
+.ttt-cell {
+    width: 32%;
+    height: 32%;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border-right: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+}
+
+.ttt-cell:last-child {
+    border-right: none;
+}
+
+.ttt-row:last-child .ttt-cell {
+    border-bottom: none;
+}
