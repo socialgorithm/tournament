@@ -6,7 +6,9 @@ class About extends React.Component {
     return (
       <div>
         <Header>Getting Started</Header>
-        <p>Welcome to the docs, I'm still writing them though!</p>
+        <p>
+          Welcome to the docs, I'm still writing them though!
+        </p>
       </div>
     );
   }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Menu, Input, Icon } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
+
+import Server from '../../containers/ServerContainer';
 
 class Header extends React.Component {
   constructor() {
@@ -44,7 +46,7 @@ class Header extends React.Component {
             Github
           </Menu.Item>
           <Menu.Item>
-            <Input label='Server' icon='lightning' placeholder='http://localhost:3143' />
+            <Server />
           </Menu.Item>
         </Menu.Menu>
       </Menu>
