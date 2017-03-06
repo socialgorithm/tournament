@@ -1,0 +1,8 @@
+pre {
+    background: #efefef;
+    padding: 10px;
+    white-space: pre;
+    word-break: normal;
+    word-wrap: normal;
+    font: 12px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
