@@ -65,10 +65,20 @@ class About extends React.Component {
         </pre>
 
         <p>
+          Download the starting point's code from our repository by running:
+        </p>
+
+        <pre>
+          $ git clone https://github.com/aurbano/uttt-player.git
+          $ cd uttt-player
+          $ npm install
+        </pre>
+
+        <p>
           Once you have this, you'll be able to run the following:
         </p>
         <pre>
-          $ uttt --local -a path/to/playerA.js -b path/to/playerB.js
+          $ uttt --local -a src/logic.js -b src/random.js
         </pre>
 
         <p>If everything goes well, you should see this when the games finishes:</p>
@@ -88,6 +98,10 @@ class About extends React.Component {
           Max game: 6.78ms{'\n'}
           Min game: 0.02ms
         </pre>
+
+        <p>
+          Now your task is to edit <code>src/logic.js</code> and keep running the previous command until you consistently beat the random player :)
+        </p>
 
         <p>Alternatively, you can test if a player complies with the game logic by running automated tests. Just download
           <a href="https://github.com/aurbano/ultimate-ttt-server/blob/master/tests/client.test.js">this test file</a>, put it next to your player, and edit it so that the path inside of the test file points to your player.</p>
