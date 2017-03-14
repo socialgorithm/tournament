@@ -69,9 +69,9 @@ class About extends React.Component {
         </p>
 
         <pre>
-          $ git clone https://github.com/aurbano/uttt-player.git
-          $ cd uttt-player
-          $ npm install
+          $ git clone https://github.com/aurbano/uttt-player.git{'\n'}
+          $ cd uttt-player{'\n'}
+          $ npm install{'\n'}
         </pre>
 
         <p>
