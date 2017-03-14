@@ -1,32 +1,42 @@
 import { handleActions } from 'redux-actions';
+import { Map } from 'immutable';
 
-import * as actions from './actions';
+import * as constants from './constants';
 
-export const initialState = {
+export const initialState = Map({
   host: 'localhost:3141',
   status: 'disconnected',
   error: null,
-};
+});
 
 export default handleActions({
-  [actions.CONNECT]: connect,
-  [actions.CONNECTED]: connected,
+  [constants.CONNECT]: connect,
+  [constants.CONNECTED]: connected,
+  [constants.DISCONNECTED]: disconnected,
+  [constants.CONNECTION_ERROR]: connectionError,
 }, initialState);
 
 function connect(state, action) {
-  console.log('Connecting...');
-  const newState = state;
-  newState.status = 'connecting';
-  newState.error = null;
-
-  return newState;
+  return state.merge({
+    status: 'connecting',
+    error: null,
+  });
 }
 
 function connected(state, action) {
-  console.log('Connected!');
-  const newState = state;
-  newState.status = 'connected';
-  newState.error = null;
+  return state.merge({
+    status: 'connected',
+    error: null,
+  });
+}
 
-  return newState;
+function disconnected(state, action) {
+  return initialState;
+}
+
+function connectionError(state, action) {
+  return state.merge({
+    status: 'disconnected',
+    error: action.payload,
+  });
 }

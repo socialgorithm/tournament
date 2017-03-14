@@ -13,3 +13,17 @@ export function connected() {
     payload: {},
   }
 }
+
+export function disconnected(data) {
+  return {
+    type: actions.DISCONNECTED,
+    payload: data,
+  }
+}
+
+export function error(data) {
+  return {
+    type: actions.CONNECTION_ERROR,
+    payload: data,
+  }
+}

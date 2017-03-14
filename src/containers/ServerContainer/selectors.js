@@ -4,7 +4,7 @@ const applicationsSelector = (state) => state.get('server');
 
 const getState = createSelector(
   [applicationsSelector],
-  (substate) => substate
+  (substate) => substate.toJS()
 );
 
 export default getState;

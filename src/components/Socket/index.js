@@ -9,7 +9,8 @@ class Socket extends React.Component {
     this.socket = null;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
+    console.log('socket update', this.props.status);
     if (this.props.status === 'connecting') {
       this.connect();
     }
@@ -21,16 +22,48 @@ class Socket extends React.Component {
 
   connect = () => {
     console.log('Connecting socket');
-    this.socket = io.connect(this.props.host, {
+
+    this.socket = io(this.props.host, {
+      reconnection: false,
+      reconnectionAttempts: 0,
+    });
+
+    this.socket.on('connect', (data) => {
+      console.log('connected', data);
+      this.props.actions.connected();
+    });
+
+    this.socket.on('disconnect', (data) => {
+      console.log('Disconnected', data);
+      this.props.actions.disconnected(data);
+    });
+
+    this.socket.on('reconnect_error', (data) => {
+      this.props.actions.error({
+        type: 'reconnect_error',
+        message: data.message,
+      });
+    });
+
+    this.socket.on('connect_error', (data) => {
+      this.props.actions.error({
+        type: 'connect_error',
+        message: data.message,
+      });
+    });
+
+    this.socket.on('error', (data) => {
+      this.props.actions.error({
+        type: 'error',
+        message: data.message,
+      });
+
+    });
+
+    this.socket.connect({
       query: {
         client: true,
       }
-    });
-
-    this.props.actions.connected();
-
-    this.socket.on('error', function (data) {
-      console.error('Error in socket', data);
     });
   };
 
@@ -41,9 +74,10 @@ class Socket extends React.Component {
 Socket.propTypes = {
   host: React.PropTypes.string.isRequired,
   status: React.PropTypes.string.isRequired,
-  error: React.PropTypes.string,
   actions: React.PropTypes.shape({
-    connected: React.PropTypes.func.isRequired
+    connected: React.PropTypes.func.isRequired,
+    disconnected: React.PropTypes.func.isRequired,
+    error: React.PropTypes.func.isRequired,
   }).isRequired
 };
 

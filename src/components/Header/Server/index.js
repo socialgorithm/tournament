@@ -28,6 +28,7 @@ class Server extends React.Component {
   };
 
   render() {
+    console.log('Received: ', this.props.status, this.props.error);
     if (this.props.status === 'disconnected') {
 
       const editHost = (
@@ -74,7 +75,10 @@ class Server extends React.Component {
 Server.propTypes = {
   host: React.PropTypes.string.isRequired,
   status: React.PropTypes.string.isRequired,
-  error: React.PropTypes.string,
+  error: React.PropTypes.shape({
+    type: React.PropTypes.string,
+    message: React.PropTypes.string,
+  }),
   actions: React.PropTypes.shape({
     connect: React.PropTypes.func.isRequired
   }).isRequired
