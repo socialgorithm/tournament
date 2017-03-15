@@ -21,7 +21,7 @@ export default function createRoutes() {
           name: 'stats',
           getComponent: (nextState, cb) => {
             require.ensure([], (require) => {
-              cb(null, require('./sections/Stats').default)
+              cb(null, require('./containers/StatsContainer').default)
             })
           },
         },

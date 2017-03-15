@@ -4,13 +4,14 @@ import { bindActionCreators } from 'redux';
 import Socket from '../../components/Socket';
 
 import { getState } from '../ServerContainer/selectors';
-import * as actions from '../ServerContainer/actions';
+import * as serverActions from '../ServerContainer/actions';
+import * as statsActions from '../StatsContainer/actions';
 
 const mapStateToProps = getState;
 
 function mapDispatchToProps(dispatch) {
   return {
-      actions: bindActionCreators(actions, dispatch),
+    actions: bindActionCreators({ ...serverActions, ...statsActions }, dispatch),
   };
 }
 
