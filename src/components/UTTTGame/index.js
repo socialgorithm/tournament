@@ -5,20 +5,12 @@ import Board from './Board';
 import './style.css';
 
 class UTTTGame extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.uttt = new UTTT();
-  }
   render() {
-    const height = this.props.height || 300;
-    const width = this.props.width || 300;
-
-    const board = this.uttt.board;
+    const game = this.props.game || new UTTT();
 
     return (
-      <div className="ttt" style={ { width, height } }>
-        { board.map((row, rowIndex) => (
+      <div className="ttt" style={ this.props.style }>
+        { game.board.map((row, rowIndex) => (
           <div className="ttt-board-row" key={ `row-${rowIndex}` }>
             { row.map((board, boardIndex) => (
               <Board game={ board } key={ `row-${boardIndex}` } />
@@ -31,8 +23,8 @@ class UTTTGame extends React.Component {
 }
 
 UTTTGame.propTypes = {
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
+  game: React.PropTypes.object,
+  style: React.PropTypes.object,
 };
 
 export default UTTTGame;

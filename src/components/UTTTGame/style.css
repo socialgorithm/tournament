@@ -1,10 +1,13 @@
 .ttt {
     position: relative;
+    height: 30em;
+    width: 30em;
+
 }
 
 .ttt-board-row {
-    height: 32%;
-    border-bottom: solid 3px #fff;
+    height: 10em;
+    border-bottom: solid 3px #999;
 }
 
 .ttt-board-row:last-child {
@@ -12,11 +15,21 @@
 }
 
 .ttt-board {
-    width: 31%;
-    height: 100%;
+    width: 10em;
+    height: 10em;
     display: inline-table;
-    border-right: solid 3px #fff;
-    background: #efefef;
+    border-right: solid 3px #999;
+    transition: all ease-out 0.1s;
+}
+
+.ttt-board.lost {
+    background-color: rgba(219, 40, 40, 0.2);
+}
+.ttt-board.tied {
+    background-color: rgba(219, 219, 219, 0.2);
+}
+.ttt-board.won {
+    background-color: rgba(33, 133, 208, 0.2);
 }
 
 .ttt-board:last-child {
@@ -28,13 +41,33 @@
 }
 
 .ttt-cell {
-    width: 32%;
-    height: 32%;
+    width: 3.3em;
+    height: 3.3em;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
     border-right: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
+}
+
+.ttt-cell-played {
+    width: 60%;
+    height: 60%;
+    margin: 0 auto;
+    background: transparent;
+    transition: all ease-out 0.1s;
+}
+
+.ttt-cell-played:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.ttt-cell-played.you {
+    background: #2185D0;
+}
+
+.ttt-cell-played.opponent {
+    background: #db2828;
 }
 
 .ttt-cell:last-child {
