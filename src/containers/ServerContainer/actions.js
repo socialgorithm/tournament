@@ -1,9 +1,9 @@
 import * as actions from './constants';
 
-export function connect() {
+export function connect(host) {
   return {
     type: actions.CONNECT,
-    payload: {},
+    payload: host,
   }
 }
 

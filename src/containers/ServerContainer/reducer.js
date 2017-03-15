@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import * as constants from './constants';
 
 export const initialState = Map({
-  host: 'localhost:3141',
+  host: 'http://localhost:3141',
   status: 'disconnected',
   error: null,
 });
@@ -19,6 +19,7 @@ export default handleActions({
 
 function connect(state, action) {
   return state.merge({
+    host: action.payload,
     status: 'connecting',
     error: null,
   });

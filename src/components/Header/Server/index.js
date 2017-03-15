@@ -47,7 +47,7 @@ class Server extends React.Component {
         <Form onSubmit={ this.saveChanges } error={ !!errorMessage } loading={ this.props.status === 'connecting' }>
           <Form.Group inline>
             <label>Server</label>
-            <Form.Input value={ this.state.host } onChange={ (e, input) => { this.handleHostChange([input.value]);  } } />
+            <Form.Input value={ this.state.host } onChange={ (e, input) => { this.handleHostChange(input.value);  } } />
             <Form.Button primary>Connect</Form.Button>
           </Form.Group>
           <Message

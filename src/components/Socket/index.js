@@ -31,7 +31,7 @@ class Socket extends React.Component {
 
   connect = () => {
     this.socket = io(this.props.host, {
-      reconnection: true,
+      reconnection: false,
       query: {
         client: true,
       }
