@@ -7,6 +7,13 @@ export function connect() {
   }
 }
 
+export function disconnect() {
+  return {
+    type: actions.DISCONNECT,
+    payload: {},
+  }
+}
+
 export function connected() {
   return {
     type: actions.CONNECTED,

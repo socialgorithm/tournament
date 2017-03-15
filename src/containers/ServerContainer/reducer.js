@@ -11,6 +11,7 @@ export const initialState = Map({
 
 export default handleActions({
   [constants.CONNECT]: connect,
+  [constants.DISCONNECT]: disconnect,
   [constants.CONNECTED]: connected,
   [constants.DISCONNECTED]: disconnected,
   [constants.CONNECTION_ERROR]: connectionError,
@@ -19,6 +20,13 @@ export default handleActions({
 function connect(state, action) {
   return state.merge({
     status: 'connecting',
+    error: null,
+  });
+}
+
+function disconnect(state, action) {
+  return state.merge({
+    status: 'disconnecting',
     error: null,
   });
 }

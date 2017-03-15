@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Loader, Label, Popup, Button, Form } from 'semantic-ui-react';
+import { Message, Grid, Label, Button, Form, Modal, Icon } from 'semantic-ui-react';
 
 class Server extends React.Component {
   constructor(props) {
@@ -28,46 +28,66 @@ class Server extends React.Component {
   };
 
   render() {
-    console.log('Received: ', this.props.status, this.props.error);
-    if (this.props.status === 'disconnected') {
+    let status, modalContent;
 
-      const editHost = (
-        <Form onSubmit={ this.saveChanges }>
-          <Input label='Server' icon='lightning' value={ this.state.host } onChange={ (e, input) => { this.handleHostChange([input.value]);  } } />
+    if (this.props.status === 'disconnected' || this.props.status === 'connecting') {
+      status = (
+        <div>
+          <Label circular color='red' empty style={ {marginRight: '10px'} }/>
+          Connect
+        </div>
+      );
+      const errorMessage = (this.props.error) ? (
+        <div>
+          <p>Please make sure that you have typed the right host:port, and that the server is running.</p>
+          <p><code>{ this.props.error.type }: { this.props.error.message }</code></p>
+        </div>
+        ) : null;
+      modalContent = (
+        <Form onSubmit={ this.saveChanges } error={ !!errorMessage } loading={ this.props.status === 'connecting' }>
+          <Form.Group inline>
+            <label>Server</label>
+            <Form.Input value={ this.state.host } onChange={ (e, input) => { this.handleHostChange([input.value]);  } } />
+            <Form.Button primary>Connect</Form.Button>
+          </Form.Group>
+          <Message
+            error
+            icon='warning sign'
+            header='Unable to connect'
+            content={ errorMessage }
+          />
         </Form>
       );
-
-      return (
-        <Popup
-          trigger={ editHost }
-        >
-          Press enter to connect
-        </Popup>
+    } else {
+      status = (
+        <div>
+          <Label circular color='green' empty style={ {marginRight: '10px'} }/>
+          { this.props.host }
+        </div>
+      );
+      modalContent = (
+        <Grid columns={ 2 }>
+          <Grid.Column>
+            <Label circular color='green' empty style={ {marginRight: '10px'} }/>
+            Connected to { this.props.host }
+          </Grid.Column>
+          <Grid.Column>
+            <Button negative onClick={ this.props.actions.disconnect }>Disconnect</Button>
+          </Grid.Column>
+        </Grid>
       );
     }
-
-    if (this.props.status === 'connecting') {
-      return (
-        <Loader active indeterminate inline size='tiny' />
-      );
-    }
-
-    const connected = (
-      <div>
-        <Label circular color='green' empty style={ {marginRight: '10px'} }/>
-        { this.props.host }
-      </div>
-    );
 
     return (
-      <Popup
-        trigger={ connected }
-        flowing
-        hoverable
-      >
-        <p>Connected to <code>{ this.props.host }</code></p>
-        <p><Button content='Disconnect' negative size='tiny' /></p>
-      </Popup>
+      <Modal trigger={<Button basic inverted compact>{ status }</Button>}>
+        <Modal.Header>
+          <Icon name='lightning' />
+          Server connection
+        </Modal.Header>
+        <Modal.Content>
+          { modalContent }
+        </Modal.Content>
+      </Modal>
     );
   }
 }
@@ -80,7 +100,8 @@ Server.propTypes = {
     message: React.PropTypes.string,
   }),
   actions: React.PropTypes.shape({
-    connect: React.PropTypes.func.isRequired
+    connect: React.PropTypes.func.isRequired,
+    disconnect: React.PropTypes.func.isRequired,
   }).isRequired
 };
 

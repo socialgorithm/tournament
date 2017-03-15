@@ -10,31 +10,38 @@ class Socket extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('socket update', this.props.status);
     if (this.props.status === 'connecting') {
       this.connect();
+    }
+    if (this.props.status === 'disconnecting') {
+      this.disconnect();
     }
   }
 
   componentWillUnmount() {
-    console.log('destroy socket');
+    this.disconnect();
   }
 
-  connect = () => {
-    console.log('Connecting socket');
+  disconnect = () => {
+    if (this.socket) {
+      this.socket.close();
+      this.props.actions.disconnected();
+    }
+  };
 
+  connect = () => {
     this.socket = io(this.props.host, {
-      reconnection: false,
-      reconnectionAttempts: 0,
+      reconnection: true,
+      query: {
+        client: true,
+      }
     });
 
     this.socket.on('connect', (data) => {
-      console.log('connected', data);
       this.props.actions.connected();
     });
 
     this.socket.on('disconnect', (data) => {
-      console.log('Disconnected', data);
       this.props.actions.disconnected(data);
     });
 
@@ -53,18 +60,15 @@ class Socket extends React.Component {
     });
 
     this.socket.on('error', (data) => {
+      const message = (typeof data === 'string') ? data : data.message;
       this.props.actions.error({
         type: 'error',
-        message: data.message,
+        message,
       });
 
     });
 
-    this.socket.connect({
-      query: {
-        client: true,
-      }
-    });
+    this.socket.connect();
   };
 
   render (){ return null; }

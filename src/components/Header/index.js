@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Menu, Icon } from 'semantic-ui-react';
 
-import Server from '../../containers/ServerContainer';
+import ServerContainer from '../../containers/ServerContainer';
 
 class Header extends React.Component {
   constructor() {
@@ -46,7 +46,7 @@ class Header extends React.Component {
             Github
           </Menu.Item>
           <Menu.Item>
-            <Server />
+            <ServerContainer />
           </Menu.Item>
         </Menu.Menu>
       </Menu>
