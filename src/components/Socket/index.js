@@ -7,6 +7,12 @@ class Socket extends React.Component {
     super(props);
 
     this.socket = null;
+
+    if (localStorage.getItem('host') !== null) {
+      this.props.actions.connect(
+        localStorage.getItem('host')
+      );
+    }
   }
 
   componentDidUpdate() {
@@ -37,8 +43,10 @@ class Socket extends React.Component {
       }
     });
 
-    this.socket.on('connect', (data) => {
+    this.socket.on('connect', () => {
       this.props.actions.connected();
+      // persist the host to localStorage
+      localStorage.setItem('host', this.props.host);
     });
 
     this.socket.on('disconnect', (data) => {

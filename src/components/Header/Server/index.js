@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message, Grid, Label, Button, Form, Modal, Icon } from 'semantic-ui-react';
+import { Message, Popup, Grid, Label, Button, Form, Modal, Icon } from 'semantic-ui-react';
 
 class Server extends React.Component {
   constructor(props) {
@@ -32,10 +32,15 @@ class Server extends React.Component {
 
     if (this.props.status === 'disconnected' || this.props.status === 'connecting') {
       status = (
-        <div>
-          <Label circular color='red' empty style={ {marginRight: '10px'} }/>
-          Connect
-        </div>
+        <Popup
+          content='Click to connect to a server'
+          trigger={
+            <div>
+              <Label circular color='red' empty style={ {marginRight: '10px'} }/>
+              Connect
+            </div>
+          }
+        />
       );
       const errorMessage = (this.props.error) ? (
         <div>
@@ -60,10 +65,23 @@ class Server extends React.Component {
       );
     } else {
       status = (
-        <div>
-          <Label circular color='green' empty style={ {marginRight: '10px'} }/>
-          { this.props.host }
-        </div>
+        <Popup
+          trigger={
+            <div>
+              <Label circular color='green' empty style={ {marginRight: '10px'} }/>
+              Connected
+            </div>
+          }
+        >
+          <Popup.Content>
+            <Label color='green'>
+              Server
+              <Label.Detail>
+                { this.props.host }
+              </Label.Detail>
+            </Label>
+          </Popup.Content>
+        </Popup>
       );
       modalContent = (
         <Grid columns={ 2 }>
