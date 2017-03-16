@@ -8,7 +8,7 @@ You can also upload game logs and visualize the games move by move to debug your
 
 ## Getting started
 
-A version of this client is always running at https://urbanoalvarez.es/ultimate-ttt-web/
+A version of this client is always running at [uttt.socialgorithm.org](https://uttt.socialgorithm.org)
 
 If you want to deploy your own version clone this repository and run `npm start`.
 
