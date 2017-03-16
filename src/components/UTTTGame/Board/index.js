@@ -29,6 +29,13 @@ class Board extends React.Component {
               if (this.props.highlightMove) {
                 highlight = this.props.highlightMove.join(',') === [rowIndex, cellIndex].join(',');
               }
+              if (cell.mainIndex && this.props.lastMove <= cell.mainIndex) {
+                return (
+                  <div className={ classNames('ttt-cell') } key={ `row-${cellIndex}` }>
+                    <div className='ttt-cell-played'></div>
+                  </div>
+                );
+              }
               return (
                 <div className={ classNames('ttt-cell', { active: highlight }) } key={ `row-${cellIndex}` }>
                   <div className={ classNames('ttt-cell-played', { 'you': cell.player === 0, 'opponent': cell.player === 1 }) }>
@@ -48,6 +55,7 @@ Board.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
   game: React.PropTypes.object.isRequired,
+  lastMove: React.PropTypes.number,
   highlightBoard: React.PropTypes.boolean,
   highlightMove: React.PropTypes.array,
 };
