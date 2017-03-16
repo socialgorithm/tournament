@@ -25,6 +25,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "immutable": "^3.8.1",
+    "rc-slider": "^6.2.0",
     "react": "^15.4.2",
     "react-ace": "^4.1.6",
     "react-dom": "^15.4.2",
@@ -41,7 +42,7 @@
     "semantic-ui-css": "^2.2.9",
     "semantic-ui-react": "^0.67.1",
     "socket.io-client": "^1.7.3",
-    "ultimate-ttt": "^2.1.2"
+    "ultimate-ttt": "^3.1.0"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0",

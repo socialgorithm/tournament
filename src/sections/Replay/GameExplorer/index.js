@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
 import UTTT from 'ultimate-ttt';
 
@@ -11,6 +12,7 @@ class GameExplorer extends React.Component {
     this.state = {
       games: this.parseGameData(props.gameData),
       activeGame: 0,
+      activeMove: -1,
     };
   }
 
@@ -30,7 +32,7 @@ class GameExplorer extends React.Component {
     lines.forEach((line) => {
       if (line === 'init') {
         curGame = games.push({
-          uttt: new UTTT(),
+          uttt: new UTTT(3),
           moves: [],
         }) - 1;
         return;
@@ -49,31 +51,34 @@ class GameExplorer extends React.Component {
         }
         const board = turn[0].split(',');
         const move = turn[1].split(',');
+
         game.moves.push({
           board,
           move,
-          player: (opponent) ? 2 : 1,
+          player: (opponent) ? 1 : 0,
         });
+
         if (opponent) {
-          game.uttt.move(board, 2, move);
+          game.uttt = game.uttt.addOpponentMove(board, move);
         } else {
-          game.uttt.move(board, 1, move);
+          game.uttt = game.uttt.addMyMove(board, move);
         }
       } catch(e) {
-        console.error('Error', line, curGame, games);
-        throw e;
+        console.log('Error', e);
+        //throw e;
       }
     });
+    console.log(games);
     return games;
   };
 
   printWinner = (winner) => {
     let color = 'grey';
     let text = 'Tied';
-    if (winner === 1) {
+    if (winner === 0) {
       color = 'green';
       text = 'won';
-    } else if (winner === 2) {
+    } else if (winner === 1) {
       color = 'red';
       text = 'lost'
     }
@@ -84,7 +89,27 @@ class GameExplorer extends React.Component {
     );
   };
 
+  select = (move) => {
+    if (this.state.activeMove === move) {
+      this.setState({
+        activeMove: -1,
+      });
+    } else {
+      this.setState({
+        activeMove: move,
+      });
+    }
+  };
+
   render() {
+    let activeMove = {
+      board: null,
+      move: null,
+    };
+    if (this.state.activeMove > -1) {
+      activeMove = this.state.games[this.state.activeGame].moves[this.state.activeMove];
+    }
+
     return (
       <Grid>
         <Grid.Column width={ 4 }>
@@ -103,7 +128,12 @@ class GameExplorer extends React.Component {
           <Grid columns={ 2 } stackable>
             <Grid.Column>
               <Header>Game</Header>
-              <UTTTGame style={ { fontSize: '0.7em' } } game={ this.state.games[this.state.activeGame].uttt } />
+              <UTTTGame
+                style={ { fontSize: '0.7em' } }
+                game={ this.state.games[this.state.activeGame].uttt }
+                highlightBoard={ activeMove.board }
+                highlightMove={ activeMove.move }
+              />
               <Divider />
               <p><Label empty circular color='blue' horizontal /> You</p>
               <p><Label empty circular color='red' horizontal /> Opponent</p>
@@ -120,9 +150,13 @@ class GameExplorer extends React.Component {
                 </Table.Header>
                 <Table.Body>
                   { this.state.games[this.state.activeGame].moves.map((data, $index) => (
-                    <Table.Row key={ $index }>
+                    <Table.Row
+                      className={ classNames({ active: this.state.activeMove === $index}) }
+                      key={ $index }
+                      onClick={ () => { this.select($index) } }
+                    >
                       <Table.Cell>
-                        <Label circular color={ (data.player === 1)? 'blue' : 'red' }>{ $index + 1 }</Label>
+                        <Label circular color={ (data.player === 0)? 'blue' : 'red' }>{ $index + 1 }</Label>
                       </Table.Cell>
                       <Table.Cell>{ data.board.join(', ') }</Table.Cell>
                       <Table.Cell>{ data.move.join(', ') }</Table.Cell>
