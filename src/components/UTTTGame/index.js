@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid, Button } from 'semantic-ui-react';
 import UTTT from 'ultimate-ttt';
 import Slider from 'rc-slider';
 
@@ -10,14 +11,49 @@ class UTTTGame extends React.Component {
   constructor(props) {
     super(props);
 
+    this.replayInterval = null;
+
     this.state = {
       lastMove: (props.game) ? props.game.moves : 0,
+      isReplaying: false,
     };
   }
 
   updateSelection = (val) => {
     this.setState({
       lastMove: val
+    });
+  };
+
+  replay = () => {
+    if (!this.props.game) {
+      return;
+    }
+    if (this.state.isReplaying) {
+      this.pauseReplaying();
+      return;
+    }
+    if (this.state.lastMove >= this.props.game.moves) {
+      this.setState({
+        lastMove: 0,
+      });
+    }
+    this.pauseReplaying();
+    this.setState({
+      isReplaying: true,
+    });
+    this.replayInterval = setInterval(() => {
+      this.updateSelection(this.state.lastMove + 1);
+      if (this.state.lastMove >= this.props.game.moves) {
+        this.pauseReplaying();
+      }
+    }, 500);
+  };
+
+  pauseReplaying = () => {
+    clearInterval(this.replayInterval);
+    this.setState({
+      isReplaying: false,
     });
   };
 
@@ -51,13 +87,24 @@ class UTTTGame extends React.Component {
             </div>
           )) }
         </div>
-        <Slider
-          min={ 0 }
-          max={ game.moves }
-          step={ 1 }
-          value={ this.state.lastMove }
-          onChange={ this.updateSelection }
-        />
+        <Grid>
+          <Grid.Column width={ 4 }>
+            <Button
+              size='tiny'
+              icon={ (this.state.isReplaying) ? 'pause' : 'play' }
+              onClick={ this.replay }
+            />
+          </Grid.Column>
+          <Grid.Column width={ 12 }>
+            <Slider
+              min={ 0 }
+              max={ game.moves }
+              step={ 1 }
+              value={ this.state.lastMove }
+              onChange={ this.updateSelection }
+            />
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
