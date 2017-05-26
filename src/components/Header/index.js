@@ -15,10 +15,6 @@ class Header extends React.Component {
         name: 'Stats',
       },
       {
-        url: '/about',
-        name: 'About',
-      },
-      {
         url: '/replay',
         name: 'Replay',
       },
@@ -35,10 +31,16 @@ class Header extends React.Component {
         </Menu.Item>
 
         {
-          this.sections.map((section) => <Menu.Item as={ Link } activeClassName='active' to={ section.url } title={ section.name } key={ section.url }>
-            { section.name }
-          </Menu.Item>)
+          this.sections.map((section) => (
+            <Menu.Item as={ Link } activeClassName='active' to={ section.url } title={ section.name } key={ section.url }>
+              { section.name }
+            </Menu.Item>
+          ))
         }
+
+        <Menu.Item as='a' href='https://socialgorithm.org/ultimate-ttt-docs' title='Ultimate TTT Documentation'>
+          Documentation
+        </Menu.Item>
 
         <Menu.Menu position='right' icon>
           <Menu.Item href="https://github.com/aurbano/ultimate-ttt-web" target='_blank'>

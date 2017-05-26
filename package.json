@@ -1,5 +1,5 @@
 {
-  "name": "ultimate-ttt-web",
+  "name": "@socialgorithm/ultimate-ttt-web",
   "version": "0.2.0",
   "description": "Ultimate Tic Tac Toe Algorithm - Web Client",
   "private": true,

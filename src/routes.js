@@ -5,17 +5,8 @@ export default function createRoutes() {
     {
       path: '/',
       component: App,
-      indexRoute: { onEnter: (nextState, replace) => replace('/about') },
+      indexRoute: { onEnter: (nextState, replace) => replace('/stats') },
       childRoutes: [
-        {
-          path: '/about',
-          name: 'about',
-          getComponent: (nextState, cb) => {
-            require.ensure([], (require) => {
-              cb(null, require('./sections/About').default)
-            })
-          },
-        },
         {
           path: '/stats',
           name: 'stats',
