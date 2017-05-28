@@ -45,9 +45,9 @@ class GameExplorer extends React.Component {
       const parts = line.split(' ');
       let turn = parts[0].split(';');
       try {
-        let opponent = false;
+        let opponent = true;
         if (parts.length > 1) {
-          opponent = true;
+          opponent = false;
           turn = parts[1].split(';');
         }
         const board = turn[0].split(',');
@@ -65,7 +65,7 @@ class GameExplorer extends React.Component {
           game.uttt = game.uttt.addMyMove(board, move);
         }
       } catch(e) {
-        console.log('Error', e);
+        console.log('Error', e, game.uttt.prettyPrint());
         //throw e;
       }
     });
