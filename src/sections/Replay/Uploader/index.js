@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Header, Icon, Segment, Message } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 
@@ -90,7 +91,7 @@ class Uploader extends React.Component {
 }
 
 Uploader.propTypes = {
-  onUpload: React.PropTypes.func.isRequired,
+  onUpload: PropTypes.func.isRequired,
 };
 
 export default Uploader;

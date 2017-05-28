@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
 import UTTT from 'ultimate-ttt';
@@ -173,7 +174,7 @@ class GameExplorer extends React.Component {
 }
 
 GameExplorer.propTypes = {
-  gameData: React.PropTypes.string.isRequired,
+  gameData: PropTypes.string.isRequired,
 };
 
 export default GameExplorer;

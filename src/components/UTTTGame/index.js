@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Button } from 'semantic-ui-react';
 import UTTT from 'ultimate-ttt';
 import Slider from 'rc-slider';
@@ -111,11 +112,11 @@ class UTTTGame extends React.Component {
 }
 
 UTTTGame.propTypes = {
-  game: React.PropTypes.object,
-  style: React.PropTypes.object,
-  currentMove: React.PropTypes.number,
-  highlightBoard: React.PropTypes.array,
-  highlightMove: React.PropTypes.array,
+  game: PropTypes.object,
+  style: PropTypes.object,
+  currentMove: PropTypes.number,
+  highlightBoard: PropTypes.array,
+  highlightMove: PropTypes.array,
 };
 
 export default UTTTGame;
