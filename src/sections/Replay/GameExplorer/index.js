@@ -65,11 +65,9 @@ class GameExplorer extends React.Component {
           game.uttt = game.uttt.addMyMove(board, move);
         }
       } catch(e) {
-        console.log('Error', e, game.uttt.prettyPrint());
-        //throw e;
+        console.log('Error parsing game', e);
       }
     });
-    console.log(games);
     return games;
   };
 
