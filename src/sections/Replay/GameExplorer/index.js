@@ -134,8 +134,8 @@ class GameExplorer extends React.Component {
                 highlightMove={ activeMove.move }
               />
               <Divider />
-              <p><Label empty circular color='blue' horizontal /> You</p>
-              <p><Label empty circular color='red' horizontal /> Opponent</p>
+              <p><Label empty circular color='blue' horizontal /> Player A (player)</p>
+              <p><Label empty circular color='red' horizontal /> Player B (server)</p>
             </Grid.Column>
             <Grid.Column>
               <Header>Moves</Header>
