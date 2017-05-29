@@ -2,30 +2,26 @@ import React from 'react';
 import './index.css';
 
 
-const gameLayout = (game, index) => (
-  <div key={index}>
-    <li className="spacer">&nbsp;</li>
-    <li className={"game game-top " + (game.playerA === game.winner ? "winner" : "")}>{game.playerA}</li>
-    <li className="game game-spacer">&nbsp;</li>
-    <li className={"game game-bottom " + (game.playerB === game.winner ? "winner" : "")}>{game.playerB}</li>
-    <li className="spacer">&nbsp;</li>
-  </div>
-);
+const gameLayout = (game, index) => ([
+  <li key={index * 10 + 1}>&nbsp;</li>,
+  <li className={"game game-top " + (game.playerA === game.winner ? "winner" : "")} key={index * 10 + 2}>{game.playerA}</li>,
+  <li key={index * 10 + 3}>&nbsp;</li>,
+  <li className={"game game-bottom " + (game.playerB === game.winner ? "winner" : "")} key={index * 10 + 4}>{game.playerB}</li>,
+]);
+
 class Tournaments extends React.Component {
   render() {
     return (
         <main id="tournament">
           {
             this.props.rounds.map((round, $index) => (
-              <div>
-                <ul className={ "round " + "round-" + ($index + 1)}>
-                  {
-                    round.games.map((game, index) => (
-                      gameLayout(game, index)
-                    ))
-                  }
-                </ul>
-              </div>
+              <ul className={ "round " + "round-" + ($index + 1)}>
+                {
+                  round.games.map((game, index) => (
+                    gameLayout(game, index)
+                  ))
+                }
+              </ul>
             ))
           }
         </main>

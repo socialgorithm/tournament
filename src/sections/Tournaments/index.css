@@ -1,55 +1,45 @@
-/*
- *  Flex Layout Specifics
-*/
-main{
+main, ul {
     display:flex;
-    flex-direction:row;
 }
-.round{
-    display:flex;
+
+ul {
     flex-direction:column;
-    justify-content:center;
-    width:200px;
+    width: 200px;
     list-style:none;
     padding:0;
 }
-.round .spacer{ flex-grow:1; }
-.round .spacer:first-child,
-.round .spacer:last-child{ flex-grow:.5; }
 
-.round .game-spacer{
+.game + li {
     flex-grow:1;
 }
 
-/*
- *  General Styles
-*/
-body{
-    font-family:sans-serif;
-    font-size:small;
-    padding:10px;
-    line-height:1.4em;
+ul:before, ul:after {
+    content: " ";
+    display: inline-block;
+    flex-grow:.5;
 }
 
-li.game{
+.game {
     padding-left:20px;
 }
 
-li.game.winner{
+.winner {
     font-weight:bold;
 }
-li.game span{
+
+.game span {
     float:right;
     margin-right:5px;
 }
 
-li.game-top{ border-bottom:1px solid #aaa; }
-
-li.game-spacer{
-    border-right:1px solid #aaa;
-    min-height:40px;
+.game-top {
+    border-bottom:1px solid #aaa;
 }
 
-li.game-bottom{
+.game-top + li {
+    border-right:1px solid #aaa; min-height:40px;
+}
+
+.game-bottom {
     border-top:1px solid #aaa;
 }
