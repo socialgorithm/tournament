@@ -47,6 +47,10 @@ class Socket extends React.Component {
       this.props.actions.updateStats(data);
     });
 
+    this.socket.on('tournaments', (data) => {
+      this.props.actions.updateTournaments(data);
+    });
+
     this.socket.on('connect', () => {
       this.props.actions.connected();
       // persist the host to localStorage
@@ -88,13 +92,14 @@ class Socket extends React.Component {
 
 
 Socket.propTypes = {
-  host: PropTypes.string.isRequired,
+host: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   actions: PropTypes.shape({
     connected: PropTypes.func.isRequired,
     disconnected: PropTypes.func.isRequired,
     error: PropTypes.func.isRequired,
     updateStats: PropTypes.func.isRequired,
+    updateTournaments: PropTypes.func.isRequired,
   }).isRequired,
 };
 

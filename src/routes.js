@@ -26,6 +26,15 @@ export default function createRoutes() {
           },
         },
         {
+          path: '/tournaments',
+          name: 'tournaments',
+          getComponent: (nextState, cb) => {
+            require.ensure([], (require) => {
+              cb(null, require('./containers/TournamentContainer').default)
+            })
+          },
+        },
+        {
           path: '*',
           name: 'notfound',
           getComponent: (nextState, cb) => {
