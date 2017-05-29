@@ -18,6 +18,10 @@ class Header extends React.Component {
         url: '/replay',
         name: 'Replay',
       },
+      {
+        url: '/tournaments',
+        name: 'Tournaments',
+      },
     ];
   }
 

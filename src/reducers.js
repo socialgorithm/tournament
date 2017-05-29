@@ -9,6 +9,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 
 import serverReducer from './containers/ServerContainer/reducer';
 import statsReducer from './containers/StatsContainer/reducer';
+import tournamentsReducer from './containers/TournamentContainer/reducer';
 
 
 // Initial routing state
@@ -39,6 +40,7 @@ export default function createReducer(asyncReducers) {
     route: routeReducer,
     server: serverReducer,
     stats: statsReducer,
+    tournaments: tournamentsReducer,
     ...asyncReducers,
   });
 }
