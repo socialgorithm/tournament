@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './index.css';
 
 
@@ -15,7 +16,7 @@ class Tournaments extends React.Component {
         <main id="tournament">
           {
             this.props.rounds.map((round, $index) => (
-              <ul className={ "round " + "round-" + ($index + 1)}>
+              <ul className={ `round round-${$index + 1}` }>
                 {
                   round.games.map((game, index) => (
                     gameLayout(game, index)
@@ -31,7 +32,7 @@ class Tournaments extends React.Component {
 
 
 Tournaments.propTypes = {
-  rounds: React.PropTypes.array.isRequired,
+  rounds: PropTypes.array.isRequired,
 };
 
 export default Tournaments;
