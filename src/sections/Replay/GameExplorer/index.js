@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
 import UTTT from 'ultimate-ttt';
@@ -44,9 +45,9 @@ class GameExplorer extends React.Component {
       const parts = line.split(' ');
       let turn = parts[0].split(';');
       try {
-        let opponent = false;
+        let opponent = true;
         if (parts.length > 1) {
-          opponent = true;
+          opponent = false;
           turn = parts[1].split(';');
         }
         const board = turn[0].split(',');
@@ -64,11 +65,9 @@ class GameExplorer extends React.Component {
           game.uttt = game.uttt.addMyMove(board, move);
         }
       } catch(e) {
-        console.log('Error', e);
-        //throw e;
+        console.log('Error parsing game', e);
       }
     });
-    console.log(games);
     return games;
   };
 
@@ -135,8 +134,8 @@ class GameExplorer extends React.Component {
                 highlightMove={ activeMove.move }
               />
               <Divider />
-              <p><Label empty circular color='blue' horizontal /> You</p>
-              <p><Label empty circular color='red' horizontal /> Opponent</p>
+              <p><Label empty circular color='blue' horizontal /> Player A (player)</p>
+              <p><Label empty circular color='red' horizontal /> Player B (server)</p>
             </Grid.Column>
             <Grid.Column>
               <Header>Moves</Header>
@@ -173,7 +172,7 @@ class GameExplorer extends React.Component {
 }
 
 GameExplorer.propTypes = {
-  gameData: React.PropTypes.string.isRequired,
+  gameData: PropTypes.string.isRequired,
 };
 
 export default GameExplorer;

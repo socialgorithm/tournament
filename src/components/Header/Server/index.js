@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message, Popup, Grid, Label, Button, Form, Modal, Icon } from 'semantic-ui-react';
 
 class Server extends React.Component {
@@ -111,15 +112,15 @@ class Server extends React.Component {
 }
 
 Server.propTypes = {
-  host: React.PropTypes.string.isRequired,
-  status: React.PropTypes.string.isRequired,
-  error: React.PropTypes.shape({
-    type: React.PropTypes.string,
-    message: React.PropTypes.string,
+  host: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  error: PropTypes.shape({
+    type: PropTypes.string,
+    message: PropTypes.string,
   }),
-  actions: React.PropTypes.shape({
-    connect: React.PropTypes.func.isRequired,
-    disconnect: React.PropTypes.func.isRequired,
+  actions: PropTypes.shape({
+    connect: PropTypes.func.isRequired,
+    disconnect: PropTypes.func.isRequired,
   }).isRequired
 };
 

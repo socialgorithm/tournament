@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import io from 'socket.io-client';
-
 
 class Socket extends React.Component {
   constructor(props) {
@@ -92,14 +92,14 @@ class Socket extends React.Component {
 
 
 Socket.propTypes = {
-  host: React.PropTypes.string.isRequired,
-  status: React.PropTypes.string.isRequired,
-  actions: React.PropTypes.shape({
-    connected: React.PropTypes.func.isRequired,
-    disconnected: React.PropTypes.func.isRequired,
-    error: React.PropTypes.func.isRequired,
-    updateStats: React.PropTypes.func.isRequired,
-    updateTournaments: React.PropTypes.func.isRequired,
+host: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  actions: PropTypes.shape({
+    connected: PropTypes.func.isRequired,
+    disconnected: PropTypes.func.isRequired,
+    error: PropTypes.func.isRequired,
+    updateStats: PropTypes.func.isRequired,
+    updateTournaments: PropTypes.func.isRequired,
   }).isRequired,
 };
 

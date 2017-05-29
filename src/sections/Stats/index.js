@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Header, Grid, List, Label } from 'semantic-ui-react';
 
 class Stats extends React.Component {
@@ -32,8 +33,8 @@ class Stats extends React.Component {
 }
 
 Stats.propTypes = {
-  players: React.PropTypes.array.isRequired,
-  games: React.PropTypes.array.isRequired,
+  players: PropTypes.array.isRequired,
+  games: PropTypes.array.isRequired,
 };
 
 export default Stats;

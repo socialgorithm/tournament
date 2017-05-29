@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import '../style.css';
@@ -52,12 +53,12 @@ class Board extends React.Component {
 }
 
 Board.propTypes = {
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  game: React.PropTypes.object.isRequired,
-  lastMove: React.PropTypes.number,
-  highlightBoard: React.PropTypes.boolean,
-  highlightMove: React.PropTypes.array,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  game: PropTypes.object.isRequired,
+  lastMove: PropTypes.number,
+  highlightBoard: PropTypes.boolean,
+  highlightMove: PropTypes.array,
 };
 
 export default Board;
