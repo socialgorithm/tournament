@@ -47,6 +47,10 @@ class Socket extends React.Component {
       this.props.actions.updateStats(data);
     });
 
+    this.socket.on('tournaments', (data) => {
+      this.props.actions.updateTournaments(data);
+    });
+
     this.socket.on('connect', () => {
       this.props.actions.connected();
       // persist the host to localStorage
@@ -95,6 +99,7 @@ Socket.propTypes = {
     disconnected: React.PropTypes.func.isRequired,
     error: React.PropTypes.func.isRequired,
     updateStats: React.PropTypes.func.isRequired,
+    updateTournaments: React.PropTypes.func.isRequired,
   }).isRequired,
 };
 
