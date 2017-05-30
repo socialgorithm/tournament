@@ -1,0 +1,32 @@
+.jtk-endpoint, .jtk-endpoint circle {
+    fill: none;
+    stroke: none;
+}
+
+.jtk-connector {
+    fill: #aaa;
+    stroke: #aaa;
+}
+
+.jtk-connector.active {
+    fill: #4183C4;
+    stroke: #4183C4;
+}
+
+.jtk-connector path {
+    stroke: inherit;
+    fill: inherit;
+}
+
+path.jtk-connector-outline {
+    stroke: transparent;
+}
+
+.jtk-hover {
+    stroke: #1e70bf;
+    fill: #1e70bf;
+}
+
+.jtk-dragged {
+    cursor: move;
+}

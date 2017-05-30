@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
-class Socket extends React.Component {
+class SocketProvider extends React.Component {
   constructor(props) {
     super(props);
 
@@ -47,7 +47,7 @@ class Socket extends React.Component {
       this.props.actions.updateStats(data);
     });
 
-    this.socket.on('tournaments', (data) => {
+    this.socket.on('tournament', (data) => {
       this.props.actions.updateTournaments(data);
     });
 
@@ -85,14 +85,42 @@ class Socket extends React.Component {
     });
 
     this.socket.connect();
+
+    setTimeout(() => {
+      let urlParams = {};
+      (window.onpopstate = function () {
+        let match,
+          pl     = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+          query  = window.location.search.substring(1);
+
+        urlParams = {};
+        while (match = search.exec(query))
+          urlParams[decode(match[1])] = decode(match[2]);
+      })();
+      if (urlParams.startTournament) {
+        console.log('Starting tournament');
+        this.socket.emit('tournament', { start: true });
+      }
+    }, 100);
   };
 
-  render (){ return null; }
+  render() {
+    return (
+      <div>
+        { this.props.children }
+      </div>
+    );
+  }
 }
 
+SocketProvider.childContextTypes = {
+  socket: PropTypes.object,
+};
 
-Socket.propTypes = {
-host: PropTypes.string.isRequired,
+SocketProvider.propTypes = {
+  host: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   actions: PropTypes.shape({
     connected: PropTypes.func.isRequired,
@@ -103,4 +131,4 @@ host: PropTypes.string.isRequired,
   }).isRequired,
 };
 
-export default Socket;
+export default SocketProvider;

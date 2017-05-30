@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Button } from 'semantic-ui-react';
-import UTTT from 'ultimate-ttt';
+import UTTT from '@socialgorithm/ultimate-ttt';
 import Slider from 'rc-slider';
 
 import Board from './Board';
@@ -48,7 +48,7 @@ class UTTTGame extends React.Component {
       if (this.state.lastMove >= this.props.game.moves) {
         this.pauseReplaying();
       }
-    }, 500);
+    }, 300);
   };
 
   pauseReplaying = () => {

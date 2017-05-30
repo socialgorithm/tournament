@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Server from '../../sections/Tournaments';
+import Tournaments from '../../sections/Tournaments';
 
 import { getState } from './selectors';
 import * as actions from './actions';
@@ -14,4 +14,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Server);
+export default connect(mapStateToProps, mapDispatchToProps)(Tournaments);

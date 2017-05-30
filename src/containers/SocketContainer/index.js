@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Socket from '../../components/Socket';
+import SocketProvider from '../../components/SocketProvider';
 
 import { getState } from '../ServerContainer/selectors';
 import * as serverActions from '../ServerContainer/actions';
@@ -16,4 +16,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Socket);
+export default connect(mapStateToProps, mapDispatchToProps)(SocketProvider);
