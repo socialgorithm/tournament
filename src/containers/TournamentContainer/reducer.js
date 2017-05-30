@@ -81,7 +81,8 @@ const round4 = {
 };
 
 const tournament = {
-  rounds: [round1, round2, round3, round4]
+  rounds: [round1, round2, round3, round4],
+  started: false,
 };
 
 export const initialState = Map(tournament);

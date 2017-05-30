@@ -66,7 +66,7 @@ export default class Player extends React.PureComponent { // eslint-disable-line
 // PropTypes
 Player.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   winner: PropTypes.bool.isRequired,
   jsPlumbInstance: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
