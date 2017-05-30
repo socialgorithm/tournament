@@ -1,0 +1,31 @@
+.round > div {
+    flex-grow: 1;
+}
+
+.game span {
+    float:right;
+    margin-right:5px;
+}
+
+.winner {
+    font-weight:bold;
+}
+
+.game span {
+    float:right;
+    margin-right:5px;
+}
+
+.game-pair {
+    margin-bottom: 20px;
+}
+
+.game {
+    background: #efefef;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+}
+
+.winner {
+    font-weight:bold;
+}

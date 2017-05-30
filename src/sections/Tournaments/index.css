@@ -1,45 +1,18 @@
-main, ul {
+main, .round {
     display:flex;
 }
 
-ul {
+.round {
     flex-direction:column;
     width: 200px;
     list-style:none;
     padding:0;
+    margin-right: 50px;
 }
 
-.game + li {
-    flex-grow:1;
-}
-
-ul:before, ul:after {
+.round:before,
+.round:after {
     content: " ";
     display: inline-block;
     flex-grow:.5;
-}
-
-.game {
-    padding-left:20px;
-}
-
-.winner {
-    font-weight:bold;
-}
-
-.game span {
-    float:right;
-    margin-right:5px;
-}
-
-.game-top {
-    border-bottom:1px solid #aaa;
-}
-
-.game-top + li {
-    border-right:1px solid #aaa; min-height:40px;
-}
-
-.game-bottom {
-    border-top:1px solid #aaa;
 }
