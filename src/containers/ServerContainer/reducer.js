@@ -3,8 +3,13 @@ import { Map } from 'immutable';
 
 import * as constants from './constants';
 
+const hosts = {
+  local: 'http://localhost:3141',
+  online: 'https://ultimate-ttt-server.herokuapp.com',
+};
+
 export const initialState = Map({
-  host: 'http://localhost:3141',
+  host: (window.location.host.indexOf('localhost') < 0) ? hosts.online : hosts.local,
   status: 'disconnected',
   error: null,
 });
