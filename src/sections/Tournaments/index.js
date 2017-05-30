@@ -53,6 +53,7 @@ class Tournaments extends React.Component {
                   round.games.map((game, $gameIndex) => (
                     <TournamentGame
                       game={ game }
+                      isPlaying={ false }
                       gameIndex={ $gameIndex }
                       roundIndex={ $roundIndex }
                       key={ `game-${$gameIndex}` }

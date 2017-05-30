@@ -1,78 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import './index.css';
 import Connection from './Connection/index';
+import Player from './Player/index';
 
 class TournamentGame extends React.Component {
-
-  componentDidMount() {
-    this.addConnectors();
-  }
-
   getId = (round, game, player) => `R${round}-G${game}-P${player}`;
-
-  addConnectors = () => {
-
-    const sourceConfig = {
-      anchor: 'Continuous',
-      endpoint: 'Blank',
-      isSource: false,
-      connector: ['Flowchart'],
-      maxConnections: 10,
-      isTarget: false,
-      dropOptions: {
-        tolerance: 'touch',
-        hoverClass: 'dropHover',
-        activeClass: 'dropActive',
-      },
-    };
-
-    const targetConfig = {
-      dropOptions: {
-        hoverClass: 'dropHover',
-      },
-      endpoint: 'Blank',
-      anchor: 'Continuous',
-      isTarget: false,
-    };
-
-    this.props.jsPlumbInstance.makeSource(this.gameA, sourceConfig);
-    this.props.jsPlumbInstance.makeTarget(this.gameA, targetConfig);
-
-    this.props.jsPlumbInstance.makeSource(this.gameB, sourceConfig);
-    this.props.jsPlumbInstance.makeTarget(this.gameB, targetConfig);
-    this.props.jsPlumbInstance.addEndpoint(this.gameA, {
-
-    });
-  };
 
   render() {
     const nextRound = this.props.roundIndex + 1;
     const nextGame = Math.floor(this.props.gameIndex / 2);
     const nextPlayer = (Math.round(this.props.gameIndex / 2) === nextGame) ? 0 : 1;
 
+    let gameMargin = 0;
+    let playerAMarginTop = 0;
+    let playerBMarginTop = 0;
+    if (this.props.roundIndex > 0) {
+      gameMargin = Math.pow(this.props.roundIndex, 2) * 15;
+      playerAMarginTop = this.props.roundIndex * 10;
+      playerBMarginTop = this.props.roundIndex * 73;
+    }
+
     return (
-      <div className='game-pair'>
-        <div
-          ref={ (ref) => { this.gameA = ref; } }
+      <div className='game-pair' style={ { marginTop: gameMargin, marginBottom: gameMargin } }>
+        <Player
           id={ this.getId(this.props.roundIndex, this.props.gameIndex, 0) }
-          className={
-            classNames('game', 'game-top', {winner: this.props.game.playerA === this.props.game.winner })
-          }
-        >
-          {this.props.game.playerA}
-        </div>
-        <div
-          ref={ (ref) => { this.gameB = ref; } }
+          style={ { marginTop: playerAMarginTop } }
+          winner={ this.props.game.playerA === this.props.game.winner }
+          name={ this.props.game.playerA }
+          jsPlumbInstance={ this.props.jsPlumbInstance }
+        />
+        <Player
           id={ this.getId(this.props.roundIndex, this.props.gameIndex, 1) }
-          className={
-            classNames('game', 'game-bottom', {winner: this.props.game.playerB === this.props.game.winner })
-          }
-        >
-          {this.props.game.playerB}
-        </div>
+          style={ { marginTop: playerBMarginTop } }
+          winner={ this.props.game.playerB === this.props.game.winner }
+          name={ this.props.game.playerB }
+          jsPlumbInstance={ this.props.jsPlumbInstance }
+        />
         <Connection
           jsPlumbInstance={ this.props.jsPlumbInstance }
           sourceId={ this.getId(this.props.roundIndex, this.props.gameIndex, 0) }
@@ -93,6 +58,7 @@ class TournamentGame extends React.Component {
 TournamentGame.PropTypes = {
   game: PropTypes.object.isRequired,
   gameIndex: PropTypes.number.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
   roundIndex: PropTypes.number.isRequired,
   jsPlumbInstance: PropTypes.object.isRequired,
 };

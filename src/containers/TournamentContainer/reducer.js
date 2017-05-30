@@ -57,6 +57,13 @@ const round3Game1 = {
   result: gameStatuses.IN_PROGRESS
 };
 
+const round4Game1 = {
+  playerA: "player2",
+  playerB: null,
+  winner: null,
+  result: gameStatuses.IN_PROGRESS
+};
+
 const round1 = {
   games: [round1Game1, round1Game2, round1Game3, round1Game4]
 };
@@ -69,8 +76,12 @@ const round3 = {
   games: [round3Game1]
 };
 
+const round4 = {
+  games: [round4Game1]
+};
+
 const tournament = {
-  rounds: [round1, round2, round3]
+  rounds: [round1, round2, round3, round4]
 };
 
 export const initialState = Map(tournament);
