@@ -11,7 +11,7 @@ class App extends React.Component {
     return (
       <SocketContainer>
         <Header />
-        <Container>
+        <Container fluid style={ { padding: '0 20px' } }>
           { this.props.children }
         </Container>
       </SocketContainer>

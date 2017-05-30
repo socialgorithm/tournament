@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsplumb from 'jsplumb';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Table, Loader } from 'semantic-ui-react';
 
 import './index.css';
-
-import TournamentGame from '../../components/TournamentGame/index';
 
 class Tournaments extends React.Component {
   /**
@@ -55,32 +53,59 @@ class Tournaments extends React.Component {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
   };
 
+  getCell(playerA, playerB, key) {
+    if (playerA === playerB || !this.props.players[playerA][playerB]) {
+      return (
+        <Table.Cell
+          disabled
+          style={ { background: '#efefef' } }
+          key={ key }
+        >
+          -
+        </Table.Cell>
+      );
+    }
+
+    const session = this.props.players[playerA][playerB];
+    if (!session.finished) {
+      return (
+        <Table.Cell key={ key }>
+          <Loader active={ session.started && !session.finished } inline size='small'/>
+        </Table.Cell>
+      );
+    }
+
+    return (
+      <Table.Cell key={ key } positive={ session.stats.winner === 0 } negative={ session.stats.winner === 1 }>
+        W { session.stats.winPercentages[0] } - T { session.stats.tiePercentage }
+      </Table.Cell>
+    );
+  }
+
   render() {
     const header = (this.props.started) ? 'Tournament' : 'Waiting for Tournament to start...';
     return (
       <div>
         <h1>{ header }</h1>
         <Segment loading={ !this.props.started }>
-          <main id="tournament">
-            {
-              this.props.rounds.map((round, $roundIndex) => (
-                <div className={ `round round-${$roundIndex + 1}` } key={ `round-${$roundIndex}` }>
-                  {
-                    round.games.map((game, $gameIndex) => (
-                      <TournamentGame
-                        game={ game }
-                        isPlaying={ false }
-                        gameIndex={ $gameIndex }
-                        roundIndex={ $roundIndex }
-                        key={ `game-${$gameIndex}` }
-                        jsPlumbInstance={ this.jsPlumbInstance }
-                      />
-                    ))
-                  }
-                </div>
-              ))
-            }
-          </main>
+          <Table definition celled striped textAlign='center'>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell />
+                { Object.keys(this.props.players).map((player, $index) => (
+                  <Table.HeaderCell key={ $index }>{ player }</Table.HeaderCell>
+                ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              { Object.keys(this.props.players).map((playerA, $index) => (
+                <Table.Row key={ $index }>
+                  <Table.Cell key={ `head-cell-${$index}` }>{ playerA }</Table.Cell>
+                  { Object.keys(this.props.players).map((playerB, $playerIndex) => this.getCell(playerA, playerB, `cell-${$playerIndex}`)) }
+                </Table.Row>
+              )) }
+            </Table.Body>
+          </Table>
         </Segment>
       </div>
     );
@@ -88,7 +113,7 @@ class Tournaments extends React.Component {
 }
 
 Tournaments.propTypes = {
-  rounds: PropTypes.array.isRequired,
+  players: PropTypes.object.isRequired,
   started: PropTypes.bool.isRequired,
 };
 

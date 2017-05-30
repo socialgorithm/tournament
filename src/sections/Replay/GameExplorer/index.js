@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
-import UTTT from 'ultimate-ttt';
+import UTTT from '@socialgorithm/ultimate-ttt';
 
 import UTTTGame from '../../../components/UTTTGame';
 
@@ -10,29 +10,49 @@ class GameExplorer extends React.Component {
   constructor(props) {
     super(props);
 
+    const {games, won, lost, tied} = this.parseGameData(props.gameData);
+
     this.state = {
-      games: this.parseGameData(props.gameData),
+      games,
       activeGame: 0,
       activeMove: -1,
+      won,
+      lost,
+      tied,
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    const {games, won, lost, tied} = this.parseGameData(nextProps.gameData);
+
     this.setState({
-      games: this.parseGameData(nextProps.gameData),
+      games,
+      activeGame: 0,
+      activeMove: -1,
+      won,
+      lost,
+      tied,
     });
   }
 
   parseGameData = (gameData) => {
+    const ret = {
+      games: [],
+      won: 0,
+      lost: 0,
+      tied: 0,
+    };
     const lines = gameData.split("\n")
       .filter((line) => line.length > 0)
       .map((line) => line.split('] ').pop()
       );
-    const games = [];
     let curGame;
     lines.forEach((line) => {
       if (line === 'init') {
-        curGame = games.push({
+        if (ret.games[curGame]) {
+          console.log('was it finished? ', ret.games[curGame].uttt.isFinished());
+        }
+        curGame = ret.games.push({
           uttt: new UTTT(3),
           moves: [],
         }) - 1;
@@ -41,17 +61,17 @@ class GameExplorer extends React.Component {
       if (line.indexOf(';') < 0) {
         return;
       }
-      const game = games[curGame];
+      const game = ret.games[curGame];
       const parts = line.split(' ');
       let turn = parts[0].split(';');
       try {
-        let opponent = true;
+        let opponent = false;
         if (parts.length > 1) {
-          opponent = false;
+          opponent = true;
           turn = parts[1].split(';');
         }
-        const board = turn[0].split(',');
-        const move = turn[1].split(',');
+        const board = turn[0].split(',').map((coord) => parseInt(coord, 10));
+        const move = turn[1].split(',').map((coord) => parseInt(coord, 10));
 
         game.moves.push({
           board,
@@ -64,11 +84,27 @@ class GameExplorer extends React.Component {
         } else {
           game.uttt = game.uttt.addMyMove(board, move);
         }
+
+        // update state
+        if (game.uttt.isFinished()) {
+          switch (game.uttt.getResult()) {
+            case 0:
+              ret.won = ret.won + 1;
+              break;
+            case 1:
+              ret.lost = ret.lost + 1;
+              break;
+            default:
+            case -1:
+              ret.tied = ret.tied + 1;
+              break;
+          }
+        }
       } catch(e) {
-        console.log('Error parsing game', e);
+        console.log('Error parsing game', e.message, ret.games[curGame], ret.games[curGame].uttt);
       }
     });
-    return games;
+    return ret;
   };
 
   printWinner = (winner) => {
@@ -112,10 +148,23 @@ class GameExplorer extends React.Component {
     return (
       <Grid>
         <Grid.Column width={ 4 }>
-          <Header>Games</Header>
+          <h2>
+            <div style={ { float: 'right' } }>
+              <Label color='green'>
+                <b>Won:</b> { this.state.won }
+              </Label>
+              <Label color='red'>
+                <b>Lost:</b> { this.state.lost }
+              </Label>
+              <Label color='grey'>
+                <b>Tied:</b> { this.state.tied }
+              </Label>
+            </div>
+            Games
+          </h2>
           <List selection divided relaxed>
             { this.state.games.map((game, $index) => (
-              <List.Item key={ $index } active={ $index === this.state.activeGame } onClick={ () => { this.setState({ activeGame: $index }); } }>
+              <List.Item key={ $index } active={ $index === this.state.activeGame } onClick={ () => { this.setState({ activeGame: $index, activeMove: -1, }); } }>
                 <List.Content>
                   { this.printWinner(game.uttt.winner) } { game.uttt.moves } moves
                 </List.Content>
@@ -128,7 +177,7 @@ class GameExplorer extends React.Component {
             <Grid.Column>
               <Header>Game</Header>
               <UTTTGame
-                style={ { fontSize: '0.7em' } }
+                style={ { fontSize: '0.7em', margin: '0 auto' } }
                 game={ this.state.games[this.state.activeGame].uttt }
                 highlightBoard={ activeMove.board }
                 highlightMove={ activeMove.move }
