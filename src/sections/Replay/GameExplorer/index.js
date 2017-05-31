@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import eol from 'eol';
 import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
 import UTTT from '@socialgorithm/ultimate-ttt';
 
@@ -42,7 +43,7 @@ class GameExplorer extends React.Component {
       lost: 0,
       tied: 0,
     };
-    const lines = gameData.split("\n")
+    const lines = eol.split(gameData)
       .filter((line) => line.length > 0)
       .map((line) => line.split('] ').pop()
       );
