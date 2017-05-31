@@ -101,7 +101,7 @@ class GameExplorer extends React.Component {
           }
         }
       } catch(e) {
-        console.log('Error parsing game', e.message, ret.games[curGame], ret.games[curGame].uttt);
+        console.log('Error parsing game', e.message);
       }
     });
     return ret;
