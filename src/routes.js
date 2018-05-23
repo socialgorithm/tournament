@@ -35,6 +35,15 @@ export default function createRoutes() {
           },
         },
         {
+          path: '/match',
+          name: 'match',
+          getComponent: (nextState, cb) => {
+            require.ensure([], (require) => {
+              cb(null, require('./sections/Match').default)
+            })
+          },
+        },
+        {
           path: '/tournaments',
           name: 'tournaments',
           getComponent: (nextState, cb) => {

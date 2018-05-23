@@ -1,7 +1,7 @@
 .hero {
-    background: url(https://socialgorithm.org/img/bg-pattern.png),#79f1a4;
-    background: url(https://socialgorithm.org/img/bg-pattern.png),-webkit-linear-gradient(to left,#79f1a4,#0e5cad);
-    background: url(https://socialgorithm.org/img/bg-pattern.png),linear-gradient(to left,#79f1a4,#0e5cad);
+    background: url(https://socialgorithm.org/img/bg-pattern.png),#E80505;
+    background: url(https://socialgorithm.org/img/bg-pattern.png),-webkit-linear-gradient( 135deg, #FDD819 0%, #E80505 100%);
+    background: url(https://socialgorithm.org/img/bg-pattern.png),linear-gradient( 135deg, #FDD819 0%, #E80505 100%);
     color: #fff;
     text-align: center;
     padding: 4em 0;
@@ -15,13 +15,26 @@
 }
 
 .bg-primary {
-    background: #ef6c00;
-    background: -webkit-linear-gradient(#ef6c00,#d66000);
-    background: linear-gradient(#ef6c00,#d66000);
+    background: #ee6f30;
+    background: -webkit-linear-gradient(#ee6f30,#d66000);
+    background: linear-gradient(#ee6f30,#d66000);
     color: #fff;
 }
 
-.bg-primary .icon {
+.bg-secondary {
+    background: #efefef;
+}
+
+.section .icon {
     margin-bottom: 0.5em;
     font-size: 2em;
+}
+
+.section.big-links a {
+    color: inherit;
+    display: block;
+}
+
+.section a:hover {
+    color: #d66000;
 }

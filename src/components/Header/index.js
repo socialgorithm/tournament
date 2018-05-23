@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Menu, Icon } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
+import './index.css';
 
 class Header extends React.Component {
   constructor() {
@@ -26,11 +27,14 @@ class Header extends React.Component {
   }
 
   render() {
-    const style = {
-      borderRadius: 0,
-    };
     return (
-      <Menu inverted style={ style }>
+      <Menu inverted className='main-header'>
+        <Menu.Item header
+                   as='a'
+                   href='https://socialgorithm.org'
+        >
+          #socialgorithm
+        </Menu.Item>
         <Menu.Item header
                    as={ Link }
                    activeClassName='active'
