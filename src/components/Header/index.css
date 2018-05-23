@@ -1,0 +1,11 @@
+.ui.menu.main-header {
+    background-color: #3c4b64;
+    border-radius: 0;
+}
+
+.ui.menu.main-header .item {
+    font-family: Lato,Helvetica,Arial,sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 11px;
+}

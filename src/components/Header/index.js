@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Menu, Icon } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
+import './index.css';
 
 class Header extends React.Component {
   constructor() {
@@ -16,22 +17,31 @@ class Header extends React.Component {
       },
       {
         url: '/replay',
-        name: 'Replay',
+        name: 'Analyse',
       },
       {
         url: '/tournaments',
-        name: 'Tournaments',
+        name: 'Competition',
       },
     ];
   }
 
   render() {
     return (
-      <Menu inverted>
+      <Menu inverted className='main-header'>
         <Menu.Item header
+                   as='a'
+                   href='https://socialgorithm.org'
+        >
+          #socialgorithm
+        </Menu.Item>
+        <Menu.Item header
+                   as={ Link }
+                   activeClassName='active'
+                   to='/home'
                    name='home'
         >
-          Ultimate TTT Battle
+          Ultimate TTT
         </Menu.Item>
 
         {
@@ -42,12 +52,8 @@ class Header extends React.Component {
           ))
         }
 
-        <Menu.Item as='a' href='https://socialgorithm.org/ultimate-ttt-docs' title='Ultimate TTT Documentation'>
-          Documentation
-        </Menu.Item>
-
         <Menu.Menu position='right' icon>
-          <Menu.Item href="https://github.com/aurbano/ultimate-ttt-web" target='_blank'>
+          <Menu.Item href="https://github.com/socialgorithm" target='_blank'>
             <Icon name='github'/>
             Github
           </Menu.Item>

@@ -5,8 +5,17 @@ export default function createRoutes() {
     {
       path: '/',
       component: App,
-      indexRoute: { onEnter: (nextState, replace) => replace('/stats') },
+      indexRoute: { onEnter: (nextState, replace) => replace('/home') },
       childRoutes: [
+        {
+          path: '/home',
+          name: 'home',
+          getComponent: (nextState, cb) => {
+            require.ensure([], (require) => {
+              cb(null, require('./sections/Home').default)
+            })
+          },
+        },
         {
           path: '/stats',
           name: 'stats',
@@ -22,6 +31,15 @@ export default function createRoutes() {
           getComponent: (nextState, cb) => {
             require.ensure([], (require) => {
               cb(null, require('./sections/Replay').default)
+            })
+          },
+        },
+        {
+          path: '/match',
+          name: 'match',
+          getComponent: (nextState, cb) => {
+            require.ensure([], (require) => {
+              cb(null, require('./sections/Match').default)
             })
           },
         },

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
 import SocketContainer from '../../containers/SocketContainer';
@@ -11,9 +10,7 @@ class App extends React.Component {
     return (
       <SocketContainer>
         <Header />
-        <Container fluid style={ { padding: '0 20px' } }>
-          { this.props.children }
-        </Container>
+        { this.props.children }
       </SocketContainer>
     );
   }
