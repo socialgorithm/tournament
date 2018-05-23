@@ -1,47 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import jsplumb from 'jsplumb';
-import { Segment, Table, Loader } from 'semantic-ui-react';
+import { Segment, Table, Loader, Container } from 'semantic-ui-react';
 
 import './index.css';
 
 class Tournaments extends React.Component {
-  /**
-   * Prepare a jsPlumb instance
-   */
-  constructor(props) {
-    super(props);
-    const jsPlumb = (jsplumb.jsPlumb) ? jsplumb.jsPlumb : jsplumb;
-    this.jsPlumbInstance = jsPlumb.getInstance({
-      Container: this.canvas,
-      ConnectionsDetachable: false,
-      ConnectionOverlays: [
-        ['Arrow', {
-          location: 1,
-          width: 8,
-          length: 6,
-          foldback: 1,
-        }],
-        ['Label', {
-          location: 0.1,
-          id: 'label',
-          cssClass: 'aLabel',
-        }],
-      ],
-    });
-
-    this.jsPlumbInstance.importDefaults({
-      PaintStyle: {
-        strokeWidth: 2,
-        stroke: 'rgb(184, 184, 184)',
-      },
-    });
-
-    this.jsPlumbInstance.registerConnectionType('basic', {
-      connector: ['StateMachine', { gap: 0 }],
-      overlays: ['Arrow'],
-    });
-  };
 
   getParameterByName = (name, url) => {
     if (!url) url = window.location.href;
@@ -85,7 +48,7 @@ class Tournaments extends React.Component {
   render() {
     const header = (this.props.started) ? 'Tournament' : 'Waiting for Tournament to start...';
     return (
-      <div>
+      <Container>
         <h1>{ header }</h1>
         <Segment loading={ !this.props.started }>
           <Table definition celled striped textAlign='center'>
@@ -107,7 +70,7 @@ class Tournaments extends React.Component {
             </Table.Body>
           </Table>
         </Segment>
-      </div>
+      </Container>
     );
   }
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, Grid, List, Label } from 'semantic-ui-react';
+import { Header, Grid, List, Label, Container } from 'semantic-ui-react';
 
 class Stats extends React.Component {
   render() {
     return (
-      <div>
+      <Container>
         <Grid divided>
           <Grid.Column width={ 4 }>
             <Header>Players</Header>
@@ -27,7 +27,7 @@ class Stats extends React.Component {
             </ul>
           </Grid.Column>
         </Grid>
-      </div>
+      </Container>
     );
   }
 }

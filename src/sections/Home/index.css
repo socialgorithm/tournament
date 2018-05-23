@@ -1,0 +1,27 @@
+.hero {
+    background: url(https://socialgorithm.org/img/bg-pattern.png),#79f1a4;
+    background: url(https://socialgorithm.org/img/bg-pattern.png),-webkit-linear-gradient(to left,#79f1a4,#0e5cad);
+    background: url(https://socialgorithm.org/img/bg-pattern.png),linear-gradient(to left,#79f1a4,#0e5cad);
+    color: #fff;
+    text-align: center;
+    padding: 4em 0;
+    margin-top: -0.5em;
+    font-size: 2em;
+}
+
+.section {
+    text-align: center;
+    padding: 5em 0;
+}
+
+.bg-primary {
+    background: #ef6c00;
+    background: -webkit-linear-gradient(#ef6c00,#d66000);
+    background: linear-gradient(#ef6c00,#d66000);
+    color: #fff;
+}
+
+.bg-primary .icon {
+    margin-bottom: 0.5em;
+    font-size: 2em;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from 'semantic-ui-react';
 
 import Uploader from './Uploader';
 import GameExplorer from './GameExplorer';
@@ -31,9 +32,9 @@ class Replay extends React.Component {
     }
 
     return (
-      <div>
+      <Container fluid style={ { padding: '0 20px' } }>
         { content }
-      </div>
+      </Container>
     );
   }
 }
