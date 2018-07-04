@@ -3,6 +3,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import Header from '../../components/Header';
 import SocketContainer from '../../containers/SocketContainer';
+import { SocketContext } from '../../components/SocketProvider';
 import Home from '../Home';
 import Match from '../Match';
 import Replay from '../Replay';
