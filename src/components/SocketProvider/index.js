@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 
 class SocketProvider extends React.Component {
+  static socket;
+  
   constructor(props) {
     super(props);
 
