@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
+
+import { connect, disconnect } from './socket';
 
 import SocketContext from './provider';
+
 class SocketProvider extends React.Component {
   constructor(props) {
     super(props);
@@ -19,13 +21,14 @@ class SocketProvider extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.status === 'connecting') {
-      this.connect();
+  static getDerivedStateFromProps(props, state) {
+    if (props.status === 'connecting') {
+      return connect(props, state);
     }
-    if (this.props.status === 'disconnecting') {
-      this.disconnect();
+    if (props.status === 'disconnecting') {
+      return disconnect(props, state);
     }
+    return state;
   }
 
   componentWillUnmount() {
@@ -37,69 +40,7 @@ class SocketProvider extends React.Component {
       console.warn('Socket not connected');
       return;
     }
-    this.state.socket.emit(message, payload);
-  };
-
-  disconnect = () => {
-    if (this.state.socket) {
-      this.state.socket.close();
-      this.props.actions.disconnected();
-    }
-  };
-
-  connect = () => {
-    const socket = io(this.props.host, {
-      reconnection: false,
-      query: {
-        client: true,
-      }
-    });
-
-    socket.on('stats', (data) => {
-      this.props.actions.updateStats(data);
-    });
-
-    socket.on('tournament', (data) => {
-      this.props.actions.updateTournaments(data);
-    });
-
-    socket.on('connect', () => {
-      this.props.actions.connected();
-      // persist the host to localStorage
-      localStorage.setItem('host', this.props.host);
-    });
-
-    socket.on('disconnect', (data) => {
-      this.props.actions.disconnected(data);
-    });
-
-    socket.on('reconnect_error', (data) => {
-      this.props.actions.error({
-        type: 'reconnect_error',
-        message: data.message,
-      });
-    });
-
-    socket.on('connect_error', (data) => {
-      this.props.actions.error({
-        type: 'connect_error',
-        message: data.message,
-      });
-    });
-
-    socket.on('error', (data) => {
-      const message = (typeof data === 'string') ? data : data.message;
-      this.props.actions.error({
-        type: 'error',
-        message,
-      });
-    });
-
-    socket.connect();
-
-    this.setState({
-      socket,
-    });
+    return this.state.socket.emit(message, payload);
   };
 
   render() {
