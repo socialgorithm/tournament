@@ -13,6 +13,7 @@ class SocketProvider extends React.Component {
     this.state = {
       socket: null,
       emit: this.emit,
+      uuid: props.uuid,
     };
 
     if (localStorage.getItem('host') !== null) {

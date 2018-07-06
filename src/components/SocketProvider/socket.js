@@ -11,6 +11,7 @@ export const connect = (props, state) => {
         timeout: 2000,
         query: {
             client: true,
+            name: props.uuid,
         }
     });
 

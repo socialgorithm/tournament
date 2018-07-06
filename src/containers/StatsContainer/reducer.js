@@ -20,7 +20,8 @@ function getStats(state, action) {
 function updateStats(state, action) {
   const update = action.payload;
   console.log('stats update', update);
-  const players = state.get('players');
+  const players = state.get('players') || [];
+  console.log('players', players);
   switch (update.type) {
     case 'stats':
       return state.merge({
