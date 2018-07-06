@@ -91,7 +91,9 @@ class JoinMatch extends React.PureComponent {
             <div style={ { paddingBottom: '2em' } }>
                 <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.players.length }</Label></p>
                 <List></List>
-                <div style={ footerStyle }><Icon name='copy outline' /> { this.token() }</div>
+                <div style={ footerStyle }>
+                    <a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
+                </div>
             </div>
         );
     };
