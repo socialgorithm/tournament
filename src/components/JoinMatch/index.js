@@ -1,18 +1,25 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Icon, Container, Message } from 'semantic-ui-react';
+import { Icon, Container, Message, Loader } from 'semantic-ui-react';
 
 class JoinMatch extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            players: 1,
+        };
+    }
     componentDidMount() {
-        console.log('joining lobby');
         this.props.socket.emit('lobby join', {
             token: this.token(),
         });
     }
 
-    componentWillUnmount() {
-        
-    }
+    // componentWillUnmount() {
+    //     // leave the lobby?
+    //     this.props.socket.emit();
+    // }
 
     token = () => this.props.match.params.name;
 
@@ -27,10 +34,17 @@ class JoinMatch extends React.PureComponent {
     
         return (
             <Container textAlign='center'>
-                <h1><Icon name='game' /><br /> Joined Match</h1>
+                <h1><Icon name='game' /><br /> Joined Match!</h1>
                 <p>
-                    Available players: 1
+                    <Loader
+                        inline
+                        active
+                        content='Waiting for game to start...'
+                    />
                 </p>
+                <Message compact>
+                    Available Players: { this.state.players }
+                </Message>
             </Container>
         );
     }
