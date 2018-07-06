@@ -13,3 +13,10 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 .ui.header:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
     font-size: 1.5em;
 }
+
+pre.code {
+    background: #efefef;
+    font-size: 0.9em;
+    padding: 0.5em 1em;
+    margin: 0;
+}

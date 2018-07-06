@@ -8,7 +8,7 @@ class JoinMatch extends React.PureComponent {
 
         this.state = {
             admin: false,
-            players: 1,
+            players: [],
         };
     }
     componentDidMount() {
@@ -60,6 +60,22 @@ class JoinMatch extends React.PureComponent {
         );
     };
 
+    renderJoinCommand = () => {
+        const connectStyle = {
+            margin: '1em -1em 0',
+            borderTop: '1px solid #efefef',
+            padding: '1em 1em 0',
+            fontSize: '0.9em',
+        };
+        const host = this.props.socket.socket.io.uri;
+        return (
+            <div style={ connectStyle }>
+                <p>Connect your player:</p>
+                <pre className='code'>$ uabc --host "{host}" --token "{this.token()}" -f "path/to/executable"</pre>
+            </div>
+        );
+    };
+
     renderPlayers = () => {
         const footerStyle = {
             position: 'absolute',
@@ -72,8 +88,8 @@ class JoinMatch extends React.PureComponent {
             fontSize: '0.7em',
         };
         return (
-            <div>
-                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.players }</Label></p>
+            <div style={ { paddingBottom: '2em' } }>
+                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.players.length }</Label></p>
                 <List></List>
                 <div style={ footerStyle }><Icon name='copy outline' /> { this.token() }</div>
             </div>
@@ -100,6 +116,7 @@ class JoinMatch extends React.PureComponent {
                         <Grid.Column width={ 12 }>
                             { this.renderLoader() }
                             { this.renderAdmin() }
+                            { this.renderJoinCommand() }
                         </Grid.Column>
                     </Grid>
                 </Segment>                
