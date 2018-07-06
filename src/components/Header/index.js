@@ -43,7 +43,7 @@ class Header extends React.Component {
         {
           this.sections.map((section) => (
             <Menu.Item
-                exact
+                exact={ section.exact }
                 as={ NavLink }
                 activeClassName='active'
                 to={ section.url }
