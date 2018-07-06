@@ -34,13 +34,13 @@ class JoinMatch extends React.PureComponent {
             return null;
         }
         return (
-            <p>
+            <div style={ { textAlign: 'center', color: '#999' } }>
                 <Loader
                     inline
                     active
                     content='Waiting for game to start...'
                 />
-            </p>
+            </div>
         );
     };
 
@@ -97,7 +97,7 @@ class JoinMatch extends React.PureComponent {
                         <Grid.Column width={ 4 }>
                             { this.renderPlayers() }                        
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column width={ 12 }>
                             { this.renderLoader() }
                             { this.renderAdmin() }
                         </Grid.Column>
