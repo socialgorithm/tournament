@@ -55,7 +55,7 @@ class Header extends React.Component {
           ))
         }
 
-        <Menu.Menu position='right' icon>
+        <Menu.Menu position='right'>
           <Menu.Item href="https://github.com/socialgorithm" target='_blank'>
             <Icon name='github'/>
           </Menu.Item>

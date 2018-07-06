@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import { connect, disconnect } from './socket';
 
@@ -64,8 +65,4 @@ SocketProvider.propTypes = {
   }).isRequired,
 };
 
-export default SocketProvider;
-
-export {
-  SocketContext,
-};
+export default withRouter(SocketProvider);

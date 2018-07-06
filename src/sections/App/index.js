@@ -1,9 +1,10 @@
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header';
 import SocketContainer from '../../containers/SocketContainer';
-import { SocketContext } from '../../components/SocketProvider';
 import Home from '../Home';
 import Match from '../Match';
 import Replay from '../Replay';
@@ -15,10 +16,11 @@ class App extends React.PureComponent {
     return (
       <SocketContainer>
         <Header />
+        <ToastContainer />
         <Switch>
           <Route exact path='/' component={ Home } />
-          <Route exact path='/match' component={ Match } />
-          <Route exact path='/replay' component={ Replay } />
+          <Route path='/match' component={ Match } />
+          <Route path='/replay' component={ Replay } />
           <Route path='' component={ NotFound } />
         </Switch>
       </SocketContainer>

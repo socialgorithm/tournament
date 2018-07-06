@@ -1,34 +1,37 @@
 import React from 'react';
-import { Icon, Container, Button, Message } from 'semantic-ui-react';
+import { Switch, Route } from 'react-router-dom';
+import { Icon, Message } from 'semantic-ui-react';
 
+import CreateMatch from '../../components/CreateMatch';
+import JoinMatch from '../../components/JoinMatch';
 
 export default (props) => {
-
-    console.log('socket', props.socket);
-
-    if (!props.socket) {
+    if (!props.socket || !props.socket.socket) {
         return (
-            <Message>
-                Please connect to the server first.
-            </Message>
+            <div>
+                <h1><Icon name='game' /><br /> Match</h1>
+                <Message>
+                    Please connect to the server first.
+                </Message>
+            </div>
         );
     }
 
-    const createGame = () => {
-        props.socket.emit('lobby create', (data) => {
-            console.log('new lobby', data);
-        });
+    const render = (Component) => {
+        return () => (
+            <Component { ...props } />
+        );
     };
 
     return (
-        <Container textAlign='center'>
-            <h1><Icon name='game' /><br /> Create Match</h1>
-            <Button
-                primary
-                icon='add'
-                content='Get Started'
-                onClick={ createGame }
+        <Switch>
+            <Route
+                path='/match/:name'
+                render={ render(JoinMatch) }
             />
-        </Container>
+            <Route
+                render={ render(CreateMatch) }
+            />
+        </Switch>
     );
 };

@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import { toast } from 'react-toastify';
 
 export const connect = (props, state) => {
     if (state.socket) {
@@ -24,6 +25,17 @@ export const connect = (props, state) => {
         props.actions.connected();
         // persist the host to localStorage
         localStorage.setItem('host', props.host);
+    });
+
+    socket.on('lobby created', (data) => {
+        // Redirect to this token
+        props.history.push(`/match/${data.token}`);
+    });
+
+    socket.on('lobby exception', (data) => {
+        // Redirect to this token
+        toast.error(data.error);
+        props.history.push('/match');
     });
 
     socket.on('disconnect', (data) => {
