@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Icon, Message, Container } from 'semantic-ui-react';
 
+import ServerContainer from '../../containers/ServerContainer';
 import CreateMatch from '../../components/CreateMatch';
 import JoinMatch from '../../components/JoinMatch';
 
@@ -10,9 +11,7 @@ export default (props) => {
         return (
             <Container textAlign='center'>
                 <h1><Icon name='game' /><br /> Match</h1>
-                <Message compact warning>
-                    Please connect to the server first (top right button in the header)
-                </Message>
+                <ServerContainer content="Connect to server" />
             </Container>
         );
     }

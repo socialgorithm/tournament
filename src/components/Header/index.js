@@ -64,7 +64,7 @@ class Header extends React.Component {
             Docs
           </Menu.Item>
           <Menu.Item>
-            <ServerContainer />
+            <ServerContainer inverted />
           </Menu.Item>
         </Menu.Menu>
       </Menu>

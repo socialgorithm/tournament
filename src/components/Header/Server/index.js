@@ -38,7 +38,7 @@ class Server extends React.Component {
           trigger={
             <div>
               <Label circular color='red' empty style={ {marginRight: '10px'} }/>
-              Connect
+              { this.props.content || 'Connect' }
             </div>
           }
         />
@@ -98,7 +98,7 @@ class Server extends React.Component {
     }
 
     return (
-      <Modal trigger={<Button basic inverted compact>{ status }</Button>}>
+      <Modal trigger={<Button basic inverted={ this.props.inverted } compact>{ status }</Button>}>
         <Modal.Header>
           <Icon name='lightning' />
           Server connection
