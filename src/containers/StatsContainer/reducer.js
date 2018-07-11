@@ -1,16 +1,16 @@
 import { handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 
 import * as constants from './constants';
 
 export const initialState = Map({
-  players: [],
+  players: List(),
   games: []
 });
 
 export default handleActions({
   [constants.GET_STATS]: getStats,
-  [constants.UPDATE_STATS]: updateStats,
+  //[constants.UPDATE_STATS]: updateStats,
 }, initialState);
 
 function getStats(state, action) {
@@ -19,9 +19,7 @@ function getStats(state, action) {
 
 function updateStats(state, action) {
   const update = action.payload;
-  console.log('stats update', update);
-  const players = state.get('players') || [];
-  console.log('players', players);
+  const players = state.get('players') || List();
   switch (update.type) {
     case 'stats':
       return state.merge({

@@ -8,17 +8,22 @@ class JoinMatch extends React.PureComponent {
 
         this.state = {
             admin: false,
-            players: [],
+            lobby: {
+                token: null,
+                players: [],
+            },
         };
     }
     componentDidMount() {
         this.props.socket.socket.on('lobby joined', data => {
             this.setState({
                 admin: data.isAdmin,
+                lobby: data.lobby,
             });
         });
         this.props.socket.emit('lobby join', {
             token: this.token(),
+            spectating: true,
         });
     }
 
@@ -71,7 +76,7 @@ class JoinMatch extends React.PureComponent {
         return (
             <div style={ connectStyle }>
                 <p>Connect your player:</p>
-                <pre className='code'>$ uabc --host "{host}" --token "{this.token()}" -f "path/to/executable"</pre>
+                <pre className='code'>$ uabc --host "{host}" --lobby "{this.token()}" --token "your team name" -f "path/to/executable"</pre>
             </div>
         );
     };
@@ -89,8 +94,14 @@ class JoinMatch extends React.PureComponent {
         };
         return (
             <div style={ { paddingBottom: '2em' } }>
-                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.players.length }</Label></p>
-                <List></List>
+                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.lobby.players.length }</Label></p>
+                <List>
+                    { this.state.lobby.players.map(player => (
+                        <List.Item>
+                            { player.token }
+                        </List.Item>
+                    )) }
+                </List>
                 <div style={ footerStyle }>
                     <a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
                 </div>
