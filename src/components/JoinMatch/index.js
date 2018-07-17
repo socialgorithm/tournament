@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label } from 'semantic-ui-react';
+import * as circularJson from 'circular-json';
 
 class JoinMatch extends React.PureComponent {
     constructor(props) {
@@ -18,20 +19,20 @@ class JoinMatch extends React.PureComponent {
         this.props.socket.socket.on('lobby joined', data => {
             this.setState({
                 admin: data.isAdmin,
-                lobby: data.lobby,
+                lobby: circularJson.parse(data.lobby),
             });
         });
         this.props.socket.socket.on('connected', data => {
-            const lobby = data.lobby;
-            if (data.lobby.token !== this.state.lobby.token) {
+            const lobby = circularJson.parse(data.lobby);
+            if (lobby.token !== this.state.lobby.token) {
                 return;
             }
             this.setState({
-                lobby: data.lobby,
+                lobby: lobby,
             });
         });
         this.props.socket.socket.on('lobby disconnected', data => {
-            const lobby = data.payload.lobby;
+            const lobby = circularJson.parse(data.payload.lobby);
             if (lobby.token !== this.state.lobby.token) {
                 return;
             }
@@ -45,10 +46,9 @@ class JoinMatch extends React.PureComponent {
         });
     }
 
-    // componentWillUnmount() {
-    //     // leave the lobby?
-    //     this.props.socket.emit();
-    // }
+    startTournament = () => {
+        this.props.socket.socket.emit('lobby tournament start', {});
+    };
 
     token = () => this.props.match.params.name;
 
@@ -71,13 +71,18 @@ class JoinMatch extends React.PureComponent {
         if (!this.state.admin) {
             return null;
         }
+        const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
         return (
             <div>
                 <Header content='Admin' />
                 <p>You are the admin for this lobby</p>
                 <Button
                     primary
+                    icon='play'
+                    title={ title }
+                    disabled={ this.state.lobby.players.length < 2 }
                     content='Start Game'
+                    onClick={ this.startTournament }
                 />
             </div>
         );

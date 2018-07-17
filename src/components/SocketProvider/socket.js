@@ -1,5 +1,6 @@
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
+import * as circularJson from 'circular-json';
 
 export const connect = (props, state) => {
     if (state.socket) {
@@ -30,8 +31,9 @@ export const connect = (props, state) => {
     });
 
     socket.on('lobby created', (data) => {
+        const lobby = circularJson.parse(data.lobby);
         // Redirect to this token
-        props.history.push(`/match/${data.lobby.token}`);
+        props.history.push(`/match/${lobby.token}`);
     });
 
     socket.on('lobby exception', (data) => {
