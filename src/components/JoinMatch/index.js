@@ -21,6 +21,24 @@ class JoinMatch extends React.PureComponent {
                 lobby: data.lobby,
             });
         });
+        this.props.socket.socket.on('connected', data => {
+            const lobby = data.lobby;
+            if (data.lobby.token !== this.state.lobby.token) {
+                return;
+            }
+            this.setState({
+                lobby: data.lobby,
+            });
+        });
+        this.props.socket.socket.on('lobby disconnected', data => {
+            const lobby = data.payload.lobby;
+            if (lobby.token !== this.state.lobby.token) {
+                return;
+            }
+            this.setState({
+                lobby,
+            });
+        });
         this.props.socket.emit('lobby join', {
             token: this.token(),
             spectating: true,
@@ -92,13 +110,14 @@ class JoinMatch extends React.PureComponent {
             background: '#efefef',
             fontSize: '0.7em',
         };
+        const players = this.state.lobby.players;
         return (
             <div style={ { paddingBottom: '2em' } }>
-                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ this.state.lobby.players.length }</Label></p>
+                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></p>
                 <List>
-                    { this.state.lobby.players.map(player => (
-                        <List.Item>
-                            { player.token }
+                    { players.map(player => (
+                        <List.Item key={ player.token }>
+                            <Icon name='circle' color='green' /> { player.token }
                         </List.Item>
                     )) }
                 </List>
