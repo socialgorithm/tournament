@@ -97,8 +97,18 @@ class Server extends React.Component {
       );
     }
 
+    const button = (
+      <Button
+        basic
+        inverted={ this.props.inverted }
+        compact
+        className='as-text'
+        content={ status }
+      />
+    );
+
     return (
-      <Modal trigger={<Button basic inverted={ this.props.inverted } compact>{ status }</Button>}>
+      <Modal trigger={ button }>
         <Modal.Header>
           <Icon name='lightning' />
           Server connection

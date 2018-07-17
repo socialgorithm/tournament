@@ -9,3 +9,8 @@
     letter-spacing: 2px;
     font-size: 11px;
 }
+
+.ui.button.as-text,
+.ui.button.inverted.as-text {
+    box-shadow: none !important;
+}

@@ -1,3 +1,8 @@
+@font-face { font-family: 'Catamaran'; font-style: normal; font-weight: 100; src: url('./assets/fonts/catamaran/catamaran-v4-latin-100.eot'); src: local('Catamaran Thin'), local('Catamaran-Thin'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.woff2') format('woff2'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.woff') format('woff'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.ttf') format('truetype'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.svg#Catamaran') format('svg'); }
+@font-face { font-family: 'Catamaran'; font-style: normal; font-weight: 900; src: url('./assets/fonts/catamaran/catamaran-v4-latin-900.eot'); src: local('Catamaran Black'), local('Catamaran-Black'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.woff2') format('woff2'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.woff') format('woff'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.ttf') format('truetype'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.svg#Catamaran') format('svg'); }
+
+@font-face { font-family: 'Lato'; font-style: normal; font-weight: 400; src: url('./assets/fonts/lato/lato-v14-latin-regular.eot'); src: local('Lato Regular'), local('Lato-Regular'), url('./assets/fonts/lato/lato-v14-latin-regular.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/lato/lato-v14-latin-regular.woff2') format('woff2'), url('./assets/fonts/lato/lato-v14-latin-regular.woff') format('woff'), url('./assets/fonts/lato/lato-v14-latin-regular.ttf') format('truetype'), url('./assets/fonts/lato/lato-v14-latin-regular.svg#Lato') format('svg'); }
+
 body {
   margin: 0;
   padding: 0;
@@ -20,4 +25,10 @@ pre.code {
     padding: 0.5em 1em;
     margin: 0;
     white-space: pre-wrap;
+}
+
+.socialgorithm-logo {
+    background: linear-gradient(to left, #79f1a4,#86e9ff) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
 }

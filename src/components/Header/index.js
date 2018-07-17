@@ -26,6 +26,7 @@ class Header extends React.Component {
       <Menu inverted className='main-header'>
         <Menu.Item header
                    as='a'
+                   className='socialgorithm-logo'
                    href='https://socialgorithm.org'
         >
           #socialgorithm
