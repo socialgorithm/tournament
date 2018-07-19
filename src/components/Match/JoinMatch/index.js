@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label } from 'semantic-ui-react';
 import * as circularJson from 'circular-json';
 
+import MatchPage from '../MatchPage';
+
 class JoinMatch extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -12,6 +14,7 @@ class JoinMatch extends React.PureComponent {
             lobby: {
                 token: null,
                 players: [],
+                tournament: null,
             },
         };
     }
@@ -139,6 +142,14 @@ class JoinMatch extends React.PureComponent {
                 <Message>
                     Please connect to the server first.
                 </Message>
+            );
+        }
+
+        if (this.state.lobby.tournament) {
+            return (
+                <MatchPage
+                  tournament={ this.state.lobby.tournament }
+                />
             );
         }
     
