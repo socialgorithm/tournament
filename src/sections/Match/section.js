@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { Icon, Message, Container } from 'semantic-ui-react';
+import { Icon, Container } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
 import CreateMatch from '../../components/CreateMatch';

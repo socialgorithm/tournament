@@ -17,51 +17,51 @@ function getStats(state, action) {
   return state;
 }
 
-function updateStats(state, action) {
-  const update = action.payload;
-  const players = state.get('players') || List();
-  switch (update.type) {
-    case 'stats':
-      return state.merge({
-        players: update.payload.players.map((player) => (
-          {
-            name: player,
-            online: true,
-          }
-        )),
-        games: update.payload.games,
-      });
-    case 'connect':
-      for (let i = 0; i < players.size; i++) {
-        if (players.get(i).name === update.payload) {
-          return state.merge({
-            players: players.mergeIn(i, {
-              online: true
-            }),
-          });
-        }
-      }
-      return state.merge({
-        players: players.push({
-          name: update.payload,
-          online: true,
-        }),
-      });
-    case 'disconnect':
-      if (!update.payload) {
-        return state;
-      }
-      for (let i = 0; i < players.size; i++) {
-        if (players.get(i).name === update.payload) {
-          return state.merge({
-            players: players.mergeIn(i, {
-              online: false
-            }),
-          });
-        }
-      }
-      return state;
-    default:
-      return state;
-  }
-}
+// function updateStats(state, action) {
+//   const update = action.payload;
+//   const players = state.get('players') || List();
+//   switch (update.type) {
+//     case 'stats':
+//       return state.merge({
+//         players: update.payload.players.map((player) => (
+//           {
+//             name: player,
+//             online: true,
+//           }
+//         )),
+//         games: update.payload.games,
+//       });
+//     case 'connect':
+//       for (let i = 0; i < players.size; i++) {
+//         if (players.get(i).name === update.payload) {
+//           return state.merge({
+//             players: players.mergeIn(i, {
+//               online: true
+//             }),
+//           });
+//         }
+//       }
+//       return state.merge({
+//         players: players.push({
+//           name: update.payload,
+//           online: true,
+//         }),
+//       });
+//     case 'disconnect':
+//       if (!update.payload) {
+//         return state;
+//       }
+//       for (let i = 0; i < players.size; i++) {
+//         if (players.get(i).name === update.payload) {
+//           return state.merge({
+//             players: players.mergeIn(i, {
+//               online: false
+//             }),
+//           });
+//         }
+//       }
+//       return state;
+//     default:
+//       return state;
+//   }
+// }

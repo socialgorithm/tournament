@@ -4,7 +4,6 @@ import * as circularJson from 'circular-json';
 
 export const connect = (props, state) => {
     if (state.socket) {
-        console.log('already connected!');
         return state;
     }
     const socket = io(props.host, {
