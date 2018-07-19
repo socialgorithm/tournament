@@ -6719,15 +6719,15 @@ selfsigned@^1.9.1:
   dependencies:
     node-forge "0.7.5"
 
-semantic-ui-css@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/semantic-ui-css/-/semantic-ui-css-2.3.2.tgz#f84ffaf7559c17401db43e2b44b7b4caaab54836"
+semantic-ui-css@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/semantic-ui-css/-/semantic-ui-css-2.3.3.tgz#134794cde03344092f2728ff61bf9203cf172834"
   dependencies:
     jquery x.*
 
-semantic-ui-react@^0.81.3:
-  version "0.81.3"
-  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.81.3.tgz#ad98917c44cda4b316ee841d67dc071e16e93e9c"
+semantic-ui-react@^0.82.0:
+  version "0.82.0"
+  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.82.0.tgz#e7145308348520bf2baf0c63a6bfe6bbd830ccdf"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.49"
     classnames "^2.2.5"

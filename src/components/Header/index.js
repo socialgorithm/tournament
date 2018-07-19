@@ -11,12 +11,20 @@ class Header extends React.Component {
 
     this.sections = [
       {
+        url: '/',
+        name: 'Home',
+        icon: 'home',
+        exact: true,
+      },
+      {
         url: '/match',
         name: 'Match',
+        icon: 'game',
       },
       {
         url: '/replay',
         name: 'Analyse',
+        icon: 'lab',
       },
     ];
   }
@@ -26,21 +34,11 @@ class Header extends React.Component {
       <Menu inverted className='main-header'>
         <Menu.Item header
                    as='a'
-                   className='socialgorithm-logo'
+                   className='socialgorithm-logo animated-hue'
                    href='https://socialgorithm.org'
         >
           #socialgorithm
         </Menu.Item>
-        <Menu.Item header
-                   as={ NavLink }
-                   activeClassName='active'
-                   to='/'
-                   exact
-                   name='home'
-        >
-          Home
-        </Menu.Item>
-
         {
           this.sections.map((section) => (
             <Menu.Item
@@ -50,19 +48,23 @@ class Header extends React.Component {
                 to={ section.url }
                 title={ section.name }
                 key={ section.url }
-            >
-              { section.name }
-            </Menu.Item>
+                icon={ section.icon }
+                content={ section.name }
+            />
           ))
         }
+        <Menu.Item href="https://socialgorithm.org/ultimate-ttt-docs" target='_blank'>
+          <Icon name='book'/>
+          Docs
+        </Menu.Item>
 
         <Menu.Menu position='right'>
           <Menu.Item href="https://github.com/socialgorithm" target='_blank'>
             <Icon name='github'/>
           </Menu.Item>
-          <Menu.Item href="https://socialgorithm.org/ultimate-ttt-docs" target='_blank'>
-            <Icon name='book'/>
-            Docs
+          <Menu.Item href="https://socialgorithm-slack.herokuapp.com" target='_blank'>
+            <Icon name='slack hash'/>
+            Slack
           </Menu.Item>
           <Menu.Item>
             <ServerContainer inverted />
