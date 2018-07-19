@@ -1,15 +1,10 @@
 import React, { Fragment } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Icon, Container, Table, Grid, Label, Segment, Progress, List } from 'semantic-ui-react';
+import { Icon, Container, Table, Grid, Label, List } from 'semantic-ui-react';
 
 import UTTTGame from '../../UTTTGame';
 import Match from './Match';
 
 export default class MatchPage extends React.PureComponent {
-    constructor(props) {
-        super(props);
-    }
-
     renderTournamentLabel() {
         let state = 'Waiting...';
         let color = null;

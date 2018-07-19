@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Container, Button, Message, Divider, Grid, Segment } from 'semantic-ui-react';
+import { Icon, Container, Button, Message, Grid, Segment } from 'semantic-ui-react';
 
 export default (props) => {
     if (!props.socket) {
