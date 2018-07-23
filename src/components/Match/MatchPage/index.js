@@ -1,10 +1,15 @@
 import React, { Fragment } from 'react';
-import { Icon, Container, Table, Grid, Label, List } from 'semantic-ui-react';
+import { Icon, Container, Loader, Grid, Label, List, Segment } from 'semantic-ui-react';
 
 import UTTTGame from '../../UTTTGame';
 import Match from './Match';
 
 export default class MatchPage extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        console.log('Render Match Page', props);
+    }
     renderTournamentLabel() {
         let state = 'Waiting...';
         let color = null;
@@ -24,23 +29,32 @@ export default class MatchPage extends React.PureComponent {
      * Renders the current match and the finished ones
      */
     renderMatches() {
-        const currentMatch = this.props.matches.find(match => match.state === 'playing');
+        const matches = this.props.tournament.stats.matches;
+        const currentMatch = matches.find(match => match.state === 'playing');
         return (
             <Fragment>
                 <h2>Current Match</h2>
-                <Match
-                    playerA={ currentMatch.players[0].token }
-                    playerB={ currentMatch.players[1].token }
-                    winsA={ currentMatch.players[0].gamesWon }
-                    winsB={ currentMatch.players[1].gamesWon }
-                    gamesPlayed={ currentMatch.games.length }
-                    totalGames={ this.props.options.maxGames }
-                    displayProgress
-                />
+                { currentMatch && (
+                    <Match
+                        playerA={ currentMatch.players[0].token }
+                        playerB={ currentMatch.players[1].token }
+                        winsA={ currentMatch.players[0].gamesWon }
+                        winsB={ currentMatch.players[1].gamesWon }
+                        gamesPlayed={ currentMatch.games.length }
+                        totalGames={ this.props.options.maxGames }
+                        displayProgress
+                    />
+                ) }
+                { !currentMatch && (
+                    <Segment textAlign='center'>
+                        <Loader active inline content='Waiting for Match to start...' />
+                    </Segment>
+                ) }
+                
 
                 <h3>Finished</h3>
 
-                { this.props.matches.filter(match => match.state === 'finished').map(match => (
+                { matches.filter(match => match.state === 'finished').map(match => (
                     <Match
                         playerA={ match.players[0].token }
                         playerB={ match.players[1].token }
@@ -53,11 +67,12 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderUpcoming() {
+        const matches = this.props.tournament.stats.matches;
         return (
             <Fragment>
                 <h2>Next Matches</h2>
                 <List relaxed>
-                    { this.props.matches.filter(match => match.state === 'upcoming').map(match => (
+                    { matches.filter(match => match.state === 'upcoming').map(match => (
                         <List.Item>
                             <b>{ match.players[0].token }</b> vs <b>{ match.players[1].token }</b>
                         </List.Item>
@@ -68,27 +83,28 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderRanking() {
-        return (
-            <Fragment>
-                <h2>Ranking</h2>
-                <Table compact>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>#</Table.HeaderCell>
-                            <Table.HeaderCell>Player</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        { this.props.ranking.players.map((player, $index) => (
-                            <Table.Row>
-                                <Table.Cell>{ $index + 1 }</Table.Cell>
-                                <Table.Cell>{ player }</Table.Cell>
-                            </Table.Row>
-                        )) }                        
-                    </Table.Body>
-                </Table>
-            </Fragment>
-        );
+        return 'Bharat hasnt made a ranking...';
+        // return (
+        //     <Fragment>
+        //         <h2>Ranking</h2>
+        //         <Table compact>
+        //             <Table.Header>
+        //                 <Table.Row>
+        //                     <Table.HeaderCell>#</Table.HeaderCell>
+        //                     <Table.HeaderCell>Player</Table.HeaderCell>
+        //                 </Table.Row>
+        //             </Table.Header>
+        //             <Table.Body>
+        //                 { this.props.ranking.players.map((player, $index) => (
+        //                     <Table.Row>
+        //                         <Table.Cell>{ $index + 1 }</Table.Cell>
+        //                         <Table.Cell>{ player }</Table.Cell>
+        //                     </Table.Row>
+        //                 )) }                        
+        //             </Table.Body>
+        //         </Table>
+        //     </Fragment>
+        // );
     }
 
     render() {

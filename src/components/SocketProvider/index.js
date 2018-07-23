@@ -34,7 +34,7 @@ class SocketProvider extends React.Component {
   }
 
   componentWillUnmount() {
-    this.disconnect();
+    disconnect(this.props, this.state);
   }
 
   emit = (message, payload) => {

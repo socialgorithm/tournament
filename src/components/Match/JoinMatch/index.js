@@ -47,6 +47,11 @@ class JoinMatch extends React.PureComponent {
             token: this.token(),
             spectating: true,
         });
+        this.props.socket.socket.on('lobby tournament started', data => {
+            this.setState({
+                lobby: circularJson.parse(data.lobby),
+            });
+        });
     }
 
     startTournament = () => {
