@@ -13,22 +13,22 @@ export default class MatchPage extends React.PureComponent {
     renderTournamentLabel() {
         let state = 'Waiting...';
         let color = null;
-        if (this.props.started) {
-            state = 'In Progress';
-            color = 'orange';
-        } else if(this.props.finished) {
+        if(this.props.tournament.stats.finished) {
             state = 'Completed';
             color = 'green';
+        } else if (this.props.tournament.stats.started) {
+            state = 'In Progress';
+            color = 'orange';
         }
         return (
             <Label color={ color } content={ state } />
         );
     }
 
-    /**
-     * Renders the current match and the finished ones
-     */
-    renderMatches() {
+    renderCurrentMatch() {
+        if (this.props.tournament.stats.finished) {
+            return null;
+        }
         const matches = this.props.tournament.stats.matches;
         const currentMatch = matches.find(match => match.state === 'playing');
         return (
@@ -50,10 +50,45 @@ export default class MatchPage extends React.PureComponent {
                         <Loader active inline content='Waiting for Match to start...' />
                     </Segment>
                 ) }
-                
+            </Fragment>
+        );
+    }
+
+    renderCurrentGame() {
+        if (this.props.tournament.stats.finished) {
+            return null;
+        }
+        const matches = this.props.tournament.stats.matches;
+        const currentMatch = matches.find(match => match.state === 'playing');
+
+        if (!currentMatch) {
+            return null;
+        }
+
+        const utttGameStyle = {
+            fontSize: '0.6em',
+        };
+
+        return (
+            <Fragment>
+                <h2>Game</h2>
+                <div style={ utttGameStyle }>
+                    <UTTTGame hideSlider />
+                </div>
+            </Fragment>
+        );
+    }
+
+    /**
+     * Renders the current match and the finished ones
+     */
+    renderMatches() {
+        const matches = this.props.tournament.stats.matches;
+        return (
+            <Fragment>
+                { this.renderCurrentMatch() }
 
                 <h3>Finished</h3>
-
                 { matches.filter(match => match.state === 'finished').map(match => (
                     <Match
                         playerA={ match.players[0].token }
@@ -68,11 +103,15 @@ export default class MatchPage extends React.PureComponent {
 
     renderUpcoming() {
         const matches = this.props.tournament.stats.matches;
+        const upcoming = matches.filter(match => match.state === 'upcoming');
+        if (upcoming.length < 1) {
+            return null;
+        }
         return (
             <Fragment>
                 <h2>Next Matches</h2>
                 <List relaxed>
-                    { matches.filter(match => match.state === 'upcoming').map(match => (
+                    { upcoming.map(match => (
                         <List.Item>
                             <b>{ match.players[0].token }</b> vs <b>{ match.players[1].token }</b>
                         </List.Item>
@@ -108,9 +147,6 @@ export default class MatchPage extends React.PureComponent {
     }
 
     render() {
-        const utttGameStyle = {
-            fontSize: '0.6em',
-        };
         return (
             <Container>
                 <Grid columns={ 2 }>
@@ -132,11 +168,7 @@ export default class MatchPage extends React.PureComponent {
                             { this.renderMatches() }
                         </Grid.Column>
                         <Grid.Column width={ 4 }>
-                            <h2>Game</h2>
-                            <div style={ utttGameStyle }>
-                                <UTTTGame hideSlider />
-                            </div>
-
+                            { this.renderCurrentGame() }
                             { this.renderUpcoming() }
                         </Grid.Column>
                     </Grid.Row>
