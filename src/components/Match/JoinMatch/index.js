@@ -16,15 +16,10 @@ class JoinMatch extends React.PureComponent {
                 players: [],
                 tournament: null,
             },
+            update: 0,
         };
     }
     componentDidMount() {
-        this.props.socket.socket.on('lobby joined', data => {
-            this.setState({
-                admin: data.isAdmin,
-                lobby: circularJson.parse(data.lobby),
-            });
-        });
         this.props.socket.socket.on('connected', data => {
             const lobby = circularJson.parse(data.lobby);
             if (lobby.token !== this.state.lobby.token) {
@@ -47,10 +42,28 @@ class JoinMatch extends React.PureComponent {
             token: this.token(),
             spectating: true,
         });
+        this.props.socket.socket.on('lobby joined', data => {
+            this.setState({
+                admin: data.isAdmin,
+                lobby: circularJson.parse(data.lobby),
+            });
+        });
         this.props.socket.socket.on('lobby tournament started', data => {
             this.setState({
                 lobby: circularJson.parse(data.lobby),
             });
+        });
+        this.props.socket.socket.on('tournament stats', data => {
+            const lobby = this.state.lobby;
+            if (lobby.tournament) {
+                lobby.tournament.stats = data;
+                this.setState({
+                    lobby,
+                    update: this.state.update++,
+                });
+            } else {
+                console.warn('Tournament is null', this.state.lobby);
+            }
         });
     }
 
