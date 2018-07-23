@@ -1,7 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label } from 'semantic-ui-react';
-import * as circularJson from 'circular-json';
 
 import MatchPage from '../MatchPage';
 
@@ -21,7 +20,7 @@ class JoinMatch extends React.PureComponent {
     }
     componentDidMount() {
         this.props.socket.socket.on('connected', data => {
-            const lobby = circularJson.parse(data.lobby);
+            const lobby = data.lobby;
             if (lobby.token !== this.state.lobby.token) {
                 return;
             }
@@ -30,7 +29,7 @@ class JoinMatch extends React.PureComponent {
             });
         });
         this.props.socket.socket.on('lobby disconnected', data => {
-            const lobby = circularJson.parse(data.payload.lobby);
+            const lobby = data.payload.lobby;
             if (lobby.token !== this.state.lobby.token) {
                 return;
             }
@@ -45,18 +44,21 @@ class JoinMatch extends React.PureComponent {
         this.props.socket.socket.on('lobby joined', data => {
             this.setState({
                 admin: data.isAdmin,
-                lobby: circularJson.parse(data.lobby),
+                lobby: data.lobby,
             });
         });
         this.props.socket.socket.on('lobby tournament started', data => {
+            if (!data.lobby || !data.lobby.tournament) {
+                return;
+            }
             this.setState({
-                lobby: circularJson.parse(data.lobby),
+                lobby: data.lobby,
             });
         });
         this.props.socket.socket.on('tournament stats', data => {
             const lobby = this.state.lobby;
-            if (lobby.tournament) {
-                lobby.tournament.stats = data;
+            if (lobby.tournament && data) {
+                lobby.tournament = data;
                 this.setState({
                     lobby,
                     update: this.state.update++,

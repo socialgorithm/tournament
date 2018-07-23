@@ -6,6 +6,9 @@ import UTTT from '@socialgorithm/ultimate-ttt';
 
 import UTTTGame from '../../../components/UTTTGame';
 
+const PLAYER_YOU = 1;
+const PLAYER_OPPONENT = 1 - PLAYER_YOU;
+
 class GameExplorer extends React.Component {
   constructor(props) {
     super(props);
@@ -77,7 +80,7 @@ class GameExplorer extends React.Component {
         game.moves.push({
           board,
           move,
-          player: (opponent) ? 1 : 0,
+          player: (opponent) ? PLAYER_OPPONENT : PLAYER_YOU,
         });
 
         if (opponent) {
@@ -89,10 +92,10 @@ class GameExplorer extends React.Component {
         // update state
         if (game.uttt.isFinished()) {
           switch (game.uttt.getResult()) {
-            case 0:
+            case PLAYER_YOU:
               ret.won = ret.won + 1;
               break;
-            case 1:
+            case PLAYER_OPPONENT:
               ret.lost = ret.lost + 1;
               break;
             default:
@@ -111,10 +114,10 @@ class GameExplorer extends React.Component {
   printWinner = (winner) => {
     let color = 'grey';
     let text = 'Tied';
-    if (winner === 0) {
+    if (winner === PLAYER_YOU) {
       color = 'green';
       text = 'won';
-    } else if (winner === 1) {
+    } else if (winner === PLAYER_OPPONENT) {
       color = 'red';
       text = 'lost'
     }
@@ -184,8 +187,8 @@ class GameExplorer extends React.Component {
                 highlightMove={ activeMove.move }
               />
               <Divider />
-              <p><Label empty circular color='blue' horizontal /> Player A (player)</p>
-              <p><Label empty circular color='red' horizontal /> Player B (server)</p>
+              <p><Label empty circular color='blue' horizontal /> Player A (You)</p>
+              <p><Label empty circular color='red' horizontal /> Player B (Opponent)</p>
             </Grid.Column>
             <Grid.Column>
               <Header>Moves</Header>

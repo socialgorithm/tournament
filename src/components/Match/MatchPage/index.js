@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Icon, Container, Loader, Grid, Label, List, Segment } from 'semantic-ui-react';
+import { Icon, Container, Loader, Grid, Label, List, Segment, Table } from 'semantic-ui-react';
 
 import UTTTGame from '../../UTTTGame';
 import Match from './Match';
@@ -13,10 +13,10 @@ export default class MatchPage extends React.PureComponent {
     renderTournamentLabel() {
         let state = 'Waiting...';
         let color = null;
-        if(this.props.tournament.stats.finished) {
+        if(this.props.tournament.finished) {
             state = 'Completed';
             color = 'green';
-        } else if (this.props.tournament.stats.started) {
+        } else if (this.props.tournament.started) {
             state = 'In Progress';
             color = 'orange';
         }
@@ -26,11 +26,11 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderCurrentMatch() {
-        if (this.props.tournament.stats.finished) {
+        if (this.props.tournament.finished) {
             return null;
         }
-        const matches = this.props.tournament.stats.matches;
-        const currentMatch = matches.find(match => match.state === 'playing');
+        const matches = this.props.tournament.matches;
+        const currentMatch = matches.find(match => match.stats.state === 'playing');
         return (
             <Fragment>
                 <h2>Current Match</h2>
@@ -38,10 +38,10 @@ export default class MatchPage extends React.PureComponent {
                     <Match
                         playerA={ currentMatch.players[0].token }
                         playerB={ currentMatch.players[1].token }
-                        winsA={ currentMatch.players[0].gamesWon }
-                        winsB={ currentMatch.players[1].gamesWon }
-                        gamesPlayed={ currentMatch.games.length }
-                        totalGames={ this.props.options.maxGames }
+                        winsA={ currentMatch.stats.wins[0] }
+                        winsB={ currentMatch.stats.wins[1] }
+                        gamesPlayed={ currentMatch.stats.games }
+                        totalGames={ this.props.tournament.options.numberOfGames }
                         displayProgress
                     />
                 ) }
@@ -55,11 +55,11 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderCurrentGame() {
-        if (this.props.tournament.stats.finished) {
+        if (this.props.tournament.finished) {
             return null;
         }
-        const matches = this.props.tournament.stats.matches;
-        const currentMatch = matches.find(match => match.state === 'playing');
+        const matches = this.props.tournament.matches;
+        const currentMatch = matches.find(match => match.stats.state === 'playing');
 
         if (!currentMatch) {
             return null;
@@ -83,18 +83,18 @@ export default class MatchPage extends React.PureComponent {
      * Renders the current match and the finished ones
      */
     renderMatches() {
-        const matches = this.props.tournament.stats.matches;
+        const matches = this.props.tournament.matches;
         return (
             <Fragment>
                 { this.renderCurrentMatch() }
 
                 <h3>Finished</h3>
-                { matches.filter(match => match.state === 'finished').map(match => (
+                { matches.filter(match => match.stats.state === 'finished').map(match => (
                     <Match
                         playerA={ match.players[0].token }
                         playerB={ match.players[1].token }
-                        winsA={ match.players[0].gamesWon }
-                        winsB={ match.players[1].gamesWon }
+                        winsA={ match.stats.wins[0] }
+                        winsB={ match.stats.wins[1] }
                     />
                 )) }
             </Fragment>
@@ -102,8 +102,8 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderUpcoming() {
-        const matches = this.props.tournament.stats.matches;
-        const upcoming = matches.filter(match => match.state === 'upcoming');
+        const matches = this.props.tournament.matches;
+        const upcoming = matches.filter(match => match.stats.state === 'upcoming');
         if (upcoming.length < 1) {
             return null;
         }
@@ -122,28 +122,27 @@ export default class MatchPage extends React.PureComponent {
     }
 
     renderRanking() {
-        return 'Bharat hasnt made a ranking...';
-        // return (
-        //     <Fragment>
-        //         <h2>Ranking</h2>
-        //         <Table compact>
-        //             <Table.Header>
-        //                 <Table.Row>
-        //                     <Table.HeaderCell>#</Table.HeaderCell>
-        //                     <Table.HeaderCell>Player</Table.HeaderCell>
-        //                 </Table.Row>
-        //             </Table.Header>
-        //             <Table.Body>
-        //                 { this.props.ranking.players.map((player, $index) => (
-        //                     <Table.Row>
-        //                         <Table.Cell>{ $index + 1 }</Table.Cell>
-        //                         <Table.Cell>{ player }</Table.Cell>
-        //                     </Table.Row>
-        //                 )) }                        
-        //             </Table.Body>
-        //         </Table>
-        //     </Fragment>
-        // );
+        return (
+            <Fragment>
+                <h2>Ranking</h2>
+                <Table compact>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>#</Table.HeaderCell>
+                            <Table.HeaderCell>Player</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        { this.props.tournament.ranking.map((player, $index) => (
+                            <Table.Row>
+                                <Table.Cell>{ $index + 1 }</Table.Cell>
+                                <Table.Cell>{ player }</Table.Cell>
+                            </Table.Row>
+                        )) }                        
+                    </Table.Body>
+                </Table>
+            </Fragment>
+        );
     }
 
     render() {
@@ -159,18 +158,18 @@ export default class MatchPage extends React.PureComponent {
                         { this.renderTournamentLabel() }
                     </Grid.Column>
                 </Grid>
-                <Grid columns={ 3 }>
+                <Grid columns={ 2 }>
                     <Grid.Row>
-                        <Grid.Column width={ 3 }>
+                        <Grid.Column width={ 4 }>
                             { this.renderRanking() }
                         </Grid.Column>
-                        <Grid.Column width={ 9 }>
+                        <Grid.Column width={ 12 }>
                             { this.renderMatches() }
                         </Grid.Column>
-                        <Grid.Column width={ 4 }>
+                        {/* <Grid.Column width={ 4 }>
                             { this.renderCurrentGame() }
                             { this.renderUpcoming() }
-                        </Grid.Column>
+                        </Grid.Column> */}
                     </Grid.Row>
                 </Grid>
             </Container>
