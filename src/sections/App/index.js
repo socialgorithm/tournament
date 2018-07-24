@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import queryString from 'query-string';
+import queryString from 'qs';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header';
@@ -14,7 +14,7 @@ import NotFound from '../NotFoundPage';
 import './index.css';
 class App extends React.PureComponent {
   render() {
-    const params = queryString.parse(this.props.location.search);
+    const params = queryString.parse(this.props.location.search.substr(1));
     if (params.p) {
       return (
         <Redirect to={ params.p } />
