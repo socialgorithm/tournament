@@ -27,6 +27,7 @@
     "classnames": "^2.2.6",
     "immutable": "^3.8.2",
     "prop-types": "^15.6.2",
+    "query-string": "^6.1.0",
     "rc-slider": "^7.0.8",
     "react": "^16.4.1",
     "react-ace": "^5.0.1",
