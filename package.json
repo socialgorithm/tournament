@@ -24,7 +24,6 @@
   "homepage": "https://uttt.socialgorithm.org",
   "dependencies": {
     "@socialgorithm/ultimate-ttt": "^4.19.0",
-    "circular-json": "^0.5.5",
     "classnames": "^2.2.6",
     "immutable": "^3.8.2",
     "prop-types": "^15.6.2",
