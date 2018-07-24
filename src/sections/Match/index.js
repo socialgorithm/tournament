@@ -1,13 +1,14 @@
 import React from 'react';
-import { Icon, Container, Message } from 'semantic-ui-react';
+
+import SocketContext from '../../components/SocketProvider/provider';
+import MatchSection from './section';
 
 export default () => {
     return (
-        <Container textAlign='center'>
-            <h1><Icon name='game' /><br /> Create Match</h1>
-            <Message warning compact>
-                Match Making is not available yet.
-            </Message>
-        </Container>
+        <SocketContext.Consumer>
+            {socket => (
+                <MatchSection socket={ socket } />
+            )}
+        </SocketContext.Consumer>
     );
 };

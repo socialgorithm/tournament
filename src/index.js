@@ -1,34 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import { useScroll } from 'react-router-scroll';
+import { ConnectedRouter as Router } from 'react-router-redux';
+import createHistory from 'history/createBrowserHistory';
+
 import 'semantic-ui-css/semantic.css';
 
-import createRoutes from './routes';
-import { selectLocationState } from './sections/App/selectors';
-
-import './index.css';
+import App from './sections/App';
 import configureStore from './store';
+import './index.css';
 
-const store = configureStore({}, browserHistory);
+const initialState = {};
+const history = createHistory();
+const store = configureStore(initialState, history);
+const MOUNT_NODE = document.getElementById('root');
 
-const history = syncHistoryWithStore(browserHistory, store, {
-  selectLocationState: selectLocationState(),
-});
+const app = (
+  <Provider store={ store }>
+    <Router history={ history }>
+      <App />
+    </Router>
+  </Provider>
+);
 
 ReactDOM.render(
-  <Provider store={ store }>
-    <Router
-      history={ history }
-      routes={ createRoutes() }
-      render={
-        // Scroll to top when going to a new page, imitating default browser
-        // behaviour
-        applyRouterMiddleware(useScroll())
-      }
-    />
-  </Provider>,
-  document.getElementById('root')
+  app,
+  MOUNT_NODE
 );

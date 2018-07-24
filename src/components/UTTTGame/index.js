@@ -58,6 +58,32 @@ class UTTTGame extends React.Component {
     });
   };
 
+  renderSlider(game) {
+    if (this.props.hideSlider) {
+      return null;
+    }
+    return (
+      <Grid>
+        <Grid.Column width={ 4 }>
+          <Button
+            size='tiny'
+            icon={ (this.state.isReplaying) ? 'pause' : 'play' }
+            onClick={ this.replay }
+          />
+        </Grid.Column>
+        <Grid.Column width={ 12 }>
+          <Slider
+            min={ 0 }
+            max={ game.moves }
+            step={ 1 }
+            value={ this.state.lastMove }
+            onChange={ this.updateSelection }
+          />
+        </Grid.Column>
+      </Grid>
+    );
+  }
+
   render() {
     const game = this.props.game || new UTTT();
 
@@ -88,24 +114,7 @@ class UTTTGame extends React.Component {
             </div>
           )) }
         </div>
-        <Grid>
-          <Grid.Column width={ 4 }>
-            <Button
-              size='tiny'
-              icon={ (this.state.isReplaying) ? 'pause' : 'play' }
-              onClick={ this.replay }
-            />
-          </Grid.Column>
-          <Grid.Column width={ 12 }>
-            <Slider
-              min={ 0 }
-              max={ game.moves }
-              step={ 1 }
-              value={ this.state.lastMove }
-              onChange={ this.updateSelection }
-            />
-          </Grid.Column>
-        </Grid>
+        { this.renderSlider(game) }
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Grid, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 import Footer from '../../components/Footer';
 
@@ -27,16 +27,16 @@ export default class Home extends React.Component {
                             </a></h1>
                         </Grid.Column>
                         <Grid.Column>
-                            <h1><Link to='/match'>
+                            <h1><NavLink to='/match'>
                                 <Icon name='game' /><br/ >
                                 Create Match
-                            </Link></h1>
+                            </NavLink></h1>
                         </Grid.Column>
                         <Grid.Column>
-                            <h1><Link to='/replay'>
+                            <h1><NavLink to='/replay'>
                                 <Icon name='lab' /><br/ >
                                 Analyse Games
-                            </Link></h1>
+                            </NavLink></h1>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

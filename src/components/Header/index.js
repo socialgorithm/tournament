@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { Menu, Icon } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
@@ -11,17 +11,20 @@ class Header extends React.Component {
 
     this.sections = [
       {
-        url: '/stats',
-        icon: 'stats',
-        name: 'Stats',
+        url: '/',
+        name: 'Home',
+        icon: 'home',
+        exact: true,
+      },
+      {
+        url: '/match',
+        name: 'Match',
+        icon: 'game',
       },
       {
         url: '/replay',
         name: 'Analyse',
-      },
-      {
-        url: '/tournaments',
-        name: 'Competition',
+        icon: 'lab',
       },
     ];
   }
@@ -31,34 +34,40 @@ class Header extends React.Component {
       <Menu inverted className='main-header'>
         <Menu.Item header
                    as='a'
+                   className='socialgorithm-logo animated-hue'
                    href='https://socialgorithm.org'
         >
           #socialgorithm
         </Menu.Item>
-        <Menu.Item header
-                   as={ Link }
-                   activeClassName='active'
-                   to='/home'
-                   name='home'
-        >
-          Ultimate TTT
-        </Menu.Item>
-
         {
           this.sections.map((section) => (
-            <Menu.Item as={ Link } activeClassName='active' to={ section.url } title={ section.name } key={ section.url }>
-              { section.name }
-            </Menu.Item>
+            <Menu.Item
+                exact={ section.exact }
+                as={ NavLink }
+                activeClassName='active'
+                to={ section.url }
+                title={ section.name }
+                key={ section.url }
+                icon={ section.icon }
+                content={ section.name }
+            />
           ))
         }
+        <Menu.Item href="https://socialgorithm.org/ultimate-ttt-docs" target='_blank'>
+          <Icon name='book'/>
+          Docs
+        </Menu.Item>
 
-        <Menu.Menu position='right' icon>
+        <Menu.Menu position='right'>
           <Menu.Item href="https://github.com/socialgorithm" target='_blank'>
             <Icon name='github'/>
-            Github
+          </Menu.Item>
+          <Menu.Item href="https://socialgorithm-slack.herokuapp.com" target='_blank'>
+            <Icon name='slack hash'/>
+            Slack
           </Menu.Item>
           <Menu.Item>
-            <ServerContainer />
+            <ServerContainer inverted />
           </Menu.Item>
         </Menu.Menu>
       </Menu>

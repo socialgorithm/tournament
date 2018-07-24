@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { Map } from 'immutable';
+import uuid from 'uuid';
 
 import * as constants from './constants';
 
@@ -12,6 +13,7 @@ export const initialState = Map({
   host: (window.location.host.indexOf('localhost') < 0) ? hosts.online : hosts.local,
   status: 'disconnected',
   error: null,
+  uuid: getUuid(),
 });
 
 export default handleActions({
@@ -53,4 +55,45 @@ function connectionError(state, action) {
     status: 'disconnected',
     error: action.payload,
   });
+}
+
+/**
+ * Load the web id from localStorage if available
+ */
+function getUuid() {
+  const newUuid = `web-${uuid.v4()}`;
+  const STORAGE_KEY = 'uuid';
+  if (!storageAvailable('localStorage')) {
+    return newUuid;
+  }
+  const storedUuid = localStorage.getItem(STORAGE_KEY);
+  if (storedUuid) {
+    return storedUuid;
+  }
+  localStorage.setItem(STORAGE_KEY, newUuid);
+  return newUuid;
+};
+
+function storageAvailable(type) {
+  try {
+      var storage = window[type],
+          x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+  }
+  catch(e) {
+      return e instanceof DOMException && (
+          // everything except Firefox
+          e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          storage.length !== 0;
+  }
 }

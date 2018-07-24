@@ -1,12 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import io from 'socket.io-client';
+import { withRouter } from 'react-router-dom';
+
+import { connect, disconnect } from './socket';
+
+import SocketContext from './provider';
 
 class SocketProvider extends React.Component {
   constructor(props) {
     super(props);
 
-    this.socket = null;
+    this.state = {
+      socket: null,
+      emit: this.emit,
+      uuid: props.uuid,
+    };
 
     if (localStorage.getItem('host') !== null) {
       this.props.actions.connect(
@@ -15,109 +23,36 @@ class SocketProvider extends React.Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.status === 'connecting') {
-      this.connect();
+  static getDerivedStateFromProps(props, state) {
+    if (props.status === 'connecting') {
+      return connect(props, state);
     }
-    if (this.props.status === 'disconnecting') {
-      this.disconnect();
+    if (props.status === 'disconnecting') {
+      return disconnect(props, state);
     }
+    return state;
   }
 
   componentWillUnmount() {
-    this.disconnect();
+    disconnect(this.props, this.state);
   }
 
-  disconnect = () => {
-    if (this.socket) {
-      this.socket.close();
-      this.props.actions.disconnected();
+  emit = (message, payload) => {
+    if (!this.state.socket) {
+      console.warn('Socket not connected');
+      return;
     }
-  };
-
-  connect = () => {
-    this.socket = io(this.props.host, {
-      reconnection: false,
-      query: {
-        client: true,
-      }
-    });
-
-    this.socket.on('stats', (data) => {
-      this.props.actions.updateStats(data);
-    });
-
-    this.socket.on('tournament', (data) => {
-      this.props.actions.updateTournaments(data);
-    });
-
-    this.socket.on('connect', () => {
-      this.props.actions.connected();
-      // persist the host to localStorage
-      localStorage.setItem('host', this.props.host);
-    });
-
-    this.socket.on('disconnect', (data) => {
-      this.props.actions.disconnected(data);
-    });
-
-    this.socket.on('reconnect_error', (data) => {
-      this.props.actions.error({
-        type: 'reconnect_error',
-        message: data.message,
-      });
-    });
-
-    this.socket.on('connect_error', (data) => {
-      this.props.actions.error({
-        type: 'connect_error',
-        message: data.message,
-      });
-    });
-
-    this.socket.on('error', (data) => {
-      const message = (typeof data === 'string') ? data : data.message;
-      this.props.actions.error({
-        type: 'error',
-        message,
-      });
-
-    });
-
-    this.socket.connect();
-
-    setTimeout(() => {
-      let urlParams = {};
-      (window.onpopstate = function () {
-        let match,
-          pl     = /\+/g,  // Regex for replacing addition symbol with a space
-          search = /([^&=]+)=?([^&]*)/g,
-          decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-          query  = window.location.search.substring(1);
-
-        urlParams = {};
-        while (match = search.exec(query))
-          urlParams[decode(match[1])] = decode(match[2]);
-      })();
-      if (urlParams.startTournament) {
-        console.log('Starting tournament');
-        this.socket.emit('tournament', { start: true });
-      }
-    }, 100);
+    return this.state.socket.emit(message, payload);
   };
 
   render() {
     return (
-      <div>
+      <SocketContext.Provider value={ this.state }>
         { this.props.children }
-      </div>
+      </SocketContext.Provider>
     );
   }
 }
-
-SocketProvider.childContextTypes = {
-  socket: PropTypes.object,
-};
 
 SocketProvider.propTypes = {
   host: PropTypes.string.isRequired,
@@ -131,4 +66,4 @@ SocketProvider.propTypes = {
   }).isRequired,
 };
 
-export default SocketProvider;
+export default withRouter(SocketProvider);
