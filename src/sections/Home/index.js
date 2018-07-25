@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Container, Grid, Icon } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
-
-import Footer from '../../components/Footer';
 
 import './index.css';
 
@@ -11,7 +9,7 @@ export default class Home extends React.Component {
   render() {
 
     return (
-      <div>
+      <Fragment>
         <div className='hero'>
             <Container>
                 <h1>Welcome to the Ultimate TTT Workshop!</h1>
@@ -45,8 +43,7 @@ export default class Home extends React.Component {
             <p>If it is the first time you're here, go to our Documentation above and read through the "Getting Started " section.</p>
             <p>Remember that you can always <a href='https://socialgorithm-slack.herokuapp.com/'>join our Slack community</a> to ask for help from our mentors!</p>
         </div>
-        <Footer />
-      </div>
+      </Fragment>
     );
   }
 }

@@ -5,6 +5,7 @@ import queryString from 'qs';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import SocketContainer from '../../containers/SocketContainer';
 import Home from '../Home';
 import Match from '../Match';
@@ -24,12 +25,15 @@ class App extends React.PureComponent {
       <SocketContainer>
         <Header />
         <ToastContainer />
-        <Switch>
-          <Route exact path='/' component={ Home } />
-          <Route path='/match' component={ Match } />
-          <Route path='/replay' component={ Replay } />
-          <Route path='' component={ NotFound } />
-        </Switch>
+        <div className='main-content'>
+          <Switch>
+            <Route exact path='/' component={ Home } />
+            <Route path='/match' component={ Match } />
+            <Route path='/replay' component={ Replay } />
+            <Route path='' component={ NotFound } />
+          </Switch>
+        </div>
+        <Footer />
       </SocketContainer>
     );
   }
