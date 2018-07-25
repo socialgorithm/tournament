@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Header, Grid, List, Label, Table, Divider } from 'semantic-ui-react';
+import { Header, Grid, List, Label, Table, Divider, Message } from 'semantic-ui-react';
 import UTTT from '@socialgorithm/ultimate-ttt';
+import { ME, OPPONENT } from '@socialgorithm/ultimate-ttt/dist/model/constants';
 
 import UTTTGame from '../../../components/UTTTGame';
 
-const PLAYER_YOU = 1;
-const PLAYER_OPPONENT = 1 - PLAYER_YOU;
+const PLAYER_YOU = ME;
+const PLAYER_OPPONENT = OPPONENT;
 
 class GameExplorer extends React.Component {
   constructor(props) {
     super(props);
 
-    const {games, won, lost, tied} = this.parseGameData(props.gameData);
+    const {error, games, won, lost, tied} = this.parseGameData(props.gameData);
 
     this.state = {
+      error,
       games,
       activeGame: 0,
       activeMove: -1,
@@ -26,20 +28,23 @@ class GameExplorer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {games, won, lost, tied} = this.parseGameData(nextProps.gameData);
+    if (this.props.gameData !== nextProps.gameData) {
+      const {games, won, lost, tied} = this.parseGameData(nextProps.gameData);
 
-    this.setState({
-      games,
-      activeGame: 0,
-      activeMove: -1,
-      won,
-      lost,
-      tied,
-    });
+      this.setState({
+        games,
+        activeGame: 0,
+        activeMove: -1,
+        won,
+        lost,
+        tied,
+      });
+    }
   }
 
   parseGameData = (gameData) => {
     const ret = {
+      error: null,
       games: [],
       won: 0,
       lost: 0,
@@ -51,63 +56,65 @@ class GameExplorer extends React.Component {
       .map((line) => line.split('] ').pop()
       );
     let curGame;
-    lines.forEach((line) => {
-      if (line === 'init') {
-        if (ret.games[curGame]) {
-          console.log('was it finished? ', ret.games[curGame].uttt.isFinished());
-        }
-        curGame = ret.games.push({
-          uttt: new UTTT(3),
-          moves: [],
-        }) - 1;
-        return;
-      }
-      if (line.indexOf(';') < 0) {
-        return;
-      }
-      const game = ret.games[curGame];
-      const parts = line.split(' ');
-      let turn = parts[0].split(';');
-      try {
-        let opponent = false;
-        if (parts.length > 1) {
-          opponent = true;
-          turn = parts[1].split(';');
-        }
-        const board = turn[0].split(',').map((coord) => parseInt(coord, 10));
-        const move = turn[1].split(',').map((coord) => parseInt(coord, 10));
-
-        game.moves.push({
-          board,
-          move,
-          player: (opponent) ? PLAYER_OPPONENT : PLAYER_YOU,
-        });
-
-        if (opponent) {
-          game.uttt = game.uttt.addOpponentMove(board, move);
-        } else {
-          game.uttt = game.uttt.addMyMove(board, move);
-        }
-
-        // update state
-        if (game.uttt.isFinished()) {
-          switch (game.uttt.getResult()) {
-            case PLAYER_YOU:
-              ret.won = ret.won + 1;
-              break;
-            case PLAYER_OPPONENT:
-              ret.lost = ret.lost + 1;
-              break;
-            default:
-            case -1:
-              ret.tied = ret.tied + 1;
-              break;
+    try {
+      lines.forEach((line) => {
+        if (line === 'init') {
+          if (ret.games[curGame]) {
+            console.log('Was it finished? ', ret.games[curGame].uttt.isFinished());
           }
+          curGame = ret.games.push({
+            uttt: new UTTT(3),
+            moves: [],
+          }) - 1;
+          return;
         }
-      } catch(e) {
-        console.log('Error parsing game', e.message);
-      }
-    });
+        if (line.indexOf(';') < 0) {
+          return;
+        }
+        const game = ret.games[curGame];
+        const parts = line.split(' ');
+        let turn = parts[0].split(';');
+          let opponent = false;
+          if (parts.length > 1) {
+            opponent = true;
+            turn = parts[1].split(';');
+          }
+          const board = turn[0].split(',').map((coord) => parseInt(coord, 10));
+          const move = turn[1].split(',').map((coord) => parseInt(coord, 10));
+
+          game.moves.push({
+            board,
+            move,
+            player: (opponent) ? PLAYER_OPPONENT : PLAYER_YOU,
+          });
+
+          if (opponent) {
+            game.uttt = game.uttt.addOpponentMove(board, move);
+          } else {
+            game.uttt = game.uttt.addMyMove(board, move);
+          }
+
+          // update state
+          if (game.uttt.isFinished()) {
+            switch (game.uttt.getResult()) {
+              case PLAYER_YOU:
+                ret.won = ret.won + 1;
+                break;
+              case PLAYER_OPPONENT:
+                ret.lost = ret.lost + 1;
+                break;
+              default:
+              case -1:
+                ret.tied = ret.tied + 1;
+                break;
+            }
+          }
+      });
+    } catch(e) {
+      console.error('Error parsing game', e);
+      ret.error = 'Unable to parse game - please make sure the log file is correct.';
+      return ret;
+    }
     return ret;
   };
 
@@ -147,6 +154,14 @@ class GameExplorer extends React.Component {
     };
     if (this.state.activeMove > -1) {
       activeMove = this.state.games[this.state.activeGame].moves[this.state.activeMove];
+    }
+
+    if (this.state.error) {
+      return (
+        <Message error>
+          { this.state.error }
+        </Message>
+      );
     }
 
     return (
