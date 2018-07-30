@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label } from 'semantic-ui-react';
+import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label, Form } from 'semantic-ui-react';
 
 import MatchPage from '../MatchPage';
 
@@ -15,9 +15,15 @@ class JoinMatch extends React.PureComponent {
                 players: [],
                 tournament: null,
             },
-            update: 0,
+            tournamentOptions: {
+                timeout: 100,
+                numberOfGames: 10,
+                type: 'FreeForAll',
+            },
+            update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
         };
     }
+
     componentDidMount() {
         this.props.socket.socket.on('connected', data => {
             const lobby = data.lobby;
@@ -70,10 +76,22 @@ class JoinMatch extends React.PureComponent {
     }
 
     startTournament = () => {
-        this.props.socket.socket.emit('lobby tournament start', {});
+        this.props.socket.socket.emit('lobby tournament start', {
+            token: this.state.lobby.token,
+            options: this.state.tournamentOptions,
+        });
     };
 
     token = () => this.props.match.params.name;
+
+    updateOption = (field) => (event, data) => {
+        const updatedOptions = this.state.tournamentOptions;
+        updatedOptions[field] = data.value;
+        this.setState({
+            tournamentOptions: updatedOptions,
+            update: this.state.update + 1,
+        });
+    };
 
     renderLoader = () => {
         if (this.state.admin) {
@@ -94,20 +112,56 @@ class JoinMatch extends React.PureComponent {
         if (!this.state.admin) {
             return null;
         }
+        const tournamentModes = [
+            {
+                text: 'Free For All',
+                value: 'FreeForAll',
+                title: 'Everyone plays everyone else',
+            },
+        ];
         const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
         return (
-            <div>
-                <Header content='Admin' />
-                <p>You are the admin for this lobby</p>
-                <Button
-                    primary
-                    icon='play'
-                    title={ title }
-                    disabled={ this.state.lobby.players.length < 2 }
-                    content='Start Game'
-                    onClick={ this.startTournament }
-                />
-            </div>
+            <Grid columns={ 2 }>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Header content='Admin' />
+                        <p>You are the admin for this lobby</p>
+                        <Button
+                            primary
+                            icon='play'
+                            title={ title }
+                            disabled={ this.state.lobby.players.length < 2 }
+                            content='Start Game'
+                            onClick={ this.startTournament }
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <h3>Tournament Settings:</h3>
+                        <Form size='small'>
+                            <Form.Input
+                                label='Timeout (Per Move, in ms)'
+                                type='number'
+                                placeholder='100'
+                                value={ this.state.tournamentOptions.timeout }
+                                onChange={ this.updateOption('timeout') }
+                            />
+                            <Form.Input
+                                label='Number of Games per Match'
+                                type='number'
+                                placeholder='10'
+                                value={ this.state.tournamentOptions.numberOfGames }
+                                onChange={ this.updateOption('numberOfGames') }
+                            />
+                            <Form.Select
+                                label='Tournament Type'
+                                options={ tournamentModes }
+                                value={ this.state.tournamentOptions.type }
+                                onChange={ this.updateOption('type') }
+                            />
+                        </Form>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>
         );
     };
 

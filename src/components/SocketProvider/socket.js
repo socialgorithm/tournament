@@ -39,6 +39,10 @@ export const connect = (props, state) => {
         props.history.push('/match');
     });
 
+    socket.on('exception', (data) => {
+        toast.error(data.error);
+    });
+
     socket.on('disconnect', (data) => {
         props.actions.disconnected(data);
     });
