@@ -1,13 +1,12 @@
 import React from 'react';
+import classNames from 'classnames';
 import { Grid, Segment, Progress } from 'semantic-ui-react';
+
+import './match.css';
 
 export default (props) => {
     const colorA = props.winsA > props.winsB ? 'green' : null;
     const colorB = props.winsB > props.winsA ? 'green' : null;
-
-    const progressStyle = {
-        margin: '2em 0 0',
-    };
 
     let progress = null;
     let gridStyle = null;
@@ -22,13 +21,12 @@ export default (props) => {
                 total={ props.totalGames }
                 progress='ratio'
                 indicating
-                style={ progressStyle }
             />
         );
     }
 
     return (
-        <Segment>
+        <div className={ classNames('match', { 'small': props.small }) }>
             <Grid columns={ 2 } textAlign='center' verticalAlign='middle' style={ gridStyle }>
                 <Grid.Column color={ colorA }>
                     <h2>{ props.playerA }</h2>
@@ -40,6 +38,6 @@ export default (props) => {
                 </Grid.Column>
             </Grid>
             { progress }
-        </Segment>
+        </div>
     );
 };

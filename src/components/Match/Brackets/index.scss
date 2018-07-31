@@ -7,7 +7,6 @@ $loserBackground: #efefef;
 
 .tournament-bracket {
   display: flex;
-  height: 600px;
   justify-content: center;
 
   .item {
@@ -15,7 +14,7 @@ $loserBackground: #efefef;
     flex-direction: row-reverse;
 
     .item-content {
-      padding: 20px;
+      padding: 1em;
       margin: 0;
       max-width: 200px;
 
@@ -34,6 +33,19 @@ $loserBackground: #efefef;
       
       &.loser {
           background-color: $loserBackground;
+      }
+
+      .match {
+          margin: -1em;
+
+          .grid {
+              margin: 0;
+
+              .column {
+                padding-top: 0.5rem;
+                padding-bottom: 0.3rem;
+              }
+          }
       }
     }
 
