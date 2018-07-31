@@ -1,0 +1,97 @@
+$side-margin: 50px;
+$vertical-margin: 10px;
+$boxColor: #ccc;
+$lineColor: #87a3ab;
+$winnerColor: #509e00;
+$loserBackground: #efefef;
+
+.tournament-bracket {
+  display: flex;
+  height: 600px;
+  justify-content: center;
+
+  .item {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .item-content {
+      padding: 20px;
+      margin: 0;
+      max-width: 200px;
+
+      text-align: center;
+
+      background: #ffffff;
+      -webkit-box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+      box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+      border-radius: 0.28571429rem;
+      border: 1px solid rgba(34, 36, 38, 0.15);
+
+      &.winner {
+          border-left-color: $winnerColor;
+          border-left-width: 4px;
+      }
+      
+      &.loser {
+          background-color: $loserBackground;
+      }
+    }
+
+    &-parent {
+      position: relative;
+      margin-left: $side-margin;
+      display: flex;
+      align-items: center;
+      &:after {
+        position: absolute;
+        content: "";
+        width: $side-margin/2;
+        height: 2px;
+        left: 0;
+        top: 50%;
+        background-color: $lineColor;
+        transform: translateX(-100%);
+      }
+    }
+    &-childrens {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &-child {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      margin-top: $vertical-margin;
+      margin-bottom: $vertical-margin;
+      position: relative;
+      &:before {
+        content: "";
+        position: absolute;
+        background-color: $lineColor;
+        right: 0;
+        top: 50%;
+        transform: translateX(100%);
+        width: 25px;
+        height: 2px;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        background-color: $lineColor;
+        right: -$side-margin / 2;
+        height: calc(50% + 22px);
+        width: 2px;
+        top: 50%;
+      }
+      &:last-child {
+        &:after {
+          transform: translateY(-100%);
+        }
+      }
+      &:only-child:after {
+        display: none;
+      }
+    }
+  }
+}
