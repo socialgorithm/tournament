@@ -1,79 +1,58 @@
 import React from "react";
 
+import Item from "./Item";
 import "./index.css";
+
+const testData = {
+  name: "Test Name A",
+  winner: true,
+  children: [
+    {
+      name: "Test Name A",
+      winner: true,
+      children: [
+        {
+          name: "Test Name A",
+          winner: true,
+          children: [
+            {
+              name: "Test Name A",
+              winner: true
+            },
+            {
+              name: "Test Name C",
+              loser: true
+            }
+          ]
+        },
+        {
+          name: "Test Name B",
+          loser: true,
+          children: [
+            {
+              name: "Test Name D",
+              loser: true
+            },
+            {
+              name: "Test Name B",
+              winner: true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "Test Name F",
+      loser: true,
+      children: []
+    }
+  ]
+};
 
 export default props => {
   return (
     <div className="tournament-bracket">
-      <div className="item">
-        <div className="item-parent">
-          <div className="item-content winner">Team A</div>
-        </div>
-        <div className="item-childrens">
-          <div className="item-child">
-            <div className="item">
-              <div className="item-parent">
-                <div className="item-content winner">Team A</div>
-              </div>
-              <div className="item-childrens">
-                <div className="item-child">
-                  <div className="item">
-                    <div className="item-parent">
-                      <div className="item-content loser">
-                        Team B is also pretty long...
-                      </div>
-                    </div>
-                    <div className="item-childrens">
-                      <div className="item-child">
-                        <div className="item-content winner">
-                          Team B is also pretty long...
-                        </div>
-                      </div>
-                      <div className="item-child">
-                        <div className="item-content loser">
-                          Team C with an annoyingly long name
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="item-child">
-                  <div className="item-content winner">Team A</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="item-child">
-            <div className="item">
-              <div className="item-parent">
-                <div className="item-content loser">Team D</div>
-              </div>
-              <div className="item-childrens">
-                <div className="item-child">
-                  <div className="item">
-                    <div className="item-parent">
-                      <div className="item-content loser">Team E</div>
-                    </div>
-                    <div className="item-childrens">
-                      <div className="item-child">
-                        <div className="item-content winner">Team E</div>
-                      </div>
-                      <div className="item-child">
-                        <div className="item-content loser">Team F</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="item-child">
-                  <div className="item-content winner">
-                    Team D<div />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Item item={testData} />
     </div>
   );
 };
