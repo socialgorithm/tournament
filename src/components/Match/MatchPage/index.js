@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Icon, Container, Loader, Grid, Label, List, Segment, Table } from 'semantic-ui-react';
+import {Icon, Container, Loader, Grid, Label, List, Segment, Table, Button} from 'semantic-ui-react';
 
 import UTTTGame from '../../UTTTGame';
 import Match from './Match';
@@ -10,6 +10,7 @@ export default class MatchPage extends React.PureComponent {
 
         console.log('Render Match Page', props);
     }
+
     renderTournamentLabel() {
         let state = 'Waiting...';
         let color = null;
@@ -25,27 +26,53 @@ export default class MatchPage extends React.PureComponent {
         );
     }
 
+	renderUpcomingMatches = (upcomingMatches) => {
+        const matches = upcomingMatches.filter(match => match.stats.state === 'upcoming');
+        return matches.length > 0 && (
+            <Fragment>
+                <h3>Next Up</h3>
+                { matches.map(match => (
+                    <Match
+                        playerA={ match.players[0].token }
+                        playerB={ match.players[1].token }
+                    />
+                )) }
+            </Fragment>
+        );
+    };
+
     renderCurrentMatch() {
         if (this.props.tournament.finished) {
             return null;
         }
-        const matches = this.props.tournament.matches;
-        const currentMatch = matches.find(match => match.stats.state === 'playing');
+        const upcomingMatches = this.props.tournament.upcomingMatches;
+        const currentMatch = upcomingMatches.find(match => match.stats.state === 'playing');
         return (
             <Fragment>
                 <h2>Current Match</h2>
                 { currentMatch && (
-                    <Match
-                        playerA={ currentMatch.players[0].token }
-                        playerB={ currentMatch.players[1].token }
-                        winsA={ currentMatch.stats.wins[0] }
-                        winsB={ currentMatch.stats.wins[1] }
-                        gamesPlayed={ currentMatch.stats.games }
-                        totalGames={ this.props.tournament.options.numberOfGames }
-                        displayProgress
-                    />
+	                <Fragment>
+                        <Match
+                            playerA={ currentMatch.players[0].token }
+                            playerB={ currentMatch.players[1].token }
+                            winsA={ currentMatch.stats.wins[0] }
+                            winsB={ currentMatch.stats.wins[1] }
+                            gamesPlayed={ currentMatch.stats.games }
+                            totalGames={ this.props.tournament.options.numberOfGames }
+                            displayProgress
+                        />
+                        {this.renderUpcomingMatches(upcomingMatches)}
+                    </Fragment>
                 ) }
-                { !currentMatch && (
+	            { !currentMatch && this.props.tournament.waiting && (
+	                <Fragment>
+                        <Segment textAlign='center'>
+                            <Button primary onClick={this.props.continueMatches}>{this.props.tournament.matches.length > 0 ? 'Continue Game' : 'Start Game'}</Button>
+                        </Segment>
+                        {this.renderUpcomingMatches(upcomingMatches)}
+	                </Fragment>
+	            ) }
+                { !currentMatch && !this.props.tournament.waiting && (
                     <Segment textAlign='center'>
                         <Loader active inline content='Waiting for Match to start...' />
                     </Segment>
@@ -148,7 +175,10 @@ export default class MatchPage extends React.PureComponent {
     render() {
         return (
             <Container>
-                <Grid columns={ 2 }>
+                <Grid columns={ 3 }>
+                    <Grid.Column>
+                        <Button onClick={this.props.backToLobby}><Icon name='chevron left'/>Lobby</Button>
+                    </Grid.Column>
                     <Grid.Column>
                     <h1>
                         <Icon name='game' /> Tournament
