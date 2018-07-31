@@ -1,6 +1,19 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Icon, Container, Message, Loader, Button, Segment, Header, Grid, List, Label, Form } from 'semantic-ui-react';
+import {
+	Icon,
+	Container,
+	Message,
+	Loader,
+	Button,
+	Segment,
+	Header,
+	Grid,
+	List,
+	Label,
+	Form,
+	Dropdown, Popup
+} from 'semantic-ui-react';
 
 import MatchPage from '../MatchPage';
 
@@ -21,6 +34,8 @@ class JoinMatch extends React.PureComponent {
                 type: 'FreeForAll',
             },
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
+            activePlayers: [],
+	        activePlayersDrop: false
         };
     }
 
@@ -30,8 +45,12 @@ class JoinMatch extends React.PureComponent {
             if (lobby.token !== this.state.lobby.token) {
                 return;
             }
+	        let activePlayers = this.state.activePlayers;
+	        if (this.state.lobby.players.length === this.state.activePlayers.length) {
+		        activePlayers = lobby.players.slice();
+	        }
             this.setState({
-                lobby: lobby,
+                lobby, activePlayers
             });
         });
         this.props.socket.socket.on('lobby disconnected', data => {
@@ -48,19 +67,36 @@ class JoinMatch extends React.PureComponent {
             spectating: true,
         });
         this.props.socket.socket.on('lobby joined', data => {
+            const {lobby, isAdmin} = data;
             this.setState({
-                admin: data.isAdmin,
-                lobby: data.lobby,
+                admin: isAdmin,
+                lobby
             });
         });
-        this.props.socket.socket.on('lobby tournament started', data => {
-            if (!data.lobby || !data.lobby.tournament) {
-                return;
-            }
-            this.setState({
-                lobby: data.lobby,
-            });
-        });
+	    this.props.socket.socket.on('lobby tournament started', data => {
+		    if (!data.lobby || !data.lobby.tournament) {
+			    return;
+		    }
+		    this.setState({
+			    lobby: data.lobby,
+		    });
+	    });
+	    this.props.socket.socket.on('lobby player kicked', data => {
+		    if (!data.lobby) {
+			    return;
+		    }
+		    this.setState({
+			    lobby: data.lobby,
+		    });
+	    });
+	    this.props.socket.socket.on('lobby player banned', data => {
+		    if (!data.lobby) {
+			    return;
+		    }
+		    this.setState({
+			    lobby: data.lobby,
+		    });
+	    });
         this.props.socket.socket.on('tournament stats', data => {
             const lobby = this.state.lobby;
             if (lobby.tournament && data) {
@@ -79,6 +115,7 @@ class JoinMatch extends React.PureComponent {
         this.props.socket.socket.emit('lobby tournament start', {
             token: this.state.lobby.token,
             options: this.state.tournamentOptions,
+	        players: this.state.activePlayers.map(p => p.token)
         });
     };
 
@@ -92,6 +129,59 @@ class JoinMatch extends React.PureComponent {
             update: this.state.update + 1,
         });
     };
+
+	kickPlayer = (token) => {
+		this.props.socket.socket.emit('lobby player kick', {
+			lobbyToken: this.state.lobby.token,
+			playerToken: token
+		});
+	};
+
+	banPlayer = (token) => {
+		this.props.socket.socket.emit('lobby player ban', {
+			lobbyToken: this.state.lobby.token,
+			playerToken: token
+		});
+	};
+
+	onDragPlayerStart = (token, e) => {
+		e.dataTransfer.setData("text/plain", token);
+		e.dataTransfer.effectAllowed = 'move';
+	};
+
+	onDragPlayerDrop = (e, type) => {
+		e.preventDefault();
+		const token = e.dataTransfer.getData("text");
+		let activePlayers = [...this.state.activePlayers];
+		if (type === 'active') {
+			if (!activePlayers.find(p => p.token === token)) {
+				const player = this.state.lobby.players.find(p => p.token === token);
+				activePlayers.push(player);
+			}
+		} else {
+			const index = activePlayers.find(p => p.token === token);
+			if (index !== -1) {
+				activePlayers.splice(index, 1);
+			}
+		}
+
+		const key = type + 'PlayersDrop';
+		const update = {activePlayers};
+		update[key] = false;
+		this.setState(update);
+	};
+
+	onDragPlayerMouseMove = (e, type, playersDrop) => {
+		e.preventDefault();
+		const key = type + 'PlayersDrop';
+		const update = {};
+		update[key] = playersDrop;
+		this.setState(update);
+	};
+
+	onDragPlayerOver = (e, type) => {
+		e.preventDefault();
+	};
 
     renderLoader = () => {
         if (this.state.admin) {
@@ -130,7 +220,7 @@ class JoinMatch extends React.PureComponent {
                             primary
                             icon='play'
                             title={ title }
-                            disabled={ this.state.lobby.players.length < 2 }
+                            disabled={ this.state.activePlayers.length < 2 }
                             content='Start Game'
                             onClick={ this.startTournament }
                         />
@@ -181,34 +271,53 @@ class JoinMatch extends React.PureComponent {
         );
     };
 
-    renderPlayers = () => {
-        const footerStyle = {
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            padding: '0.3em',
-            width: '100%',
-            textAlign: 'center',
-            background: '#efefef',
-            fontSize: '0.7em',
-        };
-        const players = this.state.lobby.players;
-        return (
-            <div style={ { paddingBottom: '2em' } }>
-                <p>Connected Players <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></p>
-                <List>
-                    { players.map(player => (
-                        <List.Item key={ player.token }>
-                            <Icon name='circle' color='green' /> { player.token }
-                        </List.Item>
-                    )) }
-                </List>
-                <div style={ footerStyle }>
-                    <a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
-                </div>
-            </div>
-        );
-    };
+	renderPlayers = ({titleText, type, dropText, infoText}) => {
+		const footerStyle = {
+			position: 'absolute',
+			bottom: 0,
+			left: 0,
+			padding: '0.3em',
+			width: '100%',
+			textAlign: 'center',
+			background: '#efefef',
+			fontSize: '0.7em',
+		};
+		const players = type === 'connected' ? this.state.lobby.players : this.state.activePlayers;
+		const playerDropKey = type + 'PlayersDrop';
+		return (
+			<div style={ { paddingBottom: '2em', height: 'calc(100% - 2em)' } }>
+				<Popup trigger={<p>{titleText} <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></p>} content={infoText} />
+
+				<div onDrop={(e) => this.onDragPlayerDrop(e, type)} onDragOver={this.onDragPlayerOver} onDragEnter={(e) => this.onDragPlayerMouseMove(e, type, true)} onDragLeave={(e) => this.onDragPlayerMouseMove(e, type, false)}
+				     style={{height: '100%', position: 'relative', background: this.state[playerDropKey] && '#efefef', borderRadius: this.state[playerDropKey] && '0.28571429rem'}}>
+					{
+						!this.state[playerDropKey] &&
+						<List>
+							{ players.map(player => (
+								<List.Item key={ player.token } draggable onDragStart={(e) => this.onDragPlayerStart(player.token, e)}>
+									<Icon name='circle' color='green' style={{display: 'inline-block', marginRight: '1rem'}}/>
+									{ player.token }
+									<Dropdown style={{float: 'right'}}>
+										<Dropdown.Menu>
+											<Dropdown.Item text="Kick player" onClick={() => this.kickPlayer(player.token)}/>
+											<Dropdown.Item text="Ban player" onClick={() => this.banPlayer(player.token)}/>
+										</Dropdown.Menu>
+									</Dropdown>
+								</List.Item>
+							)) }
+						</List>
+					}
+					{
+						this.state[playerDropKey] &&
+						<p style={{position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center'}}>{dropText}</p>
+					}
+				</div>
+				<div style={ footerStyle }>
+					<a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
+				</div>
+			</div>
+		);
+	};
 
     render() {
         if (!this.props.socket) {
@@ -228,14 +337,17 @@ class JoinMatch extends React.PureComponent {
         }
     
         return (
-            <Container textAlign='center'>
+            <Container textAlign='center' fluid style={{width: '80%'}}>
                 <h1><Icon name='game' /><br /> Joined Match!</h1>
                 <Segment textAlign='left'>
-                    <Grid columns={ 2 } divided>
-                        <Grid.Column width={ 4 }>
-                            { this.renderPlayers() }                        
-                        </Grid.Column>
-                        <Grid.Column width={ 12 }>
+                    <Grid columns={ 3 } divided>
+	                    <Grid.Column width={ 3 }>
+		                    { this.renderPlayers({titleText: 'Connected Players', type: 'connected', dropText: 'Exclude player from game', infoText: 'Players connected to the lobby'}) }
+	                    </Grid.Column>
+	                    <Grid.Column width={ 3 }>
+		                    { this.renderPlayers({titleText: 'Players', type: 'active', dropText: 'Include player in game', infoText: 'Players to be included in the tournament'}) }
+	                    </Grid.Column>
+                        <Grid.Column width={ 10 }>
                             { this.renderLoader() }
                             { this.renderAdmin() }
                             { this.renderJoinCommand() }
