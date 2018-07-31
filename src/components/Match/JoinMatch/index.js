@@ -208,6 +208,11 @@ class JoinMatch extends React.PureComponent {
                 value: 'FreeForAll',
                 title: 'Everyone plays everyone else',
             },
+            {
+                text: 'Double Elimination',
+                value: 'DoubleElimination',
+                title: 'League Mode, a player gets kicked out when losing two games',
+            },
         ];
         const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
         return (
