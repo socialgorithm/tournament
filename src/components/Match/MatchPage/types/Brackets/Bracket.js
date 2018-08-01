@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import classNames from "classnames";
 import { Loader } from 'semantic-ui-react';
 
-import Match from '../MatchPage/Match';
+import Match from '../../Match';
 
 export const TeamBox = props => {
   let content = props.team.name;

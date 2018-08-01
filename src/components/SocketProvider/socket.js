@@ -6,7 +6,7 @@ export const connect = (props, state) => {
         return state;
     }
     const socket = io(props.host, {
-        reconnection: true,
+        reconnection: false,
         timeout: 2000,
         query: {
             client: true,

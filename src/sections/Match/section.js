@@ -5,12 +5,8 @@ import { Icon, Container } from 'semantic-ui-react';
 import ServerContainer from '../../containers/ServerContainer';
 import CreateMatch from '../../components/Match/CreateMatch';
 import JoinMatch from '../../components/Match/JoinMatch';
-import Brackets from '../../components/Match/Brackets';
 
 export default (props) => {
-    return (
-        <Brackets />
-    );
     if (!props.socket || !props.socket.socket || !props.socket.socket.connected) {
         return (
             <Container textAlign='center'>
