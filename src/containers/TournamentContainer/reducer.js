@@ -21,7 +21,6 @@ function getTournaments(state, action) {
 
 function updateTournaments(state, action) {
   const update = action.payload;
-  console.log('tournaments update', update.payload);
   switch (update.type) {
     case 'stats':
       return Map(update.payload);

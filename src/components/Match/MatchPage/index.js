@@ -52,7 +52,6 @@ export default class MatchPage extends React.PureComponent {
 
   renderTournament() {
     let TournamentRenderer;
-    console.log('tournament', this.props.tournament);
     switch (this.props.tournament.options.type) {
       case 'FreeForAll':
         TournamentRenderer = FreeForAll;

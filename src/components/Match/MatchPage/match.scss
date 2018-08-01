@@ -1,6 +1,5 @@
 .match {
     min-width: 250px;
-    max-width: 300px;
 
     .ui.progress,
     .ui.progress:last-child {
@@ -8,6 +7,8 @@
     }
 
     &.small {
+        max-width: 300px;
+        
         h2 {
             font-size: 1em;
             margin-bottom: 0.5em;

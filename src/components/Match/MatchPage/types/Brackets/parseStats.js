@@ -20,15 +20,17 @@ export const parseStats = stats => {
 
   while(parsedMatches.length < matches.length) {
     const nextMatch = matches.find(match => parsedMatches.indexOf(match.uuid) < 0);
-    brackets.push(addMatch(nextMatch, matchesRef));
+    brackets.push(addMatch(nextMatch, matchesRef, false, false, true));
   }
+
+  brackets.reverse();
 
   return brackets;
 };
 
 export default parseStats;
 
-const addMatch = (match, matchesRef, winner, loser) => {
+const addMatch = (match, matchesRef, winner, loser, topLevel) => {
   const matchBracket = {
     name: "",
     status: match.stats.state,
@@ -43,6 +45,7 @@ const addMatch = (match, matchesRef, winner, loser) => {
     tie: match.stats.winner === -1 && match.stats.state === "finished",
     winner,
     loser,
+    topLevel,
     children: []
   };
 
@@ -89,7 +92,6 @@ const addMatch = (match, matchesRef, winner, loser) => {
       return;
     }
     const player = match.players[playerIndex].token;
-    console.log('adding final game', player, match.stats.winner, playerIndex);
     matchBracket.children.push({
       name: player,
       status: "finished",

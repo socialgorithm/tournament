@@ -1,10 +1,12 @@
 $side-margin: 50px;
-$vertical-margin: 10px;
+$vertical-margin: 0.5em;
 $boxColor: #ccc;
 $lineColor: #87a3ab;
 $winnerColor: #509e00;
 $loserBackground: #efefef;
 $tieBackground: #ffea9d;
+$championColor: #ffe400;
+$championBackground: #3c4b64;
 
 .tournament-bracket {
   display: flex;
@@ -39,7 +41,6 @@ $tieBackground: #ffea9d;
       display: flex;
       align-items: flex-start;
       justify-content: flex-end;
-      margin-top: $vertical-margin;
       margin-bottom: $vertical-margin;
       position: relative;
       &:before {
@@ -86,8 +87,8 @@ $tieBackground: #ffea9d;
     border: 1px solid rgba(34, 36, 38, 0.15);
 
     &.winner {
-      border-left-color: $winnerColor;
-      border-left-width: 4px;
+      border-color: $winnerColor;
+      border-bottom-width: 2px;
       background-color: transparentize($winnerColor, 0.9);
       color: $winnerColor;
     }
@@ -98,6 +99,40 @@ $tieBackground: #ffea9d;
 
     &.tie {
       background-color: $tieBackground;
+    }
+
+    &.champion {
+      background-color: $championBackground;
+      background-image: linear-gradient( 135deg, #3c4b64 10%, #434548 100%);
+      color: $championColor;
+      text-shadow: 0 0 15px rgba(255, 247, 0, 0.8);
+      box-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+
+      .champion-text {
+        font-size: 1.1em;
+      }
+    }
+
+    .top, .bottom {
+      text-transform: uppercase;
+      padding: 0.1em 1.5em;
+      letter-spacing: 0.2em;
+      text-shadow: none;
+      color: lighten($championBackground, 50);
+
+      span {
+        font-size: 0.7em;
+      }
+    }
+
+    .top {
+      margin: -1em -1em 1em;
+      border-bottom: solid 1px lighten($championBackground, 20);
+    }
+
+    .bottom {
+      margin: 1em -1em -1em;
+      border-top: solid 1px lighten($championBackground, 20);
     }
 
     .match {

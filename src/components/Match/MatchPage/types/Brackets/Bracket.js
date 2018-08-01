@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import classNames from "classnames";
-import { Loader } from 'semantic-ui-react';
+import { Loader, Icon } from 'semantic-ui-react';
 
 import Match from '../../Match';
 
@@ -26,12 +26,25 @@ export const TeamBox = props => {
       />
     );
   }
+  if (props.champion) {
+    content = (
+      <div>
+        <div className="top"><span>Winner Winner</span></div>
+        <span className="champion-text">
+          <Icon name='trophy' />
+          { content }
+        </span>
+        <div className="bottom"><span>Chicken Dinner!</span></div>
+      </div>
+    );
+  }
   return (
     <div
       className={classNames("item-content", {
         winner: props.team.winner,
         loser: props.team.loser,
         tie: props.team.tie,
+        champion: props.champion,
       })}
     >
       { content }
@@ -53,6 +66,7 @@ export const Bracket = props => {
         <TeamBox
           team={ props.item }
           totalGames={ props.totalGames }
+          champion={ props.item.topLevel && props.finished }
         />
       </div>
       {props.item.children &&

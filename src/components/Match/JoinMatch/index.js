@@ -105,8 +105,6 @@ class JoinMatch extends React.PureComponent {
                     lobby,
                     update: this.state.update + 1,
                 });
-            } else {
-                console.warn('Tournament is null', this.state.lobby);
             }
         });
     }
