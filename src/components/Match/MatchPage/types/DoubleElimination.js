@@ -1,10 +1,4 @@
-import React, { Fragment } from "react";
-import {
-  Loader,
-  Grid,
-  List,
-  Segment,
-} from "semantic-ui-react";
+import React from "react";
 
 import Brackets from './Brackets';
 

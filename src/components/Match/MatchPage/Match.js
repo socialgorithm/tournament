@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Grid, Segment, Progress } from 'semantic-ui-react';
+import { Grid, Progress } from 'semantic-ui-react';
 
 import './match.css';
 
