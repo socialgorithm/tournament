@@ -81,7 +81,7 @@ export default class MatchPage extends React.PureComponent {
     return (
       <Fragment>
         <Button primary onClick={this.props.continueMatches} disabled={ disabled }>
-          {this.props.tournament.matches.length > 0 ? 'Continue Game' : 'Start Game'}
+          {this.props.tournament.matches.length > 0 ? 'Next Match' : 'Start Tournament'}
         </Button>
       </Fragment>
     );
