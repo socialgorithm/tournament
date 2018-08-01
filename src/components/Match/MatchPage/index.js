@@ -77,13 +77,15 @@ export default class MatchPage extends React.PureComponent {
 
   renderContinueButton() {
     const disabled = !this.props.tournament.waiting;
-    
     return (
-      <Fragment>
-        <Button primary onClick={this.props.continueMatches} disabled={ disabled }>
-          {this.props.tournament.matches.length > 0 ? 'Next Match' : 'Start Tournament'}
-        </Button>
-      </Fragment>
+      <Button
+        icon='play'
+        content={this.props.tournament.matches.length > 0 ? 'Play Next Match' : 'Start Tournament'}
+        onClick={this.props.continueMatches}
+        disabled={ disabled }
+        size='tiny'
+        primary
+      />
     );
   }
 
@@ -92,7 +94,12 @@ export default class MatchPage extends React.PureComponent {
       <Container>
         <Grid columns={ 3 }>
           <Grid.Column>
-            <Button onClick={this.props.backToLobby}><Icon name='chevron left'/>Lobby</Button>
+            <Button
+              icon='chevron left'
+              content='Lobby'
+              onClick={this.props.backToLobby}
+              basic
+            />
           </Grid.Column>
           <Grid.Column>
           <h1>
@@ -100,6 +107,7 @@ export default class MatchPage extends React.PureComponent {
           </h1>
           </Grid.Column>
           <Grid.Column textAlign='right'>
+              { this.renderContinueButton() }
               { this.renderTournamentLabel() }
           </Grid.Column>
         </Grid>
@@ -107,7 +115,6 @@ export default class MatchPage extends React.PureComponent {
           <Grid.Row>
             <Grid.Column width={4}>
               {this.renderRanking()}
-              {this.renderContinueButton()}
             </Grid.Column>
             <Grid.Column width={12}>{this.renderTournament()}</Grid.Column>
           </Grid.Row>

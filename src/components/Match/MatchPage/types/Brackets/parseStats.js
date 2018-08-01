@@ -1,5 +1,3 @@
-let parsedMatches = [];
-
 /**
  * Parse Tournament Stats and generate the appropriate data structure
  * for the brackets to be rendered.
@@ -8,29 +6,39 @@ let parsedMatches = [];
  */
 export const parseStats = stats => {
   const matches = stats.matches;
-  matches.reverse();
   const brackets = [];
-  parsedMatches = [];
-
+  
   // Prepare a map of matches for quick reference
   const matchesRef = {};
   matches.forEach(match => {
     matchesRef[match.uuid] = match;
   });
 
-  while(parsedMatches.length < matches.length) {
-    const nextMatch = matches.find(match => parsedMatches.indexOf(match.uuid) < 0);
-    brackets.push(addMatch(nextMatch, matchesRef, false, false, true));
-  }
+  // Figure out the top level matches
+  // these are matches that are not parents of any match
+  const topLevelMatches = matches.map(match => match.uuid);
+  matches.filter(
+    match => match.parentMatches && match.parentMatches.length > 0
+  ).forEach(match => {
+    match.parentMatches.forEach(parentMatch => {
+      const index = topLevelMatches.indexOf(parentMatch.parent);
+      if (index > -1) {
+        topLevelMatches.splice(index, 1);
+      }
+    });
+  });
 
-  brackets.reverse();
+  topLevelMatches.forEach(matchUUID => {
+    const match = matches.find(eachMatch => eachMatch.uuid === matchUUID);
+    brackets.push(addMatch(match, matchesRef, false, false, true));
+  });
 
   return brackets;
 };
 
 export default parseStats;
 
-const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
+const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
   const matchBracket = {
     name: "",
     playerIndex: -1,
@@ -49,11 +57,9 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
     winner,
     loser,
     topLevel,
-    currentStats,
+    currentMatch,
     children: []
   };
-
-  parsedMatches.push(match.uuid);
 
   if (match.stats.winner === -1) {
     if (match.stats.state === "finished") {
@@ -61,7 +67,10 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
     }
   } else {
     matchBracket.name = match.players[match.stats.winner].token;
-    matchBracket.playerIndex = match.stats.winner;
+  }
+
+  if (currentMatch) {
+    matchBracket.playerIndex = currentMatch.players.findIndex(player => player.token === matchBracket.name);
   }
 
   // add the parents
@@ -74,7 +83,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
     match.parentMatches.forEach(parentMatchInfo => {
       const parentMatch = matchesRef[parentMatchInfo.parent];
       if (!parentMatch) {
-        console.warn("Cant fine parent match", parentMatchInfo);
+        console.warn("Can't fine parent match", parentMatchInfo);
       }
       parentLessPlayers[parentMatchInfo.playerIndex] = false;
       if (addedParentMatches.indexOf(parentMatchInfo.parent) > -1) {
@@ -89,7 +98,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
           parseInt(match.stats.winner, 10) === parseInt(parentMatchInfo.playerIndex, 10),
           parseInt(match.stats.winner, 10) === 1 - parseInt(parentMatchInfo.playerIndex, 10),
           false,
-          parentMatch.stats
+          match
         )
       );
     });
@@ -108,7 +117,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
       winner: parseInt(match.stats.winner, 10) === parseInt(playerIndex, 10),
       loser: parseInt(match.stats.winner, 10) === 1 - parseInt(playerIndex, 10),
       children: [],
-      currentStats: match.stats,
+      currentMatch: match,
     });
   });
 
