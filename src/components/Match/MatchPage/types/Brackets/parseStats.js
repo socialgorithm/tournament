@@ -30,11 +30,14 @@ export const parseStats = stats => {
 
 export default parseStats;
 
-const addMatch = (match, matchesRef, winner, loser, topLevel) => {
+const addMatch = (match, matchesRef, winner, loser, topLevel, currentStats) => {
   const matchBracket = {
     name: "",
+    playerIndex: -1,
     status: match.stats.state,
     match: {
+      players: match.players,
+      stats: match.stats,
       playerA: match.players[0].token,
       playerB: match.players[1].token,
       winsA: match.stats.wins[0],
@@ -46,6 +49,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel) => {
     winner,
     loser,
     topLevel,
+    currentStats,
     children: []
   };
 
@@ -57,6 +61,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel) => {
     }
   } else {
     matchBracket.name = match.players[match.stats.winner].token;
+    matchBracket.playerIndex = match.stats.winner;
   }
 
   // add the parents
@@ -82,6 +87,8 @@ const addMatch = (match, matchesRef, winner, loser, topLevel) => {
         matchesRef,
         parseInt(match.stats.winner, 10) === parseInt(parentMatchInfo.playerIndex, 10),
         parseInt(match.stats.winner, 10) === 1 - parseInt(parentMatchInfo.playerIndex, 10),
+        false,
+        parentMatch.stats
       )
     );
   });
@@ -94,10 +101,12 @@ const addMatch = (match, matchesRef, winner, loser, topLevel) => {
     const player = match.players[playerIndex].token;
     matchBracket.children.push({
       name: player,
+      playerIndex: playerIndex,
       status: "finished",
       winner: parseInt(match.stats.winner, 10) === parseInt(playerIndex, 10),
       loser: parseInt(match.stats.winner, 10) === 1 - parseInt(playerIndex, 10),
-      children: []
+      children: [],
+      currentStats: match.stats,
     });
   });
 

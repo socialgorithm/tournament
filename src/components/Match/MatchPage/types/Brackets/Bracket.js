@@ -5,6 +5,7 @@ import { Loader, Icon } from 'semantic-ui-react';
 import Match from '../../Match';
 
 export const TeamBox = props => {
+  console.log('render team', props.team);
   let content = props.team.name;
   if (!props.team.name) {
     content = (
@@ -25,18 +26,35 @@ export const TeamBox = props => {
         small
       />
     );
-  }
-  if (props.champion) {
-    content = (
-      <div>
-        <div className="top"><span>Winner Winner</span></div>
-        <span className="champion-text">
-          <Icon name='trophy' />
-          { content }
-        </span>
-        <div className="bottom"><span>Chicken Dinner!</span></div>
-      </div>
-    );
+  } else {
+    if (props.champion) {
+      content = (
+        <Fragment>
+          <div className="top"><span>Winner Winner</span></div>
+          <span className="champion-text">
+            <Icon name='trophy' />
+            { content }
+          </span>
+          <div className="bottom"><span>Chicken Dinner!</span></div>
+        </Fragment>
+      );
+    } else if (props.team.status === 'finished' && props.team.currentStats) {
+      const winner = props.team.playerIndex;
+      if (winner > -1) {
+        content = (
+          <Fragment>
+            { content }
+            <div className="bottom">
+              <span>
+                W { props.team.currentStats.wins[winner] } - 
+                L { props.team.currentStats.wins[1 - winner] } - 
+                T { props.team.currentStats.ties }
+              </span>
+            </div>
+          </Fragment>
+        );
+      }
+    }
   }
   return (
     <div
