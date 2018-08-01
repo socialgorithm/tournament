@@ -23,8 +23,6 @@ export const parseStats = stats => {
     brackets.push(addMatch(nextMatch, matchesRef));
   }
 
-  console.log('brackets', brackets);
-
   return brackets;
 };
 
@@ -42,6 +40,7 @@ const addMatch = (match, matchesRef, winner, loser) => {
       gamesPlayed: match.stats.games,
       totalGames: 10
     },
+    tie: match.stats.winner === -1 && match.stats.state === "finished",
     winner,
     loser,
     children: []
@@ -54,8 +53,7 @@ const addMatch = (match, matchesRef, winner, loser) => {
       matchBracket.name = "Tie";
     }
   } else {
-    const winner = match.players[match.stats.winner].token;
-    matchBracket.name = winner;
+    matchBracket.name = match.players[match.stats.winner].token;
   }
 
   // add the parents
@@ -73,8 +71,8 @@ const addMatch = (match, matchesRef, winner, loser) => {
       addMatch(
         parentMatch,
         matchesRef,
-        parentMatchInfo.playerIndex === match.stats.winner,
-        parentMatchInfo.playerIndex === 1 - match.stats.winner
+        parseInt(match.stats.winner, 10) === parseInt(parentMatchInfo.playerIndex, 10),
+        parseInt(match.stats.winner, 10) === 1 - parseInt(parentMatchInfo.playerIndex, 10),
       )
     );
   });
@@ -85,11 +83,12 @@ const addMatch = (match, matchesRef, winner, loser) => {
       return;
     }
     const player = match.players[playerIndex].token;
+    console.log('adding final game', player, match.stats.winner, playerIndex);
     matchBracket.children.push({
       name: player,
-      status: "Finished",
-      winner: match.stats.winner === playerIndex,
-      loser: match.stats.winner === 1 - playerIndex,
+      status: "finished",
+      winner: parseInt(match.stats.winner, 10) === parseInt(playerIndex, 10),
+      loser: parseInt(match.stats.winner, 10) === 1 - parseInt(playerIndex, 10),
       children: []
     });
   });

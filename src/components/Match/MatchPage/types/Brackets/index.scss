@@ -4,6 +4,7 @@ $boxColor: #ccc;
 $lineColor: #87a3ab;
 $winnerColor: #509e00;
 $loserBackground: #efefef;
+$tieBackground: #ffea9d;
 
 .tournament-bracket {
   display: flex;
@@ -74,7 +75,7 @@ $loserBackground: #efefef;
   .item-content {
     padding: 1em;
     margin: 0;
-    max-width: 200px;
+    max-width: 300px;
 
     text-align: center;
 
@@ -87,10 +88,16 @@ $loserBackground: #efefef;
     &.winner {
       border-left-color: $winnerColor;
       border-left-width: 4px;
+      background-color: transparentize($winnerColor, 0.9);
+      color: $winnerColor;
     }
 
     &.loser {
       background-color: $loserBackground;
+    }
+
+    &.tie {
+      background-color: $tieBackground;
     }
 
     .match {

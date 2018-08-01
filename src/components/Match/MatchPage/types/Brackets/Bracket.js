@@ -30,7 +30,8 @@ export const TeamBox = props => {
     <div
       className={classNames("item-content", {
         winner: props.team.winner,
-        loser: props.team.loser
+        loser: props.team.loser,
+        tie: props.team.tie,
       })}
     >
       { content }
