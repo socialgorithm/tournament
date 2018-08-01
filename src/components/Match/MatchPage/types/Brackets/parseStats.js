@@ -1,7 +1,16 @@
+let parsedMatches = [];
+
+/**
+ * Parse Tournament Stats and generate the appropriate data structure
+ * for the brackets to be rendered.
+ * 
+ * @param {*} stats 
+ */
 export const parseStats = stats => {
   const matches = stats.matches;
   matches.reverse();
   const brackets = [];
+  parsedMatches = [];
 
   // Prepare a map of matches for quick reference
   const matchesRef = {};
@@ -9,11 +18,12 @@ export const parseStats = stats => {
     matchesRef[match.uuid] = match;
   });
 
-  matches.filter(
-    match => match.parentMatches.length === 0
-  ).forEach(match => {
-    brackets.push(addMatch(match, matchesRef));
-  });
+  while(parsedMatches.length < matches.length) {
+    const nextMatch = matches.find(match => parsedMatches.indexOf(match.uuid) < 0);
+    brackets.push(addMatch(nextMatch, matchesRef));
+  }
+
+  console.log('brackets', brackets);
 
   return brackets;
 };
@@ -37,6 +47,8 @@ const addMatch = (match, matchesRef, winner, loser) => {
     children: []
   };
 
+  parsedMatches.push(match.uuid);
+
   if (match.stats.winner === -1) {
     if (match.stats.state === "finished") {
       matchBracket.name = "Tie";
@@ -47,14 +59,16 @@ const addMatch = (match, matchesRef, winner, loser) => {
   }
 
   // add the parents
-  const parentLessPlayers = [0, 1];
+  const parentLessPlayers = {
+    0: true,
+    1: true,
+  };
   match.parentMatches.forEach(parentMatchInfo => {
     const parentMatch = matchesRef[parentMatchInfo.parent];
     if (!parentMatch) {
       console.warn("Cant fine parent match", parentMatchInfo);
     }
-    const parentIndex = parentLessPlayers.indexOf(parentMatchInfo.playerIndex);
-    parentLessPlayers.splice(parentIndex);
+    parentLessPlayers[parentMatchInfo.playerIndex] = false;
     matchBracket.children.push(
       addMatch(
         parentMatch,
@@ -66,7 +80,10 @@ const addMatch = (match, matchesRef, winner, loser) => {
   });
 
   // Add parents that are not a match (first rounds)
-  parentLessPlayers.forEach(playerIndex => {
+  Object.keys(parentLessPlayers).forEach(playerIndex => {
+    if (!parentLessPlayers[playerIndex]) {
+      return;
+    }
     const player = match.players[playerIndex].token;
     matchBracket.children.push({
       name: player,

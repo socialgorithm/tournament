@@ -11,7 +11,7 @@ export const TeamBox = props => {
         <Loader active inline size='small' />
     );
   }
-  if (props.team.status === 'In Progress') {
+  if (props.team.status === 'playing') {
     content = (
       <Match
         wrapper={ Fragment }
@@ -20,7 +20,7 @@ export const TeamBox = props => {
         winsA={ props.team.match.winsA }
         winsB={ props.team.match.winsB }
         gamesPlayed={ props.team.match.gamesPlayed }
-        totalGames={ props.team.match.totalGames }
+        totalGames={ props.totalGames }
         displayProgress
         small
       />
@@ -51,6 +51,7 @@ export const Bracket = props => {
       <div className="item-parent">
         <TeamBox
           team={ props.item }
+          totalGames={ props.totalGames }
         />
       </div>
       {props.item.children &&

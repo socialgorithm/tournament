@@ -16,7 +16,7 @@ export default props => {
     <div>
       {data.map((bracket, $index) => (
         <div className="tournament-bracket">
-            <Bracket item={bracket} key={$index} />
+            <Bracket item={bracket} key={$index} totalGames={ props.stats.options.numberOfGames } />
         </div>
       ))}
     </div>
