@@ -61,12 +61,18 @@ const addMatch = (match, matchesRef, winner, loser) => {
     0: true,
     1: true,
   };
+  const addedParentMatches = [];
   match.parentMatches.forEach(parentMatchInfo => {
     const parentMatch = matchesRef[parentMatchInfo.parent];
     if (!parentMatch) {
       console.warn("Cant fine parent match", parentMatchInfo);
     }
     parentLessPlayers[parentMatchInfo.playerIndex] = false;
+    if (addedParentMatches.indexOf(parentMatchInfo.parent) > -1) {
+      // this parent was already added, this must be a tie
+      return;
+    }
+    addedParentMatches.push(parentMatchInfo.parent);
     matchBracket.children.push(
       addMatch(
         parentMatch,
