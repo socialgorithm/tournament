@@ -32,6 +32,7 @@ class JoinMatch extends React.PureComponent {
                 timeout: 100,
                 numberOfGames: 10,
                 type: 'FreeForAll',
+	            autoPlay: true
             },
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
             activePlayers: [],
@@ -68,9 +69,11 @@ class JoinMatch extends React.PureComponent {
         });
         this.props.socket.socket.on('lobby joined', data => {
             const {lobby, isAdmin} = data;
+            const tournamentActive = lobby.tournament ? !lobby.tournament.finished : false;
             this.setState({
                 admin: isAdmin,
-                lobby
+                lobby,
+	            showTournament: tournamentActive
             });
         });
 	    this.props.socket.socket.on('lobby tournament started', data => {
@@ -115,18 +118,38 @@ class JoinMatch extends React.PureComponent {
             options: this.state.tournamentOptions,
 	        players: this.state.activePlayers.map(p => p.token)
         });
+	    this.setState({showTournament: true});
     };
 
     token = () => this.props.match.params.name;
 
-    updateOption = (field) => (event, data) => {
-        const updatedOptions = this.state.tournamentOptions;
-        updatedOptions[field] = data.value;
-        this.setState({
-            tournamentOptions: updatedOptions,
-            update: this.state.update + 1,
-        });
-    };
+	updateOption = (field) => (event, data) => {
+		const updatedOptions = this.state.tournamentOptions;
+		updatedOptions[field] = data.value;
+		this.setState({
+			tournamentOptions: updatedOptions,
+			update: this.state.update + 1,
+		});
+	};
+
+	updateTypeOption = (event, data) => {
+		const updatedOptions = this.state.tournamentOptions;
+		updatedOptions.type = data.value;
+		updatedOptions.autoPlay = data.value === 'FreeForAll';
+		this.setState({
+			tournamentOptions: updatedOptions,
+			update: this.state.update + 1,
+		});
+	};
+
+	updateCheckedOption = (field) => (event, data) => {
+		const updatedOptions = this.state.tournamentOptions;
+		updatedOptions[field] = data.checked;
+		this.setState({
+			tournamentOptions: updatedOptions,
+			update: this.state.update + 1,
+		});
+	};
 
 	kickPlayer = (token) => {
 		this.props.socket.socket.emit('lobby player kick', {
@@ -181,6 +204,16 @@ class JoinMatch extends React.PureComponent {
 		e.preventDefault();
 	};
 
+	backToLobby = () => {
+		this.setState({showTournament: false});
+	};
+
+	continueMatches = () => {
+		this.props.socket.socket.emit('lobby tournament continue', {
+			lobbyToken: this.state.lobby.token
+		});
+	};
+
     renderLoader = () => {
         if (this.state.admin) {
             return null;
@@ -213,7 +246,8 @@ class JoinMatch extends React.PureComponent {
             },
         ];
         const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
-        return (
+	    console.log(this.state.activePlayers.length < 2 && (!this.state.lobby.tournament || (this.state.lobby.tournament && !this.state.lobby.tournament.finished)));
+	    return (
             <Grid columns={ 2 }>
                 <Grid.Row>
                     <Grid.Column>
@@ -223,7 +257,7 @@ class JoinMatch extends React.PureComponent {
                             primary
                             icon='play'
                             title={ title }
-                            disabled={ this.state.activePlayers.length < 2 }
+                            disabled={ this.state.activePlayers.length < 2}
                             content='Start Game'
                             onClick={ this.startTournament }
                         />
@@ -249,8 +283,13 @@ class JoinMatch extends React.PureComponent {
                                 label='Tournament Type'
                                 options={ tournamentModes }
                                 value={ this.state.tournamentOptions.type }
-                                onChange={ this.updateOption('type') }
+                                onChange={ this.updateTypeOption }
                             />
+	                        <Form.Checkbox
+		                        label='Automatically play next set of games'
+		                        checked={ this.state.tournamentOptions.autoPlay }
+		                        onChange={ this.updateCheckedOption('autoPlay') }
+	                        />
                         </Form>
                     </Grid.Column>
                 </Grid.Row>
@@ -331,10 +370,12 @@ class JoinMatch extends React.PureComponent {
             );
         }
 
-        if (this.state.lobby.tournament) {
+        if (this.state.lobby.tournament && this.state.showTournament) {
             return (
                 <MatchPage
                   tournament={ this.state.lobby.tournament }
+                  backToLobby={this.backToLobby}
+                  continueMatches={this.continueMatches}
                 />
             );
         }

@@ -5,7 +5,8 @@ import {
   Grid,
   Label,
   Table,
-  Message
+  Message,
+  Button
 } from "semantic-ui-react";
 
 import DoubleElimination from './types/DoubleElimination';
@@ -74,22 +75,40 @@ export default class MatchPage extends React.PureComponent {
     );
   }
 
+  renderContinueButton() {
+    const disabled = !this.props.tournament.waiting;
+    
+    return (
+      <Fragment>
+        <Button primary onClick={this.props.continueMatches} disabled={ disabled }>
+          {this.props.tournament.matches.length > 0 ? 'Continue Game' : 'Start Game'}
+        </Button>
+      </Fragment>
+    );
+  }
+
   render() {
     return (
       <Container>
-        <Grid columns={2}>
+        <Grid columns={ 3 }>
           <Grid.Column>
-            <h1>
-              <Icon name="game" /> Tournament
-            </h1>
+            <Button onClick={this.props.backToLobby}><Icon name='chevron left'/>Lobby</Button>
           </Grid.Column>
-          <Grid.Column textAlign="right">
-            {this.renderTournamentLabel()}
+          <Grid.Column>
+          <h1>
+            <Icon name='game' /> Tournament
+          </h1>
+          </Grid.Column>
+          <Grid.Column textAlign='right'>
+              { this.renderTournamentLabel() }
           </Grid.Column>
         </Grid>
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column width={4}>{this.renderRanking()}</Grid.Column>
+            <Grid.Column width={4}>
+              {this.renderRanking()}
+              {this.renderContinueButton()}
+            </Grid.Column>
             <Grid.Column width={12}>{this.renderTournament()}</Grid.Column>
           </Grid.Row>
         </Grid>
