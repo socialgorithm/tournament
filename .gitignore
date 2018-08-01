@@ -17,3 +17,6 @@ yarn-debug.log*
 yarn-error.log*
 
 *.iml
+
+# we only push sass
+*.css

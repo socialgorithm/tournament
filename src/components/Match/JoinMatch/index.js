@@ -108,8 +108,6 @@ class JoinMatch extends React.PureComponent {
                     lobby,
                     update: this.state.update + 1,
                 });
-            } else {
-                console.warn('Tournament is null', this.state.lobby);
             }
         });
     }
@@ -248,7 +246,6 @@ class JoinMatch extends React.PureComponent {
             },
         ];
         const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
-	    console.log(this.state.activePlayers.length < 2 && (!this.state.lobby.tournament || (this.state.lobby.tournament && !this.state.lobby.tournament.finished)));
 	    return (
             <Grid columns={ 2 }>
                 <Grid.Row>
