@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/ultimate-ttt-web",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Ultimate Tic Tac Toe Algorithm - Web Client",
   "private": true,
   "scripts": {
