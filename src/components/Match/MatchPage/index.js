@@ -8,9 +8,12 @@ import {
   Message,
   Button
 } from "semantic-ui-react";
+import FlipMove from 'react-flip-move';
 
 import DoubleElimination from './types/DoubleElimination';
 import FreeForAll from './types/FreeForAll';
+
+import './index.css';
 
 export default class MatchPage extends React.PureComponent {
   
@@ -29,25 +32,17 @@ export default class MatchPage extends React.PureComponent {
 
   renderRanking() {
     return (
-      <Fragment>
+      <div className='ranking'>
         <h2>Ranking</h2>
-        <Table compact>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>#</Table.HeaderCell>
-              <Table.HeaderCell>Player</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {this.props.tournament.ranking.map((player, $index) => (
-              <Table.Row key={ player }>
-                <Table.Cell>{$index + 1}</Table.Cell>
-                <Table.Cell>{player}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </Fragment>
+        <FlipMove>
+          {this.props.tournament.ranking.map((player, $index) => (
+            <div key={ player } className='player'>
+              <div className='rank'>{ $index + 1}</div>
+              <div className='name'>{ player }</div>
+            </div>
+          ))}
+        </FlipMove>
+      </div>
     );
   }
 

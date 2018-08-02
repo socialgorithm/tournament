@@ -1,0 +1,25 @@
+.ranking {
+    padding-left: 1em;
+
+    .player {
+        position: relative;
+        margin-bottom: 1em;
+        padding: 0.5em 1em 0.5em 0.5em;
+        background: #fff;
+        border-radius: 2em;
+        border: solid 1px #ccc;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+
+        .name, .rank {
+            display: inline-block;
+        }
+
+        .rank {
+            margin-right: 1em;
+            background: #3c4b64;
+            color: #fff;
+            border-radius: 100%;
+            padding: 0.5em 0.9em;
+        }
+    }
+}
