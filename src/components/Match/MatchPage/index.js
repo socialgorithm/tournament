@@ -1,10 +1,9 @@
-import React, { Fragment } from "react";
+import React from "react";
 import {
   Icon,
   Container,
   Grid,
   Label,
-  Table,
   Message,
   Button
 } from "semantic-ui-react";
@@ -75,7 +74,7 @@ export default class MatchPage extends React.PureComponent {
     return (
       <Button
         icon='play'
-        content={this.props.tournament.matches.length > 0 ? 'Play Next Round' : 'Start Tournament'}
+        content={this.props.tournament.matches.length > 0 ? 'Play Next Match' : 'Start Tournament'}
         onClick={this.props.continueMatches}
         disabled={ disabled }
         size='tiny'

@@ -7,7 +7,6 @@
 export const parseStats = stats => {
   const matches = stats.matches;
   const brackets = [];
-  
   // Prepare a map of matches for quick reference
   const matchesRef = {};
   matches.forEach(match => {

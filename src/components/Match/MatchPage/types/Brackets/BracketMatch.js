@@ -67,7 +67,7 @@ export default class BracketMatch extends React.PureComponent {
             <div className="bottom"><span>Chicken Dinner!</span></div>
           </Fragment>
         );
-      } else if (bracket.status === 'finished' && bracket.currentMatch) {
+      } else if (bracket.currentMatch && bracket.currentMatch.stats.state === 'finished') {
         const playerIndex = bracket.playerIndex;
         if (playerIndex > -1) {
           content = (
@@ -77,7 +77,7 @@ export default class BracketMatch extends React.PureComponent {
                 <span>
                   W { bracket.currentMatch.stats.wins[playerIndex] || 0 } - 
                   L { bracket.currentMatch.stats.wins[1 - playerIndex] || 0 } - 
-                  T { bracket.currentMatch.stats.ties || 0 }
+                  T { bracket.currentMatch.stats.gamesTied || 0 }
                 </span>
               </div>
             </Fragment>

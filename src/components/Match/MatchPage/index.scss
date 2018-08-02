@@ -10,6 +10,15 @@
         border: solid 1px #ccc;
         box-shadow: 0 3px 5px rgba(0,0,0,0.1);
 
+        &:first-child {
+            background-color: #e5efe2;
+            color: #509e01;
+
+            .rank {
+                background: #509e01;
+            }
+        }
+
         .name, .rank {
             display: inline-block;
         }

@@ -26,9 +26,7 @@ export default (props) => {
             />
         );
     }
-
-    console.log('render match', match);
-
+    
     return (
         <div className={ classNames('match', { 'small': props.small }) }>
             <Grid columns={ 2 } textAlign='center' verticalAlign='middle' style={ gridStyle }>
