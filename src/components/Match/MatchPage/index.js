@@ -40,7 +40,7 @@ export default class MatchPage extends React.PureComponent {
           </Table.Header>
           <Table.Body>
             {this.props.tournament.ranking.map((player, $index) => (
-              <Table.Row>
+              <Table.Row key={ player }>
                 <Table.Cell>{$index + 1}</Table.Cell>
                 <Table.Cell>{player}</Table.Cell>
               </Table.Row>
@@ -80,7 +80,7 @@ export default class MatchPage extends React.PureComponent {
     return (
       <Button
         icon='play'
-        content={this.props.tournament.matches.length > 0 ? 'Play Next Match' : 'Start Tournament'}
+        content={this.props.tournament.matches.length > 0 ? 'Play Next Round' : 'Start Tournament'}
         onClick={this.props.continueMatches}
         disabled={ disabled }
         size='tiny'
@@ -91,7 +91,7 @@ export default class MatchPage extends React.PureComponent {
 
   render() {
     return (
-      <Container>
+      <Container fluid>
         <Grid columns={ 3 }>
           <Grid.Column>
             <Button
@@ -113,10 +113,10 @@ export default class MatchPage extends React.PureComponent {
         </Grid>
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column width={4}>
+            <Grid.Column width={2}>
               {this.renderRanking()}
             </Grid.Column>
-            <Grid.Column width={12}>{this.renderTournament()}</Grid.Column>
+            <Grid.Column width={14}>{this.renderTournament()}</Grid.Column>
           </Grid.Row>
         </Grid>
       </Container>

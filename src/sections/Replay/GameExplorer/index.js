@@ -16,6 +16,8 @@ class GameExplorer extends React.Component {
 
     const {error, games, won, lost, tied} = this.parseGameData(props.gameData);
 
+    console.log('parsed', games);
+
     this.state = {
       error,
       games,

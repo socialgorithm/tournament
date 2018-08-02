@@ -15,7 +15,7 @@ export default props => {
   return (
     <div>
       {data.map((bracket, $index) => (
-        <div className="tournament-bracket">
+        <div className="tournament-bracket" key={ bracket.match.uuid }>
             <Bracket
               finished={ props.stats.finished }
               item={bracket}

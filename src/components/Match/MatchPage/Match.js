@@ -5,8 +5,10 @@ import { Grid, Progress } from 'semantic-ui-react';
 import './match.css';
 
 export default (props) => {
-    const colorA = props.winsA > props.winsB ? 'green' : null;
-    const colorB = props.winsB > props.winsA ? 'green' : null;
+    const { match, totalGames } = props;
+    const stats = match.stats;
+    const colorA = stats.wins[0] > stats.wins[1] ? 'green' : null;
+    const colorB = stats.wins[1] > stats.wins[0] ? 'green' : null;
 
     let progress = null;
     let gridStyle = null;
@@ -17,24 +19,26 @@ export default (props) => {
         };
         progress = (
             <Progress
-                value={ props.gamesPlayed }
-                total={ props.totalGames }
+                value={ match.stats.gamesCompleted }
+                total={ totalGames }
                 progress='ratio'
                 indicating
             />
         );
     }
 
+    console.log('render match', match);
+
     return (
         <div className={ classNames('match', { 'small': props.small }) }>
             <Grid columns={ 2 } textAlign='center' verticalAlign='middle' style={ gridStyle }>
                 <Grid.Column color={ colorA }>
-                    <h2>{ props.playerA }</h2>
-                    <h3>{ props.winsA }</h3>
+                    <h2>{ match.players[0].token }</h2>
+                    <h3>{ stats.wins[0] }</h3>
                 </Grid.Column>
                 <Grid.Column color={ colorB }>
-                    <h2>{ props.playerB }</h2>
-                    <h3>{ props.winsB }</h3>
+                    <h2>{ match.players[1].token }</h2>
+                    <h3>{ stats.wins[1] }</h3>
                 </Grid.Column>
             </Grid>
             { progress }

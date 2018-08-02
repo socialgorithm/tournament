@@ -6,7 +6,7 @@ export const Bracket = props => {
   if (!props.item.children || props.item.children.length < 1) {
     return (
       <BracketMatch
-        team={ props.item }
+        bracket={ props.item }
       />
     );
   }
@@ -14,7 +14,7 @@ export const Bracket = props => {
     <div className="item">
       <div className="item-parent">
         <BracketMatch
-          team={ props.item }
+          bracket={ props.item }
           totalGames={ props.totalGames }
           champion={ props.item.topLevel && props.finished }
         />

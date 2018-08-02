@@ -23,11 +23,7 @@ export default class MatchPage extends React.PureComponent {
         {currentMatch && (
           <Segment>
             <Match
-              playerA={currentMatch.players[0].token}
-              playerB={currentMatch.players[1].token}
-              winsA={currentMatch.stats.wins[0]}
-              winsB={currentMatch.stats.wins[1]}
-              gamesPlayed={currentMatch.stats.games}
+              match={ currentMatch }
               totalGames={this.props.tournament.options.numberOfGames}
               displayProgress
             />
@@ -82,10 +78,7 @@ export default class MatchPage extends React.PureComponent {
           .map(match => (
             <Segment>
               <Match
-                playerA={match.players[0].token}
-                playerB={match.players[1].token}
-                winsA={match.stats.wins[0]}
-                winsB={match.stats.wins[1]}
+                match={ match }
               />
             </Segment>
           ))}

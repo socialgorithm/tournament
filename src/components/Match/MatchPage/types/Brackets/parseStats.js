@@ -42,17 +42,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
   const matchBracket = {
     name: "",
     playerIndex: -1,
-    status: match.stats.state,
-    match: {
-      players: match.players,
-      stats: match.stats,
-      playerA: match.players[0].token,
-      playerB: match.players[1].token,
-      winsA: match.stats.wins[0],
-      winsB: match.stats.wins[1],
-      gamesPlayed: match.stats.games,
-      totalGames: 10
-    },
+    match,
     tie: match.stats.winner === -1 && match.stats.state === "finished",
     winner,
     loser,
@@ -113,7 +103,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
     matchBracket.children.push({
       name: player,
       playerIndex: playerIndex,
-      status: "finished",
+      match: null,
       winner: parseInt(match.stats.winner, 10) === parseInt(playerIndex, 10),
       loser: parseInt(match.stats.winner, 10) === 1 - parseInt(playerIndex, 10),
       children: [],

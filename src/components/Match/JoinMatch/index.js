@@ -30,9 +30,9 @@ class JoinMatch extends React.PureComponent {
             },
             tournamentOptions: {
                 timeout: 100,
-                numberOfGames: 10,
-                type: 'FreeForAll',
-	            autoPlay: true
+                numberOfGames: 50,
+                type: 'DoubleElimination',
+	            autoPlay: false
             },
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
             activePlayers: [],
@@ -155,15 +155,28 @@ class JoinMatch extends React.PureComponent {
 		this.props.socket.socket.emit('lobby player kick', {
 			lobbyToken: this.state.lobby.token,
 			playerToken: token
-		});
+        });
+        this.removeActivePlayer(token);
 	};
 
 	banPlayer = (token) => {
 		this.props.socket.socket.emit('lobby player ban', {
 			lobbyToken: this.state.lobby.token,
 			playerToken: token
-		});
-	};
+        });
+        this.removeActivePlayer(token);
+    };
+    
+    removeActivePlayer = (token) => {
+        const index = this.state.activePlayers.findIndex(player => player.token === token);
+        if (index > -1) {
+            const activePlayers = this.state.activePlayers;
+            activePlayers.splice(index, 1);
+            this.setState({
+                activePlayers,
+            });
+        }
+    };
 
 	onDragPlayerStart = (token, e) => {
 		e.dataTransfer.setData("text/plain", token);

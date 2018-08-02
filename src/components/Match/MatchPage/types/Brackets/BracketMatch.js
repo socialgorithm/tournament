@@ -1,32 +1,62 @@
 import React, { Fragment } from "react";
 import classNames from "classnames";
 import { Loader, Icon } from 'semantic-ui-react';
+import scrollToComponent from 'react-scroll-to-component';
 
 import Match from '../../Match';
 
-export default (props) => {
-    let content = props.team.name;
-    if (!props.team.name) {
+export default class BracketMatch extends React.PureComponent {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      ref: null,
+    };
+  }
+
+  updateRef = (ref) => {
+    this.setState({
+      ref,
+    });
+  };
+
+  componentDidUpdate() {
+    this.scroll();
+  }
+
+  componentDidMount() {
+    this.scroll();
+  }
+
+  scroll() {
+    if (this.props.bracket.match && this.props.bracket.match.stats.state === 'playing' && this.state.ref) {
+      // this match is being played, scroll to it
+      scrollToComponent(this.state.ref, {
+        duration: 500,
+      });
+    }
+  }
+
+  render() {
+    const { bracket, champion, totalGames } = this.props;
+    let content = bracket.name;
+    if (!bracket.name) {
       content = (
           <Loader active inline size='small' />
       );
     }
-    if (props.team.status === 'playing') {
+    if (bracket.match && bracket.match.stats.state === 'playing') {
       content = (
         <Match
           wrapper={ Fragment }
-          playerA={ props.team.match.playerA }
-          playerB={ props.team.match.playerB }
-          winsA={ props.team.match.winsA }
-          winsB={ props.team.match.winsB }
-          gamesPlayed={ props.team.match.gamesPlayed }
-          totalGames={ props.totalGames }
+          match={ bracket.match }
+          totalGames={ totalGames }
           displayProgress
           small
         />
       );
     } else {
-      if (props.champion) {
+      if (champion) {
         content = (
           <Fragment>
             <div className="top"><span>Winner Winner</span></div>
@@ -37,17 +67,17 @@ export default (props) => {
             <div className="bottom"><span>Chicken Dinner!</span></div>
           </Fragment>
         );
-      } else if (props.team.status === 'finished' && props.team.currentMatch) {
-        const playerIndex = props.team.playerIndex;
+      } else if (bracket.status === 'finished' && bracket.currentMatch) {
+        const playerIndex = bracket.playerIndex;
         if (playerIndex > -1) {
           content = (
             <Fragment>
               { content }
               <div className="bottom">
                 <span>
-                  W { props.team.currentMatch.stats.wins[playerIndex] || 0 } - 
-                  L { props.team.currentMatch.stats.wins[1 - playerIndex] || 0 } - 
-                  T { props.team.currentMatch.stats.ties || 0 }
+                  W { bracket.currentMatch.stats.wins[playerIndex] || 0 } - 
+                  L { bracket.currentMatch.stats.wins[1 - playerIndex] || 0 } - 
+                  T { bracket.currentMatch.stats.ties || 0 }
                 </span>
               </div>
             </Fragment>
@@ -57,14 +87,16 @@ export default (props) => {
     }
     return (
       <div
+        ref={ this.updateRef }
         className={classNames("item-content", {
-          winner: props.team.winner,
-          loser: props.team.loser,
-          tie: props.team.tie,
-          champion: props.champion,
+          winner: bracket.winner,
+          loser: bracket.loser,
+          tie: bracket.tie,
+          champion: champion,
         })}
       >
         { content }
       </div>
     );
-  };
+  }
+}
