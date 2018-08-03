@@ -16,6 +16,7 @@ import {
 } from 'semantic-ui-react';
 
 import MatchPage from '../MatchPage';
+import UTTT from '../../../../node_modules/@socialgorithm/ultimate-ttt/dist/UTTT';
 
 class JoinMatch extends React.PureComponent {
     constructor(props) {
@@ -36,7 +37,8 @@ class JoinMatch extends React.PureComponent {
             },
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
             activePlayers: [],
-	        activePlayersDrop: false
+            activePlayersDrop: false,
+            showTournament: true,
         };
     }
 
@@ -69,11 +71,10 @@ class JoinMatch extends React.PureComponent {
         });
         this.props.socket.socket.on('lobby joined', data => {
             const {lobby, isAdmin} = data;
-            const tournamentActive = lobby.tournament ? !lobby.tournament.finished : false;
             this.setState({
                 admin: isAdmin,
                 lobby,
-	            showTournament: tournamentActive
+                showTournament: true,
             });
         });
 	    this.props.socket.socket.on('lobby tournament started', data => {
@@ -110,6 +111,27 @@ class JoinMatch extends React.PureComponent {
                 });
             }
         });
+        // this.props.socket.socket.on('tournament game init', data => {
+        //     const lastGame = this.state.currentGame;
+        //     const currentGame = new UTTT(3);
+        //     this.setState({
+        //         currentGame,
+        //         lastGame,
+        //     });
+        // });
+        // this.props.socket.socket.on('tournament game move', data => {
+        //     if (!this.state.currentGame) {
+        //         return;
+        //     }
+        //     const currentGame = this.state.currentGame.move(
+        //         data.player,
+        //         data.board,
+        //         data.move,
+        //     );
+        //     this.setState({
+        //         currentGame,
+        //     });
+        // });
     }
 
     startTournament = () => {
@@ -325,7 +347,13 @@ class JoinMatch extends React.PureComponent {
         );
     };
 
-	renderPlayers = ({titleText, type, dropText, infoText}) => {
+    addAllConnectedPlayers = () => {
+        this.setState({
+            activePlayers: this.state.lobby.players,
+        });
+    };
+
+	renderPlayers = ({titleText, type, dropText, infoText, displayAddAll}) => {
 		const footerStyle = {
 			position: 'absolute',
 			bottom: 0,
@@ -337,7 +365,23 @@ class JoinMatch extends React.PureComponent {
 			fontSize: '0.7em',
 		};
 		const players = type === 'connected' ? this.state.lobby.players : this.state.activePlayers;
-		const playerDropKey = type + 'PlayersDrop';
+        const playerDropKey = type + 'PlayersDrop';
+        
+        let addAll = (
+            <div style={ footerStyle }>
+                <a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
+            </div>
+        );
+        if (displayAddAll) {
+            addAll = (
+                <div style={ footerStyle }>
+					<button className="link" onClick={ this.addAllConnectedPlayers }>
+                        <Icon name='plus' /> Add All
+                    </button>
+				</div>
+            );
+        }
+
 		return (
 			<div style={ { paddingBottom: '2em', height: 'calc(100% - 2em)' } }>
 				<Popup trigger={<p>{titleText} <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></p>} content={infoText} />
@@ -366,9 +410,7 @@ class JoinMatch extends React.PureComponent {
 						<p style={{position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center'}}>{dropText}</p>
 					}
 				</div>
-				<div style={ footerStyle }>
-					<a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
-				</div>
+				{ addAll }
 			</div>
 		);
 	};
@@ -385,6 +427,7 @@ class JoinMatch extends React.PureComponent {
         if (this.state.lobby.tournament && this.state.showTournament) {
             return (
                 <MatchPage
+                  tournamentOptions={ this.state.tournamentOptions }
                   tournament={ this.state.lobby.tournament }
                   backToLobby={this.backToLobby}
                   continueMatches={this.continueMatches}
@@ -398,7 +441,7 @@ class JoinMatch extends React.PureComponent {
                 <Segment textAlign='left'>
                     <Grid columns={ 3 } divided>
 	                    <Grid.Column width={ 3 }>
-		                    { this.renderPlayers({titleText: 'Connected Players', type: 'connected', dropText: 'Exclude player from game', infoText: 'Players connected to the lobby'}) }
+		                    { this.renderPlayers({titleText: 'Connected Players', type: 'connected', dropText: 'Exclude player from game', infoText: 'Players connected to the lobby', displayAddAll: true}) }
 	                    </Grid.Column>
 	                    <Grid.Column width={ 3 }>
 		                    { this.renderPlayers({titleText: 'Players', type: 'active', dropText: 'Include player in game', infoText: 'Players to be included in the tournament'}) }

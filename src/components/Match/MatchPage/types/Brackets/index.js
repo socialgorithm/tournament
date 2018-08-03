@@ -5,25 +5,46 @@ import Bracket from "./Bracket";
 import "./index.css";
 import parseStats from './parseStats';
 
-export default props => {
-  if (!props.stats) {
+export default class Brackets extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: this.updateStats(props),
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.stats !== this.props.stats) {
+      this.setState({
+        data: this.updateStats(nextProps),
+      });
+    }
+  }
+
+  updateStats = (props) => {
+    return parseStats(props.stats);
+  };
+
+  render () {
+    if (!this.props.stats) {
+      return (
+        <Message>Waiting for Tournament Stats...</Message>
+      );
+    }
     return (
-      <Message>Waiting for Tournament Stats...</Message>
+      <div>
+        {this.state.data.map((bracket, $index) => (
+          <div className="tournament-bracket" key={ bracket.match.uuid }>
+              <Bracket
+                finished={ this.props.stats.finished }
+                item={bracket}
+                key={$index}
+                totalGames={ this.props.stats.options.numberOfGames }
+              />
+          </div>
+        ))}
+      </div>
     );
   }
-  const data = parseStats(props.stats);
-  return (
-    <div>
-      {data.map((bracket, $index) => (
-        <div className="tournament-bracket" key={ bracket.match.uuid }>
-            <Bracket
-              finished={ props.stats.finished }
-              item={bracket}
-              key={$index}
-              totalGames={ props.stats.options.numberOfGames }
-            />
-        </div>
-      ))}
-    </div>
-  );
-};
+}

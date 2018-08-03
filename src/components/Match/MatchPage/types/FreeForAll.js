@@ -42,10 +42,8 @@ export default class MatchPage extends React.PureComponent {
     if (this.props.tournament.finished) {
       return null;
     }
-    const matches = this.props.tournament.matches;
-    const currentMatch = matches.find(match => match.stats.state === "playing");
 
-    if (!currentMatch) {
+    if (!this.props.currentGame) {
       return null;
     }
 
@@ -57,7 +55,10 @@ export default class MatchPage extends React.PureComponent {
       <Fragment>
         <h2>Game</h2>
         <div style={utttGameStyle}>
-          <UTTTGame hideSlider />
+          <UTTTGame
+            hideSlider
+            game={ this.props.currentGame }
+          />
         </div>
       </Fragment>
     );
@@ -110,7 +111,7 @@ export default class MatchPage extends React.PureComponent {
     return (
       <Grid columns={1}>
         <Grid.Row>
-          <Grid.Column width={12}>{this.renderMatches()}</Grid.Column>
+          <Grid.Column width={15}>{this.renderMatches()}</Grid.Column>
           {/* <Grid.Column width={ 4 }>
                           { this.renderCurrentGame() }
                           { this.renderUpcoming() }

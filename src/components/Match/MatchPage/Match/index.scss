@@ -1,9 +1,15 @@
 .match {
     min-width: 250px;
+    position: relative;
 
     .ui.progress,
     .ui.progress:last-child {
         margin: 0.5em;
+    }
+
+    .game {
+        position: absolute;
+        width: 100%;
     }
 
     &.small {

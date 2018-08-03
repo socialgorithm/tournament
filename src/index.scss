@@ -69,3 +69,16 @@ pre.code {
       filter: hue-rotate(360deg);
     }
   }
+
+  button.link {
+    background: none;
+    border: none;
+    font-size: 1em;
+    font-family: inherit;
+    color: #4183C4;
+    cursor: pointer;
+
+    &:hover {
+      color: #1e70bf;
+    }
+  }

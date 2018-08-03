@@ -30,17 +30,22 @@ export default class MatchPage extends React.PureComponent {
   }
 
   renderRanking() {
+    let ranking = this.props.tournament.ranking.map((player, $index) => (
+        <div key={ player } className='player'>
+            <div className='rank'>{ $index + 1}</div>
+            <div className='name'>{ player }</div>
+        </div>
+    ));
+    // Setup the animations - separately in case we need to disable them at some point
+    ranking = (
+        <FlipMove duration={ 200 }>
+            { ranking }
+        </FlipMove>
+    );
     return (
       <div className='ranking'>
-        <h2>Ranking</h2>
-        <FlipMove>
-          {this.props.tournament.ranking.map((player, $index) => (
-            <div key={ player } className='player'>
-              <div className='rank'>{ $index + 1}</div>
-              <div className='name'>{ player }</div>
-            </div>
-          ))}
-        </FlipMove>
+        <h2 style={ { textAlign: 'center' } }>Ranking</h2>
+        { ranking }
       </div>
     );
   }
@@ -86,33 +91,35 @@ export default class MatchPage extends React.PureComponent {
   render() {
     return (
       <Container fluid>
-        <Grid columns={ 3 }>
-          <Grid.Column>
-            <Button
-              icon='chevron left'
-              content='Lobby'
-              onClick={this.props.backToLobby}
-              basic
-            />
-          </Grid.Column>
-          <Grid.Column>
-          <h1>
-            <Icon name='game' /> Tournament
-          </h1>
-          </Grid.Column>
-          <Grid.Column textAlign='right'>
-              { this.renderContinueButton() }
-              { this.renderTournamentLabel() }
-          </Grid.Column>
-        </Grid>
-        <Grid columns={2}>
-          <Grid.Row>
-            <Grid.Column width={2}>
-              {this.renderRanking()}
-            </Grid.Column>
-            <Grid.Column width={14}>{this.renderTournament()}</Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <div style={ { margin: '0 1em' } }>
+            <Grid columns={ 3 }>
+                <Grid.Column largeScreen={3} widescreen={2}>
+                    <Button
+                    icon='chevron left'
+                    content='Lobby'
+                    onClick={this.props.backToLobby}
+                    basic
+                    />
+                </Grid.Column>
+                <Grid.Column>
+                <h1>
+                    <Icon name='game' /> Tournament
+                </h1>
+                </Grid.Column>
+                <Grid.Column textAlign='right'>
+                    { this.renderContinueButton() }
+                    { this.renderTournamentLabel() }
+                </Grid.Column>
+            </Grid>
+        </div>
+        <div className='tournament-page'>
+            <div className='ranking-container'>
+                {this.renderRanking()}
+            </div>
+            <div className='tournament-container'>
+                {this.renderTournament()}
+            </div>
+        </div>
       </Container>
     );
   }

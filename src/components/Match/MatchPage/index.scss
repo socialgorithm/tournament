@@ -1,5 +1,27 @@
+$rankingSize: 200px;
+$marginTop: 1em;
+
+.tournament-page {
+    position: relative;
+}
+
+.ranking-container {
+    width: $rankingSize;
+    margin-top: $marginTop;
+    border-right: 1px solid #efefef;
+    padding-right: 1em;
+    float: left;
+}
+
+.tournament-container {
+    margin-top: $marginTop * 2;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 .ranking {
     padding-left: 1em;
+    position: relative;
 
     .player {
         position: relative;
