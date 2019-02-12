@@ -1,0 +1,27 @@
+{
+  "name": "tournament-server",
+  "version": "1.0.0",
+  "description": "Socialgorithm Tournament Server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socialgorithm/tournament-server.git"
+  },
+  "keywords": [
+    "socialgorithm"
+  ],
+  "author": "Socialgorithm",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/socialgorithm/tournament-server/issues"
+  },
+  "homepage": "https://github.com/socialgorithm/tournament-server#readme",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "http": "^0.0.0",
+    "socket.io": "^2.2.0"
+  }
+}
