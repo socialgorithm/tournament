@@ -1,9 +1,5 @@
-import { RESULT_TIE } from "@socialgorithm/ultimate-ttt/dist/model/constants";
-
-
 import IMatchmaker from "./Matchmaker";
-import { Player } from "../Player";
-import { Tournament } from "../lobby/tournament/TournamentRunner";
+import { Player } from "../../Player";
 
 type PlayerStats = {
     player: Player;

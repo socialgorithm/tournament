@@ -1,8 +1,8 @@
 import * as uuid from 'uuid/v4';
 
 import { Player } from '../Player';
-import IMatchMaker from '../../matchmaker/MatchMaker';
 import { Tournament } from './Tournament';
+import IMatchMaker from './matchmaker/MatchMaker';
 
 export type TournamentOptions = {
     type: string,

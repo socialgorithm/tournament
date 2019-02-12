@@ -1,6 +1,6 @@
-import { Match } from "../lobby/tournament/match/MatchRunner";
-import { Tournament } from "../lobby/tournament/TournamentRunner";
-import { Player } from "../Player";
+import { Tournament } from "../Tournament";
+import { Match } from "../match/Match";
+import { Player } from "../../Player";
 
 /**
  * MatchMaker defines a strategy for matching players.
