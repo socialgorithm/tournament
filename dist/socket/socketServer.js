@@ -11,6 +11,7 @@ var SocketServer = (function () {
         var app = http.createServer(this.handler);
         this.io = io(app);
         app.listen(port);
+        console.log('Socket Listening on port ' + port);
         this.io.use(function (socket, next) {
             var isClient = socket.request._query.client || false;
             if (isClient) {

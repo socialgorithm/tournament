@@ -11,6 +11,8 @@ export class SocketServer {
         this.io = io(app);
         app.listen(port);
 
+        console.log('Socket Listening on port ' + port);
+
         this.io.use((socket: SocketIO.Socket, next: any) => {
             const isClient = socket.request._query.client || false;
             if (isClient) {
