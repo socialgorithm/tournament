@@ -4,7 +4,15 @@
   "description": "Socialgorithm Tournament Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/standalone.js",
+    "start:dev": "nodemon",
+    "dev": "tsc && ts-node -r tsconfig-paths/register --files src/server.ts",
+    "start:opts": "tsc && ts-node bin/index.js",
+    "build": "tsc -w",
+    "test": "npm run lint && cross-env TS_NODE_FILES=true nyc mocha -r ts-node/register -r tsconfig-paths/register --recursive 'test/**/*.test.ts'",
+    "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
+    "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
+    "docs": "typedoc --out docs/ --mode modules ./src"
   },
   "repository": {
     "type": "git",
@@ -15,6 +23,12 @@
   ],
   "author": "Socialgorithm",
   "license": "AGPL-3.0-or-later",
+  "engines": {
+    "node": ">= 8"
+  },
+  "bin": {
+    "uttt": "bin/index.js"
+  },
   "bugs": {
     "url": "https://github.com/socialgorithm/tournament-server/issues"
   },
@@ -27,6 +41,16 @@
   "devDependencies": {
     "@types/node": "^11.9.0",
     "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32"
+    "@types/socket.io-client": "^1.4.32",
+    "@types/uuid": "^3.4.4",
+    "cross-env": "^5.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.10",
+    "nyc": "^13.2.0",
+    "ts-node": "^8.0.2",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.12.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3"
   }
 }

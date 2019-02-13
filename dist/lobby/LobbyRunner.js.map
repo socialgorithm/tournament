@@ -1,0 +1,1 @@
+{"version":3,"file":"LobbyRunner.js","sourceRoot":"","sources":["../../src/lobby/LobbyRunner.ts"],"names":[],"mappings":";;AAAA,wCAA0C;AAM1C;IAII,qBAAY,KAAa;QACrB,IAAI,CAAC,KAAK,GAAG;YACT,KAAK,OAAA;YACL,IAAI,EAAK,UAAU,EAAE,SAAI,UAAU,EAAI;YACvC,OAAO,EAAE,EAAE;YACX,aAAa,EAAE,EAAE;SACpB,CAAC;IACN,CAAC;IACL,kBAAC;AAAD,CAAC,AAZD,IAYC;AAZY,kCAAW"}

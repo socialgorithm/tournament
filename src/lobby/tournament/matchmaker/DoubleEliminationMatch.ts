@@ -1,4 +1,4 @@
-import { Match } from "../MatchRunner";
+import { Match } from "../match/Match";
 
 export type MatchParent = {
     playerIndex: number;
