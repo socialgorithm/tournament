@@ -3,8 +3,9 @@ exports.__esModule = true;
 var socketServer_1 = require("./socket/socketServer");
 var banner_1 = require("./banner");
 var Server = (function () {
-    function Server() {
-        this.socketServer = new socketServer_1.SocketServer();
+    function Server(options) {
+        this.socketServer = new socketServer_1.SocketServer(options.port);
+        this.start();
     }
     Server.prototype.start = function () {
         console.log(banner_1.banner);

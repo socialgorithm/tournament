@@ -4,14 +4,14 @@ var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
 var SocketServer = (function () {
-    function SocketServer() {
+    function SocketServer(port) {
+        this.port = port;
     }
     SocketServer.prototype.start = function () {
-        var port = 3333;
         var app = http.createServer(this.handler);
         this.io = io(app);
-        app.listen(port);
-        console.log('Socket Listening on port ' + port);
+        app.listen(this.port);
+        console.log('Socket Listening on port ' + this.port);
         this.io.use(function (socket, next) {
             var isClient = socket.request._query.client || false;
             if (isClient) {

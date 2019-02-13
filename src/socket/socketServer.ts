@@ -5,13 +5,14 @@ import * as io from "socket.io";
 export class SocketServer {
     private io: SocketIO.Server;
 
+    constructor(private port: number) {}
+
     public start() {
-        const port = 3333;
         const app = http.createServer(this.handler);
         this.io = io(app);
-        app.listen(port);
+        app.listen(this.port);
 
-        console.log('Socket Listening on port ' + port);
+        console.log('Socket Listening on port ' + this.port);
 
         this.io.use((socket: SocketIO.Socket, next: any) => {
             const isClient = socket.request._query.client || false;

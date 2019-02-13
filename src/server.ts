@@ -1,5 +1,6 @@
 import { SocketServer } from "./socket/socketServer";
 import { banner } from "./banner";
+import { IOptions } from "./cli/options";
 
 /**
  * Entrypoint for the SG Tournament Server
@@ -8,14 +9,15 @@ import { banner } from "./banner";
 export class Server {
     private socketServer: SocketServer;
 
-    constructor() {
-        // Initiate the Socket
-        this.socketServer = new SocketServer();
+    constructor(options: IOptions) {
+        this.socketServer = new SocketServer(options.port);
+
+        this.start();
     }
 
     public start() {
         console.log(banner);
-        
+
         this.socketServer.start();
     }
 
