@@ -1,10 +1,8 @@
 import * as io from 'socket.io-client';
 import * as ioProxy from 'socket.io-proxy';
 
-import { GameEndPayload, GameUpdatePayload, GameMessage, SOCKET_MESSAGE } from '@socialgorithm/game-server/src/constants';
+import { GameEndPayload, GameUpdatePayload, GameMessage, SOCKET_MESSAGE, Player } from '@socialgorithm/game-server/src/constants';
 
-
-import { Player } from "../../../Player";
 import { Game } from "./Game";
 
 export type GameRunnerOptions = {

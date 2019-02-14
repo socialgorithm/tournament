@@ -2,9 +2,9 @@ import * as uuid from 'uuid/v4';
 
 import IMatchmaker from "./Matchmaker";
 import { Tournament } from "../Tournament";
-import { Player } from "../../Player";
 import { MatchOptions, Match } from "../match/Match";
 import { MatchRunner } from "../match/MatchRunner";
+import { Player } from '@socialgorithm/game-server/src/constants';
 
 /**
  * FreeForAll is a strategy where only one round is played, in which every player

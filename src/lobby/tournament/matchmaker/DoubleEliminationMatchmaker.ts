@@ -1,8 +1,8 @@
 import IMatchmaker from "./Matchmaker";
-import { Player } from "../../Player";
 import { Tournament } from "../Tournament";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import { MatchOptions } from "../match/Match";
+import { Player } from "@socialgorithm/game-server/src/constants";
 
 type PlayerStats = {
     player: Player;

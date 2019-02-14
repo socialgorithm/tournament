@@ -1,4 +1,4 @@
-import { Player } from "./Player";
+import { Player } from "@socialgorithm/game-server/src/constants";
 
 export type Lobby = {
     admin: Player,

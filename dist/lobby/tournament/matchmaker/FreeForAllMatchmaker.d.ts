@@ -1,7 +1,7 @@
 import IMatchmaker from "./Matchmaker";
 import { Tournament } from "../Tournament";
-import { Player } from "../../Player";
 import { MatchOptions, Match } from "../match/Match";
+import { Player } from '@socialgorithm/game-server/src/constants';
 export default class FreeForAllMatchmaker implements IMatchmaker {
     private players;
     private options;

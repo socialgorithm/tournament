@@ -1,4 +1,4 @@
-import { Player } from '../Player';
+import { Player } from '@socialgorithm/game-server/src/constants';
 export declare type TournamentOptions = {
     type: string;
 };

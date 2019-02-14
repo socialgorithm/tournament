@@ -1,7 +1,43 @@
 "use strict";
 exports.__esModule = true;
+var io = require("socket.io-client");
+var ioProxy = require("socket.io-proxy");
+var constants_1 = require("@socialgorithm/game-server/src/constants");
 var GameRunner = (function () {
-    function GameRunner() {
+    function GameRunner(options) {
+        var _this = this;
+        try {
+            var host = options.host || 'localhost:3333';
+            if (host.substr(0, 4) !== 'http') {
+                host = 'http://' + host;
+            }
+            if (options.proxy || process.env.http_proxy) {
+                if (options.proxy) {
+                    ioProxy.init(options.proxy);
+                }
+                this.gameSocket = ioProxy.connect(host);
+            }
+            else {
+                this.gameSocket = io.connect(host);
+            }
+            this.gameSocket.on('connect', function () {
+                console.log("Connected to Game Server");
+            });
+            this.gameSocket.on(constants_1.SOCKET_MESSAGE.GAME_MESSAGE, function (data) {
+                console.log('Received a game message', data);
+                _this.onGameToServer(data);
+            });
+            this.gameSocket.on(constants_1.SOCKET_MESSAGE.PLAYER_MESSAGE, function (data) {
+                console.log('Proxy message to player', data);
+                _this.onGameToPlayer(data.player, data.payload);
+            });
+            this.gameSocket.on('disconnect', function () {
+                console.log('Connection lost!');
+            });
+        }
+        catch (e) {
+            console.error('tournament-server Unable to connect to Game Server:', e);
+        }
     }
     GameRunner.prototype.start = function () {
         this.sendToGame({
@@ -33,11 +69,16 @@ var GameRunner = (function () {
                 console.warn('Unsupported message from game server');
         }
     };
-    GameRunner.prototype.onPlayerToGame = function (player, data) {
+    GameRunner.prototype.onPlayerToGame = function (player, payload) {
+        this.gameSocket.send(constants_1.SOCKET_MESSAGE.PLAYER_MESSAGE, {
+            player: player,
+            payload: payload
+        });
     };
     GameRunner.prototype.onGameToPlayer = function (player, data) {
     };
     GameRunner.prototype.sendToGame = function (data) {
+        this.gameSocket.send(constants_1.SOCKET_MESSAGE.GAME_MESSAGE, data);
     };
     return GameRunner;
 }());
