@@ -7,4 +7,6 @@ export declare type Tournament = {
     finished: boolean;
     matches: Match[];
     type: string;
+    ranking: Player[];
+    options: any;
 };

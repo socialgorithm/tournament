@@ -27,7 +27,7 @@
     "node": ">= 8"
   },
   "bin": {
-    "uttt": "bin/index.js"
+    "tournament-server": "bin/index.js"
   },
   "bugs": {
     "url": "https://github.com/socialgorithm/tournament-server/issues"
@@ -37,6 +37,7 @@
     "@socialgorithm/game-server": "^0.0.1",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
+    "pubsub-js": "^1.7.0",
     "random-word": "^2.0.0",
     "socket.io": "^2.2.0",
     "socket.io-proxy": "^1.0.3",
@@ -46,6 +47,7 @@
     "@types/command-line-args": "^5.0.0",
     "@types/command-line-usage": "^5.0.1",
     "@types/node": "^11.9.0",
+    "@types/pubsub-js": "^1.5.18",
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.4",

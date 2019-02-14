@@ -4,6 +4,8 @@ import * as ioProxy from 'socket.io-proxy';
 import { GameEndPayload, GameUpdatePayload, GameMessage, SOCKET_MESSAGE, Player } from '@socialgorithm/game-server/src/constants';
 
 import { Game } from "./Game";
+import PubSub from '../../../../lib/PubSub';
+import { EVENTS } from '../../../../lib/events';
 
 export type GameRunnerOptions = {
     host?: string,
@@ -14,9 +16,10 @@ export type GameRunnerOptions = {
 export class GameRunner {
     game: Game;
     gameSocket: any;
+    pubsub: PubSub;
 
     constructor(options: GameRunnerOptions) {
-        // Connect to the game server
+        // Game Server Socket Setup
         try {
             let host = options.host || 'localhost:3333';
             if (host.substr(0,4) !== 'http') {
@@ -52,6 +55,11 @@ export class GameRunner {
         } catch (e) {
             console.error('tournament-server Unable to connect to Game Server:', e);
         }
+
+        // PubSub Subscriptions
+        this.pubsub = new PubSub();
+
+        this.pubsub.subscribe(EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
     
     /**
@@ -64,6 +72,10 @@ export class GameRunner {
                 players: this.game.players,
             },
         });
+    }
+
+    public onGameEnd() {
+        this.pubsub.unsubscribeAll();
     }
 
     private onFinish(data: GameEndPayload) {
@@ -93,11 +105,15 @@ export class GameRunner {
         }
     }
 
-    private onPlayerToGame(player: Player, payload: any) {
+    private onPlayerToGame(data: any) {
+        // receives all player messages, check if it belongs here
+        if (this.game.players.indexOf(data.player) < 0) {
+            return;
+        }
         // received message from player, relay it to the game server
         this.gameSocket.send(SOCKET_MESSAGE.PLAYER_MESSAGE, {
-            player,
-            payload,
+            player: data.player,
+            payload: data.payload,
         })
     }
 

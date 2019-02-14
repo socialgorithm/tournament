@@ -1,6 +1,8 @@
 import { SocketServer } from "./socket/socketServer";
-import { banner } from "./banner";
+import { banner } from "./lib/banner";
 import { IOptions } from "./cli/options";
+import { LobbyRunner } from './lobby/LobbyRunner';
+import { LobbyManager } from './lobby/LobbyManager';
 
 /**
  * Entrypoint for the SG Tournament Server
@@ -8,10 +10,11 @@ import { IOptions } from "./cli/options";
  */
 export class Server {
     private socketServer: SocketServer;
+    private LobbyManager: LobbyManager;
 
     constructor(options: IOptions) {
         this.socketServer = new SocketServer(options.port);
-
+        this.LobbyManager = new LobbyManager();
         this.start();
     }
 

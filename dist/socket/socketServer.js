@@ -3,11 +3,43 @@ exports.__esModule = true;
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
+var PubSub_1 = require("../lib/PubSub");
+var events_1 = require("../lib/events");
 var SocketServer = (function () {
     function SocketServer(port) {
+        var _this = this;
         this.port = port;
+        this.playerSockets = {};
+        this.addPlayerToNamespace = function (data) {
+            if (!_this.playerSockets[data.player]) {
+                console.warn('Error adding player to namespace, player socket does not exist', data.player);
+                return;
+            }
+            _this.playerSockets[data.player].join(data.namespace);
+        };
+        this.sendMessageToNamespace = function (data) {
+            _this.io["in"](data.namespace).emit(data.event, data.payload);
+        };
+        this.sendMessageToPlayer = function (data) {
+            if (!_this.playerSockets[data.player]) {
+                console.warn('Error sending message to player, player socket does not exist', data.player);
+                return;
+            }
+            _this.playerSockets[data.player].emit(data.event, data.payload);
+        };
+        this.onMessageFromSocket = function (player, type) { return function (data) {
+            _this.pubSub.publish(type, {
+                player: player,
+                payload: data
+            });
+        }; };
+        this.onPlayerDisconnect = function (player) { return function () {
+            delete _this.playerSockets[player];
+        }; };
+        this.pubSub = new PubSub_1["default"]();
     }
     SocketServer.prototype.start = function () {
+        var _this = this;
         var app = http.createServer(this.handler);
         this.io = io(app);
         app.listen(this.port);
@@ -24,10 +56,32 @@ var SocketServer = (function () {
             socket.request.testToken = token;
             next();
         });
-    };
-    SocketServer.prototype.onSocketMessage = function () {
-    };
-    SocketServer.prototype.onPubSubMessage = function () {
+        this.io.on('connection', function (socket) {
+            var token = socket.handshake.query.token;
+            var player = token;
+            if (_this.playerSockets[player]) {
+                console.warn('Player already connected', player);
+                return false;
+            }
+            console.log('Connected ', player);
+            _this.playerSockets[token] = socket;
+            var listenToEvents = [
+                events_1.EVENTS.LOBBY_CREATE,
+                events_1.EVENTS.LOBBY_TOURNAMENT_START,
+                events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
+                events_1.EVENTS.LOBBY_JOIN,
+                events_1.EVENTS.LOBBY_PLAYER_BAN,
+                events_1.EVENTS.LOBBY_PLAYER_KICK,
+            ];
+            listenToEvents.forEach(function (event) {
+                socket.on(event, _this.onMessageFromSocket(player, event));
+            });
+            socket.on('game', function (data) { return _this.pubSub.publish(events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
+            socket.on('disconnect', _this.onPlayerDisconnect(player));
+            _this.pubSub.subscribe(events_1.EVENTS.SERVER_TO_PLAYER, _this.sendMessageToPlayer);
+            _this.pubSub.subscribe(events_1.EVENTS.BROADCAST_NAMESPACED, _this.sendMessageToNamespace);
+            _this.pubSub.subscribe(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, _this.addPlayerToNamespace);
+        });
     };
     SocketServer.prototype.handler = function (req, res) {
         fs.readFile(__dirname + "/../../public/index.html", function (err, data) {

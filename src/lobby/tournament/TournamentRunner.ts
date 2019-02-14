@@ -9,7 +9,7 @@ export type TournamentOptions = {
 };
 
 export class TournamentRunner {
-    private tournament: Tournament;
+    public tournament: Tournament;
     private matchmaker: IMatchMaker;
 
     constructor(private options: TournamentOptions, public players: Player[], private lobbyToken: string) {
@@ -20,6 +20,8 @@ export class TournamentRunner {
             finished: false,
             matches: [],
             type: options.type,
+            ranking: [],
+            options: {},
         };
         // const matchOptions: MatchOptions = {
         //     maxGames: this.options.numberOfGames,
@@ -33,5 +35,13 @@ export class TournamentRunner {
         // }
 
         // this.subscribeNamespaced(this.tournamentID, MATCH_END, this.playNextMatch);
+    }
+
+    public start() {
+        console.log('tournament started!');
+    }
+    
+    public continue() {
+        console.log('tournament continued!');
     }
 }

@@ -12,9 +12,17 @@ var TournamentRunner = (function () {
             started: false,
             finished: false,
             matches: [],
-            type: options.type
+            type: options.type,
+            ranking: [],
+            options: {}
         };
     }
+    TournamentRunner.prototype.start = function () {
+        console.log('tournament started!');
+    };
+    TournamentRunner.prototype["continue"] = function () {
+        console.log('tournament continued!');
+    };
     return TournamentRunner;
 }());
 exports.TournamentRunner = TournamentRunner;

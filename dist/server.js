@@ -1,10 +1,12 @@
 "use strict";
 exports.__esModule = true;
 var socketServer_1 = require("./socket/socketServer");
-var banner_1 = require("./banner");
+var banner_1 = require("./lib/banner");
+var LobbyManager_1 = require("./lobby/LobbyManager");
 var Server = (function () {
     function Server(options) {
         this.socketServer = new socketServer_1.SocketServer(options.port);
+        this.LobbyManager = new LobbyManager_1.LobbyManager();
         this.start();
     }
     Server.prototype.start = function () {

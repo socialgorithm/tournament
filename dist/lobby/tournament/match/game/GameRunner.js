@@ -3,6 +3,8 @@ exports.__esModule = true;
 var io = require("socket.io-client");
 var ioProxy = require("socket.io-proxy");
 var constants_1 = require("@socialgorithm/game-server/src/constants");
+var PubSub_1 = require("../../../../lib/PubSub");
+var events_1 = require("../../../../lib/events");
 var GameRunner = (function () {
     function GameRunner(options) {
         var _this = this;
@@ -38,6 +40,8 @@ var GameRunner = (function () {
         catch (e) {
             console.error('tournament-server Unable to connect to Game Server:', e);
         }
+        this.pubsub = new PubSub_1["default"]();
+        this.pubsub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
     GameRunner.prototype.start = function () {
         this.sendToGame({
@@ -46,6 +50,9 @@ var GameRunner = (function () {
                 players: this.game.players
             }
         });
+    };
+    GameRunner.prototype.onGameEnd = function () {
+        this.pubsub.unsubscribeAll();
     };
     GameRunner.prototype.onFinish = function (data) {
         this.game.stats = data.stats;
@@ -69,10 +76,13 @@ var GameRunner = (function () {
                 console.warn('Unsupported message from game server');
         }
     };
-    GameRunner.prototype.onPlayerToGame = function (player, payload) {
+    GameRunner.prototype.onPlayerToGame = function (data) {
+        if (this.game.players.indexOf(data.player) < 0) {
+            return;
+        }
         this.gameSocket.send(constants_1.SOCKET_MESSAGE.PLAYER_MESSAGE, {
-            player: player,
-            payload: payload
+            player: data.player,
+            payload: data.payload
         });
     };
     GameRunner.prototype.onGameToPlayer = function (player, data) {

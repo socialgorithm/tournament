@@ -26,6 +26,6 @@
     ],
     "typeRoots": [
       "node_modules/@types",
-      "src/definitions"
+      "src/lib/definitions"
     ]
   }
