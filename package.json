@@ -1,5 +1,5 @@
 {
-  "name": "tournament-server",
+  "name": "@socialgorithm/tournament-server",
   "version": "1.0.0",
   "description": "Socialgorithm Tournament Server",
   "main": "index.js",
