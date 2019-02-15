@@ -17,3 +17,21 @@ export declare type ADD_PLAYER_TO_NAMESPACE_MESSAGE = {
     player: Player;
     namespace: string;
 };
+export declare type LOBBY_JOIN_MESSAGE = {
+    player: Player;
+    payload: {
+        token: string;
+        spectating: boolean;
+    };
+};
+export declare type LOBBY_CREATE_MESSAGE = {
+    player: Player;
+};
+export declare type LOBBY_TOURNAMENT_START_MESSAGE = {};
+export declare type LOBBY_TOURNAMENT_CONTINUE_MESSAGE = {};
+export declare type LOBBY_PLAYER_BAN_MESSAGE = {
+    player: Player;
+};
+export declare type LOBBY_PLAYER_KICK_MESSAGE = {
+    player: Player;
+};

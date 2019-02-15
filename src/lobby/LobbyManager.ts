@@ -2,6 +2,7 @@ import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from '../lib/PubSub';
 import { EVENTS } from "../socket/events";
 import { LobbyRunner } from "./LobbyRunner";
+import { LOBBY_CREATE_MESSAGE } from "../socket/messages";
 
 export class LobbyManager {
     private lobbyRunners: LobbyRunner[] = [];
@@ -13,7 +14,7 @@ export class LobbyManager {
         this.pubSub.subscribe(EVENTS.LOBBY_CREATE, this.createLobby);
     }
 
-    private createLobby = (data: any) => {
+    private createLobby = (data: LOBBY_CREATE_MESSAGE) => {
         const admin = data.player;
         const lobbyRunner = new LobbyRunner(admin);
         this.lobbyRunners.push(lobbyRunner);

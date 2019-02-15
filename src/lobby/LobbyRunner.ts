@@ -5,6 +5,7 @@ import { Lobby } from "./Lobby";
 import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from '../lib/PubSub';
 import { EVENTS } from "../socket/events";
+import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE } from "../socket/messages";
 
 export class LobbyRunner {
     public lobby: Lobby;
@@ -36,7 +37,7 @@ export class LobbyRunner {
         this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
     }
 
-    private addPlayerToLobby = (data: any) => {
+    private addPlayerToLobby = (data: LOBBY_JOIN_MESSAGE) => {
         // add data.player to data.payload.token
         const player = data.player;
         const lobbyName = data.payload.token;
@@ -127,7 +128,7 @@ export class LobbyRunner {
         });
     });
 
-    private kickPlayer = this.ifAdmin((lobbyName: string, data: any) => {
+    private kickPlayer = this.ifAdmin((lobbyName: string, data: LOBBY_PLAYER_KICK_MESSAGE) => {
         const playerIndex = this.lobby.players.indexOf(data.player);
         this.lobby.players.splice(playerIndex, 1);
 
@@ -145,7 +146,7 @@ export class LobbyRunner {
         });
     });
 
-    private banPlayer = this.ifAdmin((lobbyName: string, data: any) => {
+    private banPlayer = this.ifAdmin((lobbyName: string, data: LOBBY_PLAYER_BAN_MESSAGE) => {
         const playerIndex = this.lobby.players.indexOf(data.player);
         this.lobby.players.splice(playerIndex, 1);
 

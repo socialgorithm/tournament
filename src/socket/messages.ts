@@ -25,3 +25,22 @@ import { Player } from "@socialgorithm/game-server/src/constants";
     player: Player,
     namespace: string,
  };
+
+ export type LOBBY_JOIN_MESSAGE = {
+   player: Player,
+   payload: {
+      token: string,
+      spectating: boolean,
+   },
+ };
+ export type LOBBY_CREATE_MESSAGE = {
+    player: Player,
+ };
+ export type LOBBY_TOURNAMENT_START_MESSAGE = {};
+ export type LOBBY_TOURNAMENT_CONTINUE_MESSAGE = {};
+ export type LOBBY_PLAYER_BAN_MESSAGE = {
+    player: Player,
+ };
+ export type LOBBY_PLAYER_KICK_MESSAGE = {
+    player: Player,
+ };
