@@ -4,7 +4,7 @@ var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
 var PubSub_1 = require("../lib/PubSub");
-var events_1 = require("../lib/events");
+var events_1 = require("./events");
 var SocketServer = (function () {
     function SocketServer(port) {
         var _this = this;
@@ -27,11 +27,12 @@ var SocketServer = (function () {
             }
             _this.playerSockets[data.player].emit(data.event, data.payload);
         };
-        this.onMessageFromSocket = function (player, type) { return function (data) {
-            _this.pubSub.publish(type, {
+        this.onMessageFromSocket = function (player, type) { return function (payload) {
+            var data = {
                 player: player,
-                payload: data
-            });
+                payload: payload
+            };
+            _this.pubSub.publish(type, data);
         }; };
         this.onPlayerDisconnect = function (player) { return function () {
             delete _this.playerSockets[player];

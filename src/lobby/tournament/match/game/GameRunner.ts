@@ -5,7 +5,7 @@ import { GameEndPayload, GameUpdatePayload, GameMessage, SOCKET_MESSAGE, Player 
 
 import { Game } from "./Game";
 import PubSub from '../../../../lib/PubSub';
-import { EVENTS } from '../../../../lib/events';
+import { EVENTS } from '../../../../socket/events';
 
 export type GameRunnerOptions = {
     host?: string,

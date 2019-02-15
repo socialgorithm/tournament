@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var PubSub_1 = require("../lib/PubSub");
-var events_1 = require("../lib/events");
+var events_1 = require("../socket/events");
 var LobbyRunner_1 = require("./LobbyRunner");
 var LobbyManager = (function () {
     function LobbyManager() {

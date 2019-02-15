@@ -4,7 +4,7 @@ var io = require("socket.io-client");
 var ioProxy = require("socket.io-proxy");
 var constants_1 = require("@socialgorithm/game-server/src/constants");
 var PubSub_1 = require("../../../../lib/PubSub");
-var events_1 = require("../../../../lib/events");
+var events_1 = require("../../../../socket/events");
 var GameRunner = (function () {
     function GameRunner(options) {
         var _this = this;

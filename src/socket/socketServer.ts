@@ -2,8 +2,8 @@ import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
 import PubSub from "../lib/PubSub";
-import { EVENTS } from '../lib/events';
-import { GameToPlayerMessage, NamespacedMessage } from "./messages";
+import { EVENTS } from './events';
+import { BROADCAST_NAMESPACED_MESSAGE, ADD_PLAYER_TO_NAMESPACE_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "./messages";
 import { Player } from "@socialgorithm/game-server/src/constants";
 
 export class SocketServer {
@@ -79,7 +79,7 @@ export class SocketServer {
         });
     }
 
-    private addPlayerToNamespace = (data: any) => {
+    private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
             console.warn('Error adding player to namespace, player socket does not exist', data.player);
             return;
@@ -87,11 +87,11 @@ export class SocketServer {
         this.playerSockets[data.player].join(data.namespace);
     }
 
-    private sendMessageToNamespace = (data: NamespacedMessage) => {
+    private sendMessageToNamespace = (data: BROADCAST_NAMESPACED_MESSAGE) => {
         this.io.in(data.namespace).emit(data.event, data.payload);
     }
 
-    private sendMessageToPlayer = (data: GameToPlayerMessage) => {
+    private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
             console.warn('Error sending message to player, player socket does not exist', data.player);
             return;
@@ -99,12 +99,16 @@ export class SocketServer {
         this.playerSockets[data.player].emit(data.event, data.payload);
     }
 
-    private onMessageFromSocket = (player: Player, type: string) => (data: any) => {
+    /**
+     * Generic event forwarder from the socket to the pubsub bus
+     */
+    private onMessageFromSocket = (player: Player, type: any) => (payload: any) => {
         // socket -> pubsub
-        this.pubSub.publish(type, {
+        const data: any = {
             player,
-            payload: data,
-        });
+            payload,
+        };
+        this.pubSub.publish(type, data);
     }
 
     private onPlayerDisconnect = (player: Player) => () => {

@@ -26,13 +26,13 @@ If you open our [web client](https://uttt.socialgorithm.org), you can then conne
 
 Install using npm/yarn:
 
-```
+```console
 $ npm install @socialgorithm/tournament-server
 ```
 
 Then you can execute by running `tournament-server`:
 
-```
+```console
 $ tournament-server -h
 tournament-server v1.0.0
 

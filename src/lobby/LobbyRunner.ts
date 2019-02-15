@@ -4,7 +4,7 @@ import { TournamentRunner } from "./tournament/TournamentRunner";
 import { Lobby } from "./Lobby";
 import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from '../lib/PubSub';
-import { EVENTS } from "../lib/events";
+import { EVENTS } from "../socket/events";
 
 export class LobbyRunner {
     public lobby: Lobby;

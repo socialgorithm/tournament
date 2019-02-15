@@ -9,10 +9,12 @@ var PubSub = (function () {
         PubSubJS.publish(event, data);
     };
     PubSub.prototype.publishNamespaced = function (namespace, event, data) {
-        this.publish(this.makeNamespace(namespace, event), data);
+        var namespaced = this.makeNamespace(namespace, event);
+        this.publish(namespaced, data);
     };
     PubSub.prototype.subscribeNamespaced = function (namespace, event, fn) {
-        this.subscribe(this.makeNamespace(namespace, event), fn);
+        var namespaced = this.makeNamespace(namespace, event);
+        this.subscribe(namespaced, fn);
     };
     PubSub.prototype.subscribe = function (event, fn) {
         var token = PubSubJS.subscribe(event, function (event, data) { return fn(data); });

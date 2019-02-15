@@ -14,7 +14,7 @@ exports.__esModule = true;
 var randomWord = require("random-word");
 var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var PubSub_1 = require("../lib/PubSub");
-var events_1 = require("../lib/events");
+var events_1 = require("../socket/events");
 var LobbyRunner = (function () {
     function LobbyRunner(admin) {
         var _this = this;
