@@ -190,7 +190,7 @@ class JoinMatch extends React.PureComponent {
     };
     
     removeActivePlayer = (token) => {
-        const index = this.state.activePlayers.findIndex(player => player.token === token);
+        const index = this.state.activePlayers.findIndex(player => player === token);
         if (index > -1) {
             const activePlayers = this.state.activePlayers;
             activePlayers.splice(index, 1);
@@ -392,13 +392,13 @@ class JoinMatch extends React.PureComponent {
 						!this.state[playerDropKey] &&
 						<List>
 							{ players.map(player => (
-								<List.Item key={ player.token } draggable onDragStart={(e) => this.onDragPlayerStart(player.token, e)}>
+								<List.Item key={ player } draggable onDragStart={(e) => this.onDragPlayerStart(player, e)}>
 									<Icon name='circle' color='green' style={{display: 'inline-block', marginRight: '1rem'}}/>
-									{ player.token }
+									{ player }
 									<Dropdown style={{float: 'right'}}>
 										<Dropdown.Menu>
-											<Dropdown.Item text="Kick player" onClick={() => this.kickPlayer(player.token)}/>
-											<Dropdown.Item text="Ban player" onClick={() => this.banPlayer(player.token)}/>
+											<Dropdown.Item text="Kick player" onClick={() => this.kickPlayer(player)}/>
+											<Dropdown.Item text="Ban player" onClick={() => this.banPlayer(player)}/>
 										</Dropdown.Menu>
 									</Dropdown>
 								</List.Item>
