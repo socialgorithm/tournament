@@ -140,11 +140,11 @@ var DoubleEliminationMatchmaker = (function () {
     DoubleEliminationMatchmaker.prototype.createMatch = function (playerA, playerB, optionOverrides, parentMatches) {
         var finalOptions = Object.assign(this.options, optionOverrides || {});
         var match = {
-            players: [playerA, playerB],
+            games: [],
+            matchID: "",
             parentMatches: parentMatches,
-            matchID: '',
-            state: 'upcoming',
-            games: []
+            players: [playerA, playerB],
+            state: "upcoming"
         };
         if (parentMatches) {
             match.parentMatches = parentMatches;

@@ -1,4 +1,5 @@
 import { Player } from "@socialgorithm/game-server/src/constants";
+import { TournamentOptions } from "../lobby/tournament/TournamentRunner";
 export declare type SERVER_TO_PLAYER_MESSAGE = {
     player: Player;
     event: string;
@@ -28,7 +29,11 @@ export declare type LOBBY_CREATE_MESSAGE = {
     player: Player;
 };
 export declare type LOBBY_TOURNAMENT_START_MESSAGE = {
-    type: string;
+    payload: {
+        token: string;
+        options: TournamentOptions;
+        players: Player[];
+    };
 };
 export declare type LOBBY_TOURNAMENT_CONTINUE_MESSAGE = {};
 export declare type LOBBY_PLAYER_BAN_MESSAGE = {

@@ -1,5 +1,5 @@
+import PubSub from "../../../../lib/PubSub";
 import { Game } from "./Game";
-import PubSub from '../../../../lib/PubSub';
 export declare type GameRunnerOptions = {
     host?: string;
     proxy?: string;

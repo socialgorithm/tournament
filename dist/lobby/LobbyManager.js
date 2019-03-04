@@ -23,15 +23,15 @@ var LobbyManager = (function () {
             var lobbyRunner = new LobbyRunner_1.LobbyRunner(admin);
             _this.lobbyRunners.push(lobbyRunner);
             _this.pubSub.publish(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
-                player: data.player,
-                namespace: lobbyRunner.lobby.token
+                namespace: lobbyRunner.lobby.token,
+                player: data.player
             });
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
-                player: data.player,
-                event: 'lobby created',
+                event: "lobby created",
                 payload: {
                     lobby: __assign({}, lobbyRunner.lobby)
-                }
+                },
+                player: data.player
             });
         };
         this.pubSub = new PubSub_1["default"]();

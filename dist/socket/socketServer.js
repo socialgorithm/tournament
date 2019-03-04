@@ -12,7 +12,7 @@ var SocketServer = (function () {
         this.playerSockets = {};
         this.addPlayerToNamespace = function (data) {
             if (!_this.playerSockets[data.player]) {
-                console.warn('Error adding player to namespace, player socket does not exist', data.player);
+                console.warn("Error adding player to namespace, player socket does not exist", data.player);
                 return;
             }
             _this.playerSockets[data.player].join(data.namespace);
@@ -22,15 +22,15 @@ var SocketServer = (function () {
         };
         this.sendMessageToPlayer = function (data) {
             if (!_this.playerSockets[data.player]) {
-                console.warn('Error sending message to player, player socket does not exist', data.player);
+                console.warn("Error sending message to player, player socket does not exist", data.player);
                 return;
             }
             _this.playerSockets[data.player].emit(data.event, data.payload);
         };
         this.onMessageFromSocket = function (player, type) { return function (payload) {
             var data = {
-                player: player,
-                payload: payload
+                payload: payload,
+                player: player
             };
             _this.pubSub.publish(type, data);
         }; };
@@ -44,7 +44,7 @@ var SocketServer = (function () {
         var app = http.createServer(this.handler);
         this.io = io(app);
         app.listen(this.port);
-        console.log('Socket Listening on port ' + this.port);
+        console.log("Socket Listening on port " + this.port);
         this.io.use(function (socket, next) {
             var isClient = socket.request._query.client || false;
             if (isClient) {
@@ -57,14 +57,14 @@ var SocketServer = (function () {
             socket.request.testToken = token;
             next();
         });
-        this.io.on('connection', function (socket) {
+        this.io.on("connection", function (socket) {
             var token = socket.handshake.query.token;
             var player = token;
             if (_this.playerSockets[player]) {
-                console.warn('Player already connected', player);
+                console.warn("Player already connected", player);
                 return false;
             }
-            console.log('Connected ', player);
+            console.log("Connected ", player);
             _this.playerSockets[token] = socket;
             var listenToEvents = [
                 events_1.EVENTS.LOBBY_CREATE,
@@ -77,8 +77,8 @@ var SocketServer = (function () {
             listenToEvents.forEach(function (event) {
                 socket.on(event, _this.onMessageFromSocket(player, event));
             });
-            socket.on('game', function (data) { return _this.pubSub.publish(events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
-            socket.on('disconnect', _this.onPlayerDisconnect(player));
+            socket.on("game", function (data) { return _this.pubSub.publish(events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
+            socket.on("disconnect", _this.onPlayerDisconnect(player));
             _this.pubSub.subscribe(events_1.EVENTS.SERVER_TO_PLAYER, _this.sendMessageToPlayer);
             _this.pubSub.subscribe(events_1.EVENTS.BROADCAST_NAMESPACED, _this.sendMessageToNamespace);
             _this.pubSub.subscribe(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, _this.addPlayerToNamespace);

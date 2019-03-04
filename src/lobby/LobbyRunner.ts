@@ -98,11 +98,9 @@ export class LobbyRunner {
 
   // tslint:disable-next-line:member-ordering
   private startTournament = this.ifAdmin((lobbyName: string, data: LOBBY_TOURNAMENT_START_MESSAGE) => {
-    console.log("Want to start with", data);
+    console.log("Tournament start message payload is", data);
     this.tournamentRunner = new TournamentRunner(
-      {
-        type: data.type,
-      },
+      data.payload.options,
       this.lobby.players,
       this.lobby.token,
     );

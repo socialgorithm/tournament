@@ -40,7 +40,11 @@ export type LOBBY_CREATE_MESSAGE = {
 };
 
 export type LOBBY_TOURNAMENT_START_MESSAGE = {
-  options: TournamentOptions,
+  payload: {
+    token: string,
+    options: TournamentOptions,
+    players: Player[],
+  },
 };
 
 export type LOBBY_TOURNAMENT_CONTINUE_MESSAGE = {};

@@ -12,9 +12,9 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var randomWord = require("random-word");
-var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var PubSub_1 = require("../lib/PubSub");
 var events_1 = require("../socket/events");
+var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var LobbyRunner = (function () {
     function LobbyRunner(admin) {
         var _this = this;
@@ -32,28 +32,28 @@ var LobbyRunner = (function () {
                 _this.lobby.players.push(player);
             }
             _this.pubSub.publish(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
-                player: player,
-                namespace: lobbyName
+                namespace: lobbyName,
+                player: player
             });
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: "connected",
                 namespace: lobbyName,
-                event: 'connected',
                 payload: {
                     lobby: __assign({}, _this.lobby)
                 }
             });
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
-                player: player,
-                event: 'lobby joined',
+                event: "lobby joined",
                 payload: {
                     isAdmin: _this.lobby.admin === player,
                     lobby: __assign({}, _this.lobby)
-                }
+                },
+                player: player
             });
             if (isSpectating) {
                 _this.pubSub.publish(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
-                    player: player,
-                    namespace: lobbyName + "-info"
+                    namespace: lobbyName + "-info",
+                    player: player
                 });
             }
         };
@@ -65,22 +65,20 @@ var LobbyRunner = (function () {
             next(lobbyName, data);
         }; };
         this.startTournament = this.ifAdmin(function (lobbyName, data) {
-            console.log('Want to start with', data);
-            _this.tournamentRunner = new TournamentRunner_1.TournamentRunner({
-                type: data.type
-            }, _this.lobby.players, _this.lobby.token);
+            console.log("Tournament start message payload is", data);
+            _this.tournamentRunner = new TournamentRunner_1.TournamentRunner(data.payload.options, _this.lobby.players, _this.lobby.token);
             _this.tournamentRunner.start();
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: "lobby tournament started",
                 namespace: lobbyName,
-                event: 'lobby tournament started',
                 payload: _this.tournamentRunner.tournament
             });
         });
         this.continueTournament = this.ifAdmin(function (lobbyName) {
             _this.tournamentRunner["continue"]();
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: "lobby tournament continued",
                 namespace: lobbyName,
-                event: 'lobby tournament continued',
                 payload: _this.lobby
             });
         });
@@ -88,14 +86,14 @@ var LobbyRunner = (function () {
             var playerIndex = _this.lobby.players.indexOf(data.player);
             _this.lobby.players.splice(playerIndex, 1);
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: "lobby player kicked",
                 namespace: lobbyName,
-                event: 'lobby player kicked',
                 payload: _this.lobby
             });
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
-                player: data.player,
-                event: 'kicked',
-                payload: null
+                event: "kicked",
+                payload: null,
+                player: data.player
             });
         });
         this.banPlayer = this.ifAdmin(function (lobbyName, data) {
@@ -106,21 +104,21 @@ var LobbyRunner = (function () {
             }
             _this.lobby.bannedPlayers.push(data.player);
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: "lobby player banned",
                 namespace: lobbyName,
-                event: 'lobby player banned',
                 payload: _this.lobby
             });
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
-                player: data.player,
-                event: 'banned',
-                payload: null
+                event: "banned",
+                payload: null,
+                player: data.player
             });
         });
         this.lobby = {
             admin: admin,
-            token: randomWord() + "-" + randomWord(),
+            bannedPlayers: [],
             players: [],
-            bannedPlayers: []
+            token: randomWord() + "-" + randomWord()
         };
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(events_1.EVENTS.LOBBY_JOIN, this.addPlayerToLobby);

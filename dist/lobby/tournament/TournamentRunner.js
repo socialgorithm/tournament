@@ -7,20 +7,21 @@ var TournamentRunner = (function () {
         this.players = players;
         this.lobbyToken = lobbyToken;
         this.tournament = {
-            tournamentID: uuid(),
-            players: players,
-            started: false,
             finished: false,
             matches: [],
+            options: options,
+            players: players,
             ranking: [],
-            options: options
+            started: false,
+            tournamentID: uuid()
         };
     }
     TournamentRunner.prototype.start = function () {
-        console.log('tournament started!');
+        console.log("Starting tournament", this.tournament, this.tournament.options);
+        this.tournament.started = true;
     };
     TournamentRunner.prototype["continue"] = function () {
-        console.log('tournament continued!');
+        console.log("tournament continued!");
     };
     return TournamentRunner;
 }());

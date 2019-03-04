@@ -14,5 +14,4 @@ var EVENTS;
     EVENTS["LOBBY_PLAYER_BAN"] = "lobby player ban";
     EVENTS["LOBBY_JOIN"] = "lobby join";
 })(EVENTS = exports.EVENTS || (exports.EVENTS = {}));
-;
 //# sourceMappingURL=events.js.map

@@ -37,7 +37,8 @@ export class TournamentRunner {
     }
 
     public start() {
-        console.log("tournament started!");
+        console.log("Starting tournament", this.tournament, this.tournament.options);
+        this.tournament.started = true;
     }
 
     public continue() {

@@ -1,5 +1,5 @@
-import { Tournament } from './Tournament';
-import { Player } from '@socialgorithm/game-server/src/constants';
+import { Player } from "@socialgorithm/game-server/src/constants";
+import { Tournament } from "./Tournament";
 export declare type TournamentOptions = {
     type: string;
 };

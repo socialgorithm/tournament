@@ -1,8 +1,8 @@
-import IMatchmaker from "./Matchmaker";
+import { Player } from "@socialgorithm/game-server/src/constants";
+import { MatchOptions } from "../match/Match";
 import { Tournament } from "../Tournament";
 import { DoubleEliminationMatch } from "./DoubleEliminationMatch";
-import { MatchOptions } from "../match/Match";
-import { Player } from "@socialgorithm/game-server/src/constants";
+import IMatchmaker from "./Matchmaker";
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private players;
     private options;

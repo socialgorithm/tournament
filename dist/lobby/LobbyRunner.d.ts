@@ -1,6 +1,6 @@
-import { TournamentRunner } from "./tournament/TournamentRunner";
-import { Lobby } from "./Lobby";
 import { Player } from "@socialgorithm/game-server/src/constants";
+import { Lobby } from "./Lobby";
+import { TournamentRunner } from "./tournament/TournamentRunner";
 export declare class LobbyRunner {
     lobby: Lobby;
     tournamentRunner: TournamentRunner;

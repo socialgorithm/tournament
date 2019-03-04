@@ -30,10 +30,10 @@ var FreeForAllMatchmaker = (function () {
                 }));
             }).map(function (playerB) {
                 var newMatch = {
+                    games: [],
                     matchID: uuid(),
                     players: [playerA, playerB],
-                    games: [],
-                    state: 'upcoming'
+                    state: "upcoming"
                 };
                 return newMatch;
             });
