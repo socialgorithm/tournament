@@ -1,19 +1,19 @@
-import IMatchmaker from "./Matchmaker";
+import { Player } from "@socialgorithm/game-server/src/constants";
+import { MatchOptions } from "../match/Match";
 import { Tournament } from "../Tournament";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
-import { MatchOptions } from "../match/Match";
-import { Player } from "@socialgorithm/game-server/src/constants";
+import IMatchmaker from "./Matchmaker";
 
 type PlayerStats = {
     player: Player;
     wins: number;
     losses: number;
-}
+};
 
 type MatchingResult = {
     matches?: DoubleEliminationMatch[];
     oddPlayer?: Player;
-}
+};
 
 const RESULT_TIE = -1;
 
@@ -53,7 +53,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
         const justPlayedMatches = this.tournament.matches.filter(match =>
             this.processedMatches.indexOf(match.matchID) === -1,
         );
-        let tiedMatches = 0;
+        const tiedMatches = 0;
 
         justPlayedMatches.forEach((match: DoubleEliminationMatch) => {
             // TODO Use match stats calculator
@@ -224,11 +224,11 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private createMatch(playerA: Player, playerB: Player, optionOverrides?: any, parentMatches?: MatchParent[]): DoubleEliminationMatch {
         const finalOptions = Object.assign(this.options, optionOverrides || {});
         const match: DoubleEliminationMatch = {
-            players: [playerA, playerB],
-            parentMatches,
-            matchID: '',
-            state: 'upcoming',
             games: [],
+            matchID: "",
+            parentMatches,
+            players: [playerA, playerB],
+            state: "upcoming",
         };
 
         if (parentMatches) {

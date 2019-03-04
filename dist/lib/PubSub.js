@@ -6,6 +6,7 @@ var PubSub = (function () {
         this.subscriptionTokens = [];
     }
     PubSub.prototype.publish = function (event, data) {
+        console.log("Publishing event " + event, data);
         PubSubJS.publish(event, data);
     };
     PubSub.prototype.publishNamespaced = function (namespace, event, data) {

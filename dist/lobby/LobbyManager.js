@@ -30,7 +30,7 @@ var LobbyManager = (function () {
                 player: data.player,
                 event: 'lobby created',
                 payload: {
-                    lobby: __assign({ tournament: lobbyRunner.tournamentRunner.tournament }, lobbyRunner.lobby)
+                    lobby: __assign({}, lobbyRunner.lobby)
                 }
             });
         };

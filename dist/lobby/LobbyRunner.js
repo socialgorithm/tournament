@@ -39,7 +39,7 @@ var LobbyRunner = (function () {
                 namespace: lobbyName,
                 event: 'connected',
                 payload: {
-                    lobby: __assign({ tournament: _this.tournamentRunner.tournament }, _this.lobby)
+                    lobby: __assign({}, _this.lobby)
                 }
             });
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
@@ -47,7 +47,7 @@ var LobbyRunner = (function () {
                 event: 'lobby joined',
                 payload: {
                     isAdmin: _this.lobby.admin === player,
-                    lobby: __assign({ tournament: _this.tournamentRunner.tournament }, _this.lobby)
+                    lobby: __assign({}, _this.lobby)
                 }
             });
             if (isSpectating) {
@@ -64,12 +64,16 @@ var LobbyRunner = (function () {
             }
             next(lobbyName, data);
         }; };
-        this.startTournament = this.ifAdmin(function (lobbyName) {
+        this.startTournament = this.ifAdmin(function (lobbyName, data) {
+            console.log('Want to start with', data);
+            _this.tournamentRunner = new TournamentRunner_1.TournamentRunner({
+                type: data.type
+            }, _this.lobby.players, _this.lobby.token);
             _this.tournamentRunner.start();
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
                 namespace: lobbyName,
                 event: 'lobby tournament started',
-                payload: _this.lobby
+                payload: _this.tournamentRunner.tournament
             });
         });
         this.continueTournament = this.ifAdmin(function (lobbyName) {
@@ -118,9 +122,6 @@ var LobbyRunner = (function () {
             players: [],
             bannedPlayers: []
         };
-        this.tournamentRunner = new TournamentRunner_1.TournamentRunner({
-            type: 'test'
-        }, this.lobby.players, this.lobby.token);
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(events_1.EVENTS.LOBBY_JOIN, this.addPlayerToLobby);
         this.pubSub.subscribe(events_1.EVENTS.LOBBY_TOURNAMENT_START, this.startTournament);

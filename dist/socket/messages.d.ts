@@ -27,7 +27,9 @@ export declare type LOBBY_JOIN_MESSAGE = {
 export declare type LOBBY_CREATE_MESSAGE = {
     player: Player;
 };
-export declare type LOBBY_TOURNAMENT_START_MESSAGE = {};
+export declare type LOBBY_TOURNAMENT_START_MESSAGE = {
+    type: string;
+};
 export declare type LOBBY_TOURNAMENT_CONTINUE_MESSAGE = {};
 export declare type LOBBY_PLAYER_BAN_MESSAGE = {
     player: Player;

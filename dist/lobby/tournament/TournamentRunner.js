@@ -12,9 +12,8 @@ var TournamentRunner = (function () {
             started: false,
             finished: false,
             matches: [],
-            type: options.type,
             ranking: [],
-            options: {}
+            options: options
         };
     }
     TournamentRunner.prototype.start = function () {

@@ -1,8 +1,7 @@
-import { Player } from "@socialgorithm/game-server/src/constants";
-import PubSub from '../lib/PubSub';
+import PubSub from "../lib/PubSub";
 import { EVENTS } from "../socket/events";
-import { LobbyRunner } from "./LobbyRunner";
 import { LOBBY_CREATE_MESSAGE } from "../socket/messages";
+import { LobbyRunner } from "./LobbyRunner";
 
 export class LobbyManager {
     private lobbyRunners: LobbyRunner[] = [];
@@ -21,20 +20,19 @@ export class LobbyManager {
 
         // Join the lobby namespace
         this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
-            player: data.player,
             namespace: lobbyRunner.lobby.token,
+            player: data.player,
         });
 
-         // Send confirmation to player
-         this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
-            player: data.player,
-            event: 'lobby created',
+        // Send confirmation to player
+        this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+            event: "lobby created",
             payload: {
                 lobby: {
-                    tournament: lobbyRunner.tournamentRunner.tournament,
                     ...lobbyRunner.lobby,
                 },
             },
+            player: data.player,
         });
     }
 }

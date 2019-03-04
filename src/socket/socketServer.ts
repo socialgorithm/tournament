@@ -1,10 +1,10 @@
+import { Player } from "@socialgorithm/game-server/src/constants";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
 import PubSub from "../lib/PubSub";
-import { EVENTS } from './events';
-import { BROADCAST_NAMESPACED_MESSAGE, ADD_PLAYER_TO_NAMESPACE_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "./messages";
-import { Player } from "@socialgorithm/game-server/src/constants";
+import { EVENTS } from "./events";
+import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "./messages";
 
 export class SocketServer {
     private io: SocketIO.Server;
@@ -21,9 +21,9 @@ export class SocketServer {
         const app = http.createServer(this.handler);
         this.io = io(app);
         app.listen(this.port);
-        
 
-        console.log('Socket Listening on port ' + this.port);
+        // tslint:disable-next-line:no-console
+        console.log(`Socket Listening on port ${this.port}`);
 
         this.io.use((socket: SocketIO.Socket, next: any) => {
             const isClient = socket.request._query.client || false;
@@ -38,18 +38,20 @@ export class SocketServer {
             next();
         });
 
-        this.io.on('connection', (socket: SocketIO.Socket) => {
+        this.io.on("connection", (socket: SocketIO.Socket) => {
             const token = socket.handshake.query.token;
             const player = token;
 
             if (this.playerSockets[player]) {
                 // Token already in use
-                console.warn('Player already connected', player);
+                // tslint:disable-next-line:no-console
+                console.warn("Player already connected", player);
                 return false;
             }
 
-            console.log('Connected ', player);
-            
+            // tslint:disable-next-line:no-console
+            console.log("Connected ", player);
+
             // Store the socket
             this.playerSockets[token] = socket;
 
@@ -65,23 +67,22 @@ export class SocketServer {
             listenToEvents.forEach(event => {
                 socket.on(event, this.onMessageFromSocket(player, event));
             });
-            
+
             // Special events
-            socket.on('game', (data: any) => this.pubSub.publish(EVENTS.PLAYER_TO_GAME, { player, data }));
-            socket.on('disconnect', this.onPlayerDisconnect(player));
+            socket.on("game", (data: any) => this.pubSub.publish(EVENTS.PLAYER_TO_GAME, { player, data }));
+            socket.on("disconnect", this.onPlayerDisconnect(player));
 
             // Senders
             this.pubSub.subscribe(EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
             this.pubSub.subscribe(EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
             this.pubSub.subscribe(EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
-
-            //this.publish(events.PLAYER_CONNECT, player);
         });
     }
 
     private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
-            console.warn('Error adding player to namespace, player socket does not exist', data.player);
+            // tslint:disable-next-line:no-console
+            console.warn("Error adding player to namespace, player socket does not exist", data.player);
             return;
         }
         this.playerSockets[data.player].join(data.namespace);
@@ -93,7 +94,8 @@ export class SocketServer {
 
     private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
-            console.warn('Error sending message to player, player socket does not exist', data.player);
+            // tslint:disable-next-line:no-console
+            console.warn("Error sending message to player, player socket does not exist", data.player);
             return;
         }
         this.playerSockets[data.player].emit(data.event, data.payload);
@@ -105,8 +107,8 @@ export class SocketServer {
     private onMessageFromSocket = (player: Player, type: any) => (payload: any) => {
         // socket -> pubsub
         const data: any = {
-            player,
             payload,
+            player,
         };
         this.pubSub.publish(type, data);
     }
@@ -114,7 +116,7 @@ export class SocketServer {
     private onPlayerDisconnect = (player: Player) => () => {
         // Just remove the player from the list
         delete this.playerSockets[player];
-    };
+    }
 
     /**
      * Handler for the WebSocket server. It returns a static HTML file for any request

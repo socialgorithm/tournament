@@ -1,10 +1,9 @@
-import * as uuid from 'uuid/v4';
+import * as uuid from "uuid/v4";
 
-import IMatchmaker from "./Matchmaker";
+import { Player } from "@socialgorithm/game-server/src/constants";
+import { Match, MatchOptions } from "../match/Match";
 import { Tournament } from "../Tournament";
-import { MatchOptions, Match } from "../match/Match";
-import { MatchRunner } from "../match/MatchRunner";
-import { Player } from '@socialgorithm/game-server/src/constants';
+import IMatchmaker from "./Matchmaker";
 
 /**
  * FreeForAll is a strategy where only one round is played, in which every player
@@ -48,10 +47,10 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
                 },
             ).map(playerB => {
                     const newMatch: Match = {
+                        games: [],
                         matchID: uuid(),
                         players: [playerA, playerB],
-                        games: [],
-                        state: 'upcoming',
+                        state: "upcoming",
                     };
                     return newMatch;
                 },

@@ -1,8 +1,8 @@
-import * as uuid from 'uuid/v4';
+import * as uuid from "uuid/v4";
 
-import { Tournament } from './Tournament';
-import IMatchMaker from './matchmaker/MatchMaker';
-import { Player } from '@socialgorithm/game-server/src/constants';
+import { Player } from "@socialgorithm/game-server/src/constants";
+import IMatchMaker from "./matchmaker/MatchMaker";
+import { Tournament } from "./Tournament";
 
 export type TournamentOptions = {
     type: string,
@@ -14,14 +14,13 @@ export class TournamentRunner {
 
     constructor(private options: TournamentOptions, public players: Player[], private lobbyToken: string) {
         this.tournament = {
-            tournamentID: uuid(),
-            players,
-            started: false,
             finished: false,
             matches: [],
-            type: options.type,
+            options,
+            players,
             ranking: [],
-            options: {},
+            started: false,
+            tournamentID: uuid(),
         };
         // const matchOptions: MatchOptions = {
         //     maxGames: this.options.numberOfGames,
@@ -38,10 +37,10 @@ export class TournamentRunner {
     }
 
     public start() {
-        console.log('tournament started!');
+        console.log("tournament started!");
     }
-    
+
     public continue() {
-        console.log('tournament continued!');
+        console.log("tournament continued!");
     }
 }
