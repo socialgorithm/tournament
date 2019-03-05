@@ -6,10 +6,10 @@ export declare type TournamentOptions = {
 export declare class TournamentRunner {
     private options;
     players: Player[];
-    private lobbyToken;
     tournament: Tournament;
+    private pubSub;
     private matchmaker;
-    constructor(options: TournamentOptions, players: Player[], lobbyToken: string);
+    constructor(options: TournamentOptions, players: Player[], lobby: string);
     start(): void;
     continue(): void;
 }

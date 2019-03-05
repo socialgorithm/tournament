@@ -4,6 +4,7 @@ import { TournamentOptions } from "./TournamentRunner";
 export declare type Tournament = {
     tournamentID: string;
     players: Player[];
+    lobby: string;
     options: TournamentOptions;
     started: boolean;
     finished: boolean;

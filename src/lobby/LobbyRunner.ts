@@ -98,7 +98,6 @@ export class LobbyRunner {
 
   // tslint:disable-next-line:member-ordering
   private startTournament = this.ifAdmin((lobbyName: string, data: LOBBY_TOURNAMENT_START_MESSAGE) => {
-    console.log("Tournament start message payload is", data);
     this.tournamentRunner = new TournamentRunner(
       data.payload.options,
       this.lobby.players,
@@ -106,13 +105,6 @@ export class LobbyRunner {
     );
 
     this.tournamentRunner.start();
-
-    // Notify
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
-      event: "lobby tournament started",
-      namespace: lobbyName,
-      payload: this.tournamentRunner.tournament,
-    });
   });
 
   // tslint:disable-next-line:member-ordering

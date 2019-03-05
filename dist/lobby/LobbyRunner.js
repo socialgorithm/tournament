@@ -65,14 +65,8 @@ var LobbyRunner = (function () {
             next(lobbyName, data);
         }; };
         this.startTournament = this.ifAdmin(function (lobbyName, data) {
-            console.log("Tournament start message payload is", data);
             _this.tournamentRunner = new TournamentRunner_1.TournamentRunner(data.payload.options, _this.lobby.players, _this.lobby.token);
             _this.tournamentRunner.start();
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
-                event: "lobby tournament started",
-                namespace: lobbyName,
-                payload: _this.tournamentRunner.tournament
-            });
         });
         this.continueTournament = this.ifAdmin(function (lobbyName) {
             _this.tournamentRunner["continue"]();
