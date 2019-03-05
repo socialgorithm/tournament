@@ -77,9 +77,8 @@ class JoinMatch extends React.PureComponent {
                 showTournament: true,
             });
         });
-	    this.props.socket.socket.on('lobby tournament started', data => {
-            console.log("Received tournament start", data);
 
+	    this.props.socket.socket.on('lobby tournament started', data => {
             if (!data.tournament) {
 			    return;
 		    }
@@ -87,7 +86,8 @@ class JoinMatch extends React.PureComponent {
             let newLobby = Object.assign({}, this.state.lobby);
             newLobby.tournament = data.tournament;
             this.setState({lobby: newLobby});
-	    });
+        });
+        
 	    this.props.socket.socket.on('lobby player kicked', data => {
 		    if (!data.lobby) {
 			    return;
@@ -114,27 +114,6 @@ class JoinMatch extends React.PureComponent {
                 });
             }
         });
-        // this.props.socket.socket.on('tournament game init', data => {
-        //     const lastGame = this.state.currentGame;
-        //     const currentGame = new UTTT(3);
-        //     this.setState({
-        //         currentGame,
-        //         lastGame,
-        //     });
-        // });
-        // this.props.socket.socket.on('tournament game move', data => {
-        //     if (!this.state.currentGame) {
-        //         return;
-        //     }
-        //     const currentGame = this.state.currentGame.move(
-        //         data.player,
-        //         data.board,
-        //         data.move,
-        //     );
-        //     this.setState({
-        //         currentGame,
-        //     });
-        // });
     }
 
     startTournament = () => {

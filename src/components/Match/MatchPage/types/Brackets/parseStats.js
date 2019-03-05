@@ -42,7 +42,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
     name: "",
     playerIndex: -1,
     match,
-    tie: match.stats.winner === -1 && match.stats.state === "finished",
+    tie: match.winner === -1 && match.state === "finished",
     winner,
     loser,
     topLevel,
@@ -50,12 +50,12 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
     children: []
   };
 
-  if (match.stats.winner === -1) {
-    if (match.stats.state === "finished") {
+  if (match.winner === -1) {
+    if (match.state === "finished") {
       matchBracket.name = "Tie";
     }
   } else {
-    matchBracket.name = match.players[match.stats.winner].token;
+    matchBracket.name = match.players[match.winner];
   }
 
   if (currentMatch) {
@@ -84,8 +84,8 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
         addMatch(
           parentMatch,
           matchesRef,
-          parseInt(match.stats.winner, 10) === parseInt(parentMatchInfo.playerIndex, 10),
-          parseInt(match.stats.winner, 10) === 1 - parseInt(parentMatchInfo.playerIndex, 10),
+          parseInt(match.winner, 10) === parseInt(parentMatchInfo.playerIndex, 10),
+          parseInt(match.winner, 10) === 1 - parseInt(parentMatchInfo.playerIndex, 10),
           false,
           match
         )
@@ -103,8 +103,8 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
       name: player,
       playerIndex: playerIndex,
       match: null,
-      winner: parseInt(match.stats.winner, 10) === parseInt(playerIndex, 10),
-      loser: parseInt(match.stats.winner, 10) === 1 - parseInt(playerIndex, 10),
+      winner: parseInt(match.winner, 10) === parseInt(playerIndex, 10),
+      loser: parseInt(match.winner, 10) === 1 - parseInt(playerIndex, 10),
       children: [],
       currentMatch: match,
     });

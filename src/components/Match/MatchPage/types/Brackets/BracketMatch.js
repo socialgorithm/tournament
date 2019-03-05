@@ -29,7 +29,7 @@ export default class BracketMatch extends React.PureComponent {
   }
 
   scroll() {
-    if (this.props.bracket.match && this.props.bracket.match.stats.state === 'playing' && this.state.ref) {
+    if (this.props.bracket.match && this.props.bracket.match.state === 'playing' && this.state.ref) {
       // this match is being played, scroll to it
       scrollToComponent(this.state.ref, {
         duration: 500,
@@ -45,7 +45,7 @@ export default class BracketMatch extends React.PureComponent {
           <Loader active inline size='small' />
       );
     }
-    if (bracket.match && bracket.match.stats.state === 'playing') {
+    if (bracket.match && bracket.match.state === 'playing') {
       content = (
         <Match
           wrapper={ Fragment }
@@ -67,7 +67,7 @@ export default class BracketMatch extends React.PureComponent {
             <div className="bottom"><span>Chicken Dinner!</span></div>
           </Fragment>
         );
-      } else if (bracket.currentMatch && bracket.currentMatch.stats.state === 'finished') {
+      } else if (bracket.currentMatch && bracket.currentMatch.state === 'finished') {
         const playerIndex = bracket.playerIndex;
         if (playerIndex > -1) {
           content = (
@@ -75,9 +75,9 @@ export default class BracketMatch extends React.PureComponent {
               { content }
               <div className="bottom">
                 <span>
-                  W { bracket.currentMatch.stats.wins[playerIndex] || 0 } - 
-                  L { bracket.currentMatch.stats.wins[1 - playerIndex] || 0 } - 
-                  T { bracket.currentMatch.stats.gamesTied || 0 }
+                  W { bracket.currentMatch.wins[playerIndex] || 0 } - 
+                  L { bracket.currentMatch.wins[1 - playerIndex] || 0 } - 
+                  T { bracket.currentMatch.gamesTied || 0 }
                 </span>
               </div>
             </Fragment>
