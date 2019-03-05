@@ -9,6 +9,5 @@ export type Tournament = {
     options: TournamentOptions,
     started: boolean,
     finished: boolean,
-    matches: Match[],
     ranking: Player[],
 };

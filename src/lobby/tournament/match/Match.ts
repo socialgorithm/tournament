@@ -6,6 +6,7 @@ export type Match = {
     players: Player[],
     games: Game[],
     state: "playing" | "finished" | "upcoming",
+    winner: number,
 };
 
 export type MatchOptions = {

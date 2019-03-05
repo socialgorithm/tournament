@@ -10,7 +10,7 @@ import { Tournament } from "../Tournament";
  */
 export default interface IMatchMaker {
     isFinished(): boolean;
-    updateStats(tournament: Tournament): Match[] | void;
-    getRemainingMatches(tournament: Tournament): Match[];
-    getRanking(tournament: Tournament): Player[];
+    updateStats(allMatches: Match[]): Match[] | void;
+    getRemainingMatches(): Match[];
+    getRanking(): Player[];
 }

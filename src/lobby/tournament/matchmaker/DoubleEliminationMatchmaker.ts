@@ -1,6 +1,5 @@
 import { Player } from "@socialgorithm/game-server/src/constants";
-import { MatchOptions } from "../match/Match";
-import { Tournament } from "../Tournament";
+import { Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";
 
@@ -24,7 +23,7 @@ const RESULT_TIE = -1;
  */
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private finished: boolean;
-    private tournament: Tournament;
+    private allMatches: Match[];
     private ranking: string[];
     private processedMatches: string[];
     private playerStats: { [key: string]: PlayerStats };
@@ -34,6 +33,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private unlinkedMatches: DoubleEliminationMatch[] = [];
 
     constructor(private players: Player[], private options: MatchOptions) {
+        this.allMatches = [];
         this.processedMatches = [];
         this.ranking = this.players.map(player => player);
         this.playerStats = {};
@@ -47,10 +47,10 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
         return this.finished;
     }
 
-    public updateStats(tournament: Tournament) {
-        this.tournament = tournament;
+    public updateStats(allMatches: Match[]) {
+        this.allMatches = allMatches;
 
-        const justPlayedMatches = this.tournament.matches.filter(match =>
+        const justPlayedMatches = this.allMatches.filter(match =>
             this.processedMatches.indexOf(match.matchID) === -1,
         );
         const tiedMatches = 0;
@@ -67,7 +67,9 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
             // }
         });
 
-        if (!this.tournament.finished) {
+        const tournamentFinished = allMatches.every(match => match.state === "finished");
+
+        if (!tournamentFinished) {
             this.ranking = this.unfinishedRanking();
         }
 
@@ -80,13 +82,13 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     public getRemainingMatches(): DoubleEliminationMatch[] {
         const matches: DoubleEliminationMatch[] = [];
 
-        if (this.tournament.matches.length === 0) {
+        if (this.allMatches.length === 0) {
             const matchResult = this.matchPlayers(this.players);
             this.zeroLossOddPlayer = matchResult.oddPlayer;
             return matchResult.matches;
         }
 
-        const justPlayedMatches = this.tournament.matches.filter(match =>
+        const justPlayedMatches = this.allMatches.filter(match =>
             this.processedMatches.indexOf(match.matchID) === -1,
         );
 
@@ -168,7 +170,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
 
     private finishedRanking(): string[] {
         const ranking: string[] = [];
-        const matches = this.tournament.matches.map(match => match); // mapping to copy
+        const matches = this.allMatches.map(match => match); // mapping to copy
         matches.reverse().forEach(match => {
             // TODO Calculate the ranking
             // if (match.winner !== RESULT_TIE) {
@@ -229,6 +231,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
             parentMatches,
             players: [playerA, playerB],
             state: "upcoming",
+            winner: -1,
         };
 
         if (parentMatches) {

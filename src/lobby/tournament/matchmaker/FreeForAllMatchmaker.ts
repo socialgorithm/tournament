@@ -17,7 +17,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
 
     private maxMatches: number;
     private finished: boolean;
-    private tournamentStats: Tournament;
+    private allMatches: Match[];
     private index: number = 0;
 
     constructor(private players: Player[], private options: MatchOptions) {
@@ -27,8 +27,8 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
         return this.finished;
     }
 
-    public updateStats(tournamentStats: Tournament) {
-        this.tournamentStats = tournamentStats;
+    public updateStats(allMatches: Match[]) {
+        this.allMatches = allMatches;
     }
 
     public getRemainingMatches(): Match[] {
@@ -40,7 +40,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
         const matches = this.players.map((playerA, $index) => {
             if (this.index === $index) { return []; }
             return [this.players[this.index]].filter(playerB => {
-                    return !(this.tournamentStats.matches.find(eachMatch =>
+                    return !(this.allMatches.find(eachMatch =>
                         eachMatch.players[0] === playerA && eachMatch.players[1] === playerB ||
                         eachMatch.players[1] === playerA && eachMatch.players[0] === playerB,
                     ));
@@ -51,6 +51,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
                         matchID: uuid(),
                         players: [playerA, playerB],
                         state: "upcoming",
+                        winner: -1,
                     };
                     return newMatch;
                 },
@@ -65,7 +66,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
 
     public getRanking(): string[] {
         const playerStats: any = {};
-        this.tournamentStats.matches.forEach(match => {
+        this.allMatches.forEach(match => {
             if (!playerStats[match.players[0]]) {
                 playerStats[match.players[0]] = 0;
             }

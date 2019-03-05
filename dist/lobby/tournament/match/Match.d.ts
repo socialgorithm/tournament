@@ -5,6 +5,7 @@ export declare type Match = {
     players: Player[];
     games: Game[];
     state: "playing" | "finished" | "upcoming";
+    winner: number;
 };
 export declare type MatchOptions = {
     maxGames: number;

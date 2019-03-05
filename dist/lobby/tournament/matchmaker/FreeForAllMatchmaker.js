@@ -10,8 +10,8 @@ var FreeForAllMatchmaker = (function () {
     FreeForAllMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
-    FreeForAllMatchmaker.prototype.updateStats = function (tournamentStats) {
-        this.tournamentStats = tournamentStats;
+    FreeForAllMatchmaker.prototype.updateStats = function (allMatches) {
+        this.allMatches = allMatches;
     };
     FreeForAllMatchmaker.prototype.getRemainingMatches = function () {
         var _this = this;
@@ -24,7 +24,7 @@ var FreeForAllMatchmaker = (function () {
                 return [];
             }
             return [_this.players[_this.index]].filter(function (playerB) {
-                return !(_this.tournamentStats.matches.find(function (eachMatch) {
+                return !(_this.allMatches.find(function (eachMatch) {
                     return eachMatch.players[0] === playerA && eachMatch.players[1] === playerB ||
                         eachMatch.players[1] === playerA && eachMatch.players[0] === playerB;
                 }));
@@ -33,7 +33,8 @@ var FreeForAllMatchmaker = (function () {
                     games: [],
                     matchID: uuid(),
                     players: [playerA, playerB],
-                    state: "upcoming"
+                    state: "upcoming",
+                    winner: -1
                 };
                 return newMatch;
             });
@@ -44,7 +45,7 @@ var FreeForAllMatchmaker = (function () {
     };
     FreeForAllMatchmaker.prototype.getRanking = function () {
         var playerStats = {};
-        this.tournamentStats.matches.forEach(function (match) {
+        this.allMatches.forEach(function (match) {
             if (!playerStats[match.players[0]]) {
                 playerStats[match.players[0]] = 0;
             }

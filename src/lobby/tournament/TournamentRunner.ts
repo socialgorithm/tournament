@@ -3,10 +3,16 @@ import * as uuid from "uuid/v4";
 import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from "../../lib/PubSub";
 import { EVENTS } from "../../socket/events";
+import { MatchOptions } from "./match/Match";
+import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
+import FreeForAllMatchmaker from "./matchmaker/FreeForAllMatchmaker";
 import IMatchMaker from "./matchmaker/MatchMaker";
 import { Tournament } from "./Tournament";
 
 export type TournamentOptions = {
+  autoPlay: boolean,
+  numberOfGames: number,
+  timeout: number,
   type: string,
 };
 
@@ -15,11 +21,10 @@ export class TournamentRunner {
   private pubSub: PubSub;
   private matchmaker: IMatchMaker;
 
-  constructor(private options: TournamentOptions, public players: Player[], lobby: string) {
+  constructor(options: TournamentOptions, players: Player[], lobby: string) {
     this.tournament = {
       finished: false,
       lobby,
-      matches: [],
       options,
       players,
       ranking: [],
@@ -28,16 +33,6 @@ export class TournamentRunner {
     };
 
     this.pubSub = new PubSub();
-    // const matchOptions: MatchOptions = {
-    //     maxGames: this.options.numberOfGames,
-    //     timeout: this.options.timeout,
-    // };
-    // switch (options.type) {
-    //     case 'FreeForAll':
-    //     default:
-    //         this.matchmaker = new FreeForAllMatchmaker(this.players, matchOptions);
-    //         break;
-    // }
 
     // this.subscribeNamespaced(this.tournamentID, MATCH_END, this.playNextMatch);
   }
@@ -46,12 +41,35 @@ export class TournamentRunner {
     console.log("Starting tournament", this.tournament, this.tournament.options);
     this.tournament.started = true;
 
+    const matchOptions: MatchOptions = {
+      autoPlay: this.tournament.options.autoPlay,
+      maxGames: this.tournament.options.numberOfGames,
+      timeout: this.tournament.options.timeout,
+    };
+
+    switch (this.tournament.options.type) {
+      case "DoubleElimination":
+        console.log("Doing Double Elim");
+        this.matchmaker = new DoubleEliminationMatchmaker(this.tournament.players, matchOptions);
+        break;
+      case "FreeForAll":
+      default:
+        console.log("Doing Default");
+        this.matchmaker = new FreeForAllMatchmaker(this.tournament.players, matchOptions);
+        break;
+    }
+
+    const matches = this.matchmaker.getRemainingMatches();
+
     // Notify
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby tournament started",
       namespace: this.tournament.lobby,
       payload: {
-        tournament: this.tournament,
+        tournament: {
+          matches,
+          ...this.tournament,
+        },
       },
     });
   }
