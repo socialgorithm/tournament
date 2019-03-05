@@ -78,12 +78,15 @@ class JoinMatch extends React.PureComponent {
             });
         });
 	    this.props.socket.socket.on('lobby tournament started', data => {
-		    if (!data.lobby || !data.lobby.tournament) {
+            console.log("Received tournament start", data);
+
+            if (!data.tournament) {
 			    return;
 		    }
-		    this.setState({
-			    lobby: data.lobby,
-		    });
+
+            let newLobby = Object.assign({}, this.state.lobby);
+            newLobby.tournament = data.tournament;
+            this.setState({lobby: newLobby});
 	    });
 	    this.props.socket.socket.on('lobby player kicked', data => {
 		    if (!data.lobby) {
