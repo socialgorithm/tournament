@@ -3,11 +3,12 @@ import * as uuid from "uuid/v4";
 import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from "../../lib/PubSub";
 import { EVENTS } from "../../socket/events";
-import { MatchOptions } from "./match/Match";
+import { MatchOptions, Match } from "./match/Match";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
 import FreeForAllMatchmaker from "./matchmaker/FreeForAllMatchmaker";
 import IMatchMaker from "./matchmaker/MatchMaker";
 import { Tournament } from "./Tournament";
+import { match } from 'minimatch';
 
 export type TournamentOptions = {
   autoPlay: boolean,
@@ -17,9 +18,10 @@ export type TournamentOptions = {
 };
 
 export class TournamentRunner {
-  public tournament: Tournament;
+  private tournament: Tournament;
   private pubSub: PubSub;
   private matchmaker: IMatchMaker;
+  private matches: Match[] = [];
 
   constructor(options: TournamentOptions, players: Player[], lobby: string) {
     this.tournament = {
@@ -35,6 +37,13 @@ export class TournamentRunner {
     this.pubSub = new PubSub();
 
     // this.subscribeNamespaced(this.tournamentID, MATCH_END, this.playNextMatch);
+  }
+
+  public getTournament() {
+    return {
+      matches: this.matches,
+      ...this.tournament,
+    };
   }
 
   public start() {
@@ -56,17 +65,14 @@ export class TournamentRunner {
         break;
     }
 
-    const matches = this.matchmaker.getRemainingMatches();
+    this.matches = this.matchmaker.getRemainingMatches();
 
     // Notify
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: EVENTS.LOBBY_TOURNAMENT_STARTED,
       namespace: this.tournament.lobby,
       payload: {
-        tournament: {
-          matches,
-          ...this.tournament,
-        },
+        tournament: this.getTournament,
       },
     });
   }

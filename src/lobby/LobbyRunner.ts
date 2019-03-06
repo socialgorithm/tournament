@@ -64,7 +64,7 @@ export class LobbyRunner {
       },
     });
 
-    const tournament = this.tournamentRunner ? this.tournamentRunner.tournament : null;
+    const tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;
 
     // Send join confirmation to player
     this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {

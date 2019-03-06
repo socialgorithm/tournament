@@ -18,6 +18,7 @@ var DoubleEliminationMatchmaker_1 = require("./matchmaker/DoubleEliminationMatch
 var FreeForAllMatchmaker_1 = require("./matchmaker/FreeForAllMatchmaker");
 var TournamentRunner = (function () {
     function TournamentRunner(options, players, lobby) {
+        this.matches = [];
         this.tournament = {
             finished: false,
             lobby: lobby,
@@ -29,6 +30,9 @@ var TournamentRunner = (function () {
         };
         this.pubSub = new PubSub_1["default"]();
     }
+    TournamentRunner.prototype.getTournament = function () {
+        return __assign({ matches: this.matches }, this.tournament);
+    };
     TournamentRunner.prototype.start = function () {
         this.tournament.started = true;
         var matchOptions = {
@@ -45,12 +49,12 @@ var TournamentRunner = (function () {
                 this.matchmaker = new FreeForAllMatchmaker_1["default"](this.tournament.players, matchOptions);
                 break;
         }
-        var matches = this.matchmaker.getRemainingMatches();
+        this.matches = this.matchmaker.getRemainingMatches();
         this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
             event: events_1.EVENTS.LOBBY_TOURNAMENT_STARTED,
             namespace: this.tournament.lobby,
             payload: {
-                tournament: __assign({ matches: matches }, this.tournament)
+                tournament: this.getTournament
             }
         });
     };
