@@ -35,12 +35,10 @@ export class GameRunner {
                 this.start();
             });
 
-            this.gameSocket.on(SOCKET_MESSAGE.GAME_MESSAGE, (data: GameMessage) => {
-                console.log("Received a game message", data);
-                this.onGameToServer(data);
-            });
+            this.gameSocket.on(SOCKET_MESSAGE.UPDATE, this.onUpdate);
+            this.gameSocket.on(SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
 
-            this.gameSocket.on(SOCKET_MESSAGE.PLAYER_MESSAGE, (data: any) => {
+            this.gameSocket.on(SOCKET_MESSAGE.GAME__PLAYER, (data: any) => {
                 console.log("Proxy message to player", data);
                 this.onGameToPlayer(data.player, data.payload);
             });
@@ -61,11 +59,9 @@ export class GameRunner {
      * Play an individual game between two players
      */
     private start() {
-        this.sendToGame({
-            payload: {
-                players: this.game.players,
-            },
-            type: "START",
+        console.log('emitting message', SOCKET_MESSAGE.START_GAME);
+        this.gameSocket.emit(SOCKET_MESSAGE.START_GAME, {
+            players: this.game.players,
         });
     }
 
@@ -89,36 +85,23 @@ export class GameRunner {
         this.game.stats = data.stats;
     }
 
-    private onGameToServer(data: GameMessage) {
-        switch (data.type) {
-            case "UPDATE":
-                this.onUpdate(data.payload);
-                break;
-            case "END":
-                this.onFinish(data.payload);
-                break;
-            default:
-                console.error("Unsupported message from game server");
-        }
-    }
-
     private onPlayerToGame(data: any) {
         // receives all player messages, check if it belongs here
         if (this.game.players.indexOf(data.player) < 0) {
             return;
         }
         // received message from player, relay it to the game server
-        this.gameSocket.send(SOCKET_MESSAGE.PLAYER_MESSAGE, {
+        this.gameSocket.emit(SOCKET_MESSAGE.GAME__PLAYER, {
             payload: data.payload,
             player: data.player,
         });
     }
 
-    private onGameToPlayer(player: Player, data: any) {
-        // game server -> player
-    }
-
-    private sendToGame(data: any) {
-        this.gameSocket.send(SOCKET_MESSAGE.GAME_MESSAGE, data);
+    private onGameToPlayer(player: Player, payload: any) {
+        this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+            player,
+            event: "game",
+            payload,
+        });
     }
 }

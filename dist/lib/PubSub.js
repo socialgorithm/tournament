@@ -1,12 +1,16 @@
 "use strict";
 exports.__esModule = true;
 var PubSubJS = require("pubsub-js");
+var events_1 = require("../socket/events");
 var PubSub = (function () {
     function PubSub() {
         this.subscriptionTokens = [];
     }
     PubSub.prototype.publish = function (event, data) {
-        console.log("Publishing event " + event, data);
+        console.log("Publish event: " + event);
+        if (event === events_1.EVENTS.SERVER_TO_PLAYER) {
+            console.log(data);
+        }
         PubSubJS.publish(event, data);
     };
     PubSub.prototype.publishNamespaced = function (namespace, event, data) {

@@ -94,8 +94,7 @@ export class SocketServer {
 
     private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
-            // tslint:disable-next-line:no-console
-            console.warn("Error sending message to player, player socket does not exist", data.player);
+            console.error("Error sending message to player, player socket does not exist", data.player);
             return;
         }
         this.playerSockets[data.player].emit(data.event, data.payload);

@@ -12,8 +12,6 @@ export declare class GameRunner {
     private start;
     private onFinish;
     private onUpdate;
-    private onGameToServer;
     private onPlayerToGame;
     private onGameToPlayer;
-    private sendToGame;
 }

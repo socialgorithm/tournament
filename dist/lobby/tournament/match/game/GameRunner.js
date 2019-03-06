@@ -24,11 +24,9 @@ var GameRunner = (function () {
                 console.log("Connected to Game Server, starting game");
                 _this.start();
             });
-            this.gameSocket.on(constants_1.SOCKET_MESSAGE.GAME_MESSAGE, function (data) {
-                console.log("Received a game message", data);
-                _this.onGameToServer(data);
-            });
-            this.gameSocket.on(constants_1.SOCKET_MESSAGE.PLAYER_MESSAGE, function (data) {
+            this.gameSocket.on(constants_1.SOCKET_MESSAGE.UPDATE, this.onUpdate);
+            this.gameSocket.on(constants_1.SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
+            this.gameSocket.on(constants_1.SOCKET_MESSAGE.GAME__PLAYER, function (data) {
                 console.log("Proxy message to player", data);
                 _this.onGameToPlayer(data.player, data.payload);
             });
@@ -43,11 +41,9 @@ var GameRunner = (function () {
         this.pubSub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
     GameRunner.prototype.start = function () {
-        this.sendToGame({
-            payload: {
-                players: this.game.players
-            },
-            type: "START"
+        console.log('emitting message', constants_1.SOCKET_MESSAGE.START_GAME);
+        this.gameSocket.emit(constants_1.SOCKET_MESSAGE.START_GAME, {
+            players: this.game.players
         });
     };
     GameRunner.prototype.onFinish = function (data) {
@@ -62,31 +58,21 @@ var GameRunner = (function () {
     GameRunner.prototype.onUpdate = function (data) {
         this.game.stats = data.stats;
     };
-    GameRunner.prototype.onGameToServer = function (data) {
-        switch (data.type) {
-            case "UPDATE":
-                this.onUpdate(data.payload);
-                break;
-            case "END":
-                this.onFinish(data.payload);
-                break;
-            default:
-                console.error("Unsupported message from game server");
-        }
-    };
     GameRunner.prototype.onPlayerToGame = function (data) {
         if (this.game.players.indexOf(data.player) < 0) {
             return;
         }
-        this.gameSocket.send(constants_1.SOCKET_MESSAGE.PLAYER_MESSAGE, {
+        this.gameSocket.emit(constants_1.SOCKET_MESSAGE.GAME__PLAYER, {
             payload: data.payload,
             player: data.player
         });
     };
-    GameRunner.prototype.onGameToPlayer = function (player, data) {
-    };
-    GameRunner.prototype.sendToGame = function (data) {
-        this.gameSocket.send(constants_1.SOCKET_MESSAGE.GAME_MESSAGE, data);
+    GameRunner.prototype.onGameToPlayer = function (player, payload) {
+        this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+            player: player,
+            event: "game",
+            payload: payload
+        });
     };
     return GameRunner;
 }());
