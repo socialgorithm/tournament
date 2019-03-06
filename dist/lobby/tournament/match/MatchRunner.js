@@ -14,6 +14,7 @@ var MatchRunner = (function () {
         this.pubSub.subscribeNamespaced(this.match.matchID, events_1.EVENTS.GAME_ENDED, this.onGameEnd);
     }
     MatchRunner.prototype.start = function () {
+        this.match.state = "playing";
         this.playNextGame();
     };
     MatchRunner.prototype.playNextGame = function () {
@@ -22,7 +23,6 @@ var MatchRunner = (function () {
             this.onMatchEnd();
             return;
         }
-        var gameRunner = new GameRunner_1.GameRunner(this.match.matchID, {});
         var game = {
             gameID: uuid(),
             players: this.match.players,
@@ -32,7 +32,7 @@ var MatchRunner = (function () {
             duration: 0,
             message: ""
         };
-        gameRunner.start(game);
+        new GameRunner_1.GameRunner(this.match.matchID, game, {});
     };
     MatchRunner.prototype.onGameEnd = function (game) {
         this.match.games.push(game);

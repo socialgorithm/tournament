@@ -23,8 +23,21 @@ var LobbyManager = (function () {
                 player: data.player
             });
         };
+        this.checkLobby = function (data) {
+            var lobbyRunner = _this.lobbyRunners.find(function (each) { return each.getLobby().token === data.payload.token; });
+            if (!lobbyRunner) {
+                _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+                    event: events_1.EVENTS.LOBBY_EXCEPTION,
+                    payload: {
+                        error: "Unable to join lobby, ensure token is correct"
+                    },
+                    player: data.player
+                });
+            }
+        };
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(events_1.EVENTS.LOBBY_CREATE, this.createLobby);
+        this.pubSub.subscribe(events_1.EVENTS.LOBBY_JOIN, this.checkLobby);
     }
     return LobbyManager;
 }());

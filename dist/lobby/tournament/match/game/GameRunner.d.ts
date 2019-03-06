@@ -8,8 +8,8 @@ export declare class GameRunner {
     private game;
     private gameSocket;
     private pubSub;
-    constructor(matchID: string, options: GameRunnerOptions);
-    start(game: Game): void;
+    constructor(matchID: string, game: Game, options: GameRunnerOptions);
+    private start;
     private onFinish;
     private onUpdate;
     private onGameToServer;

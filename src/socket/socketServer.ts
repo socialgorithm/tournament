@@ -115,6 +115,7 @@ export class SocketServer {
 
     private onPlayerDisconnect = (player: Player) => () => {
         // Just remove the player from the list
+        console.log("Removing " + player + " from server");
         delete this.playerSockets[player];
     }
 

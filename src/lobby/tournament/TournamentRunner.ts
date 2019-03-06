@@ -96,6 +96,7 @@ export class TournamentRunner {
   private playNextMatch() {
     this.sendStats();
     this.tournament.waiting = false;
+    this.tournament.ranking = this.matchmaker.getRanking();
     if (this.matchmaker.isFinished()) {
       this.onTournamentEnd();
     }

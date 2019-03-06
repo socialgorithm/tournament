@@ -86,6 +86,7 @@ var TournamentRunner = (function () {
         var _a;
         this.sendStats();
         this.tournament.waiting = false;
+        this.tournament.ranking = this.matchmaker.getRanking();
         if (this.matchmaker.isFinished()) {
             this.onTournamentEnd();
         }

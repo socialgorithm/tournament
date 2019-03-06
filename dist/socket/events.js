@@ -18,6 +18,7 @@ var EVENTS;
     EVENTS["LOBBY_PLAYER_KICK"] = "lobby player kick";
     EVENTS["LOBBY_PLAYER_BAN"] = "lobby player ban";
     EVENTS["LOBBY_JOIN"] = "lobby join";
+    EVENTS["LOBBY_EXCEPTION"] = "lobby exception";
     EVENTS["TOURNAMENT_STATS"] = "tournament stats";
 })(EVENTS = exports.EVENTS || (exports.EVENTS = {}));
 //# sourceMappingURL=events.js.map

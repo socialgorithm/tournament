@@ -35,6 +35,7 @@ var SocketServer = (function () {
             _this.pubSub.publish(type, data);
         }; };
         this.onPlayerDisconnect = function (player) { return function () {
+            console.log("Removing " + player + " from server");
             delete _this.playerSockets[player];
         }; };
         this.pubSub = new PubSub_1["default"]();

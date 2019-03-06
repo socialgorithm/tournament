@@ -15,6 +15,7 @@ export class MatchRunner {
     }
 
     public start() {
+        this.match.state = "playing";
         this.playNextGame();
     }
 
@@ -25,7 +26,6 @@ export class MatchRunner {
             this.onMatchEnd();
             return;
         }
-        const gameRunner = new GameRunner(this.match.matchID, {});
         const game: Game = {
             gameID: uuid(),
             players: this.match.players,
@@ -35,7 +35,10 @@ export class MatchRunner {
             duration: 0,
             message: "", // optional message for the UI
         };
-        gameRunner.start(game);
+        // The game runner will connect to the game server and automatically start the game
+        // after connecting
+        // tslint:disable-next-line:no-unused-expression
+        new GameRunner(this.match.matchID, game, {});
     }
 
     private onGameEnd(game: Game) {

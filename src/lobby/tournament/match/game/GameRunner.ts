@@ -1,7 +1,5 @@
-import * as io from "socket.io-client";
-import * as ioProxy from "socket.io-proxy";
-
 import { GameEndPayload, GameMessage, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/dist/constants";
+import * as io from "socket.io-client";
 
 import PubSub from "../../../../lib/PubSub";
 import { EVENTS } from "../../../../socket/events";
@@ -13,29 +11,28 @@ export type GameRunnerOptions = {
 };
 
 export class GameRunner {
-    private game: Game;
     private gameSocket: any;
     private pubSub: PubSub;
 
-    constructor(private matchID: string, options: GameRunnerOptions) {
+    constructor(private matchID: string, private game: Game, options: GameRunnerOptions) {
         // Game Server Socket Setup
         try {
-            let host = options.host || "localhost:3333";
+            let host = options.host || "localhost:5433";
             if (host.substr(0, 4) !== "http") {
                 host = "http://" + host;
             }
 
-            if (options.proxy || process.env.http_proxy) {
-                if (options.proxy) {
-                    ioProxy.init(options.proxy);
-                }
-                this.gameSocket = ioProxy.connect(host);
-            } else {
-                this.gameSocket = io.connect(host);
-            }
+            console.log("Initialising Game Runner");
+            console.log("Connecting to " + host);
+
+            this.gameSocket = io(host, {
+                reconnection: true,
+                timeout: 2000,
+            });
 
             this.gameSocket.on("connect", () => {
-                console.log(`Connected to Game Server`);
+                console.log(`Connected to Game Server, starting game`);
+                this.start();
             });
 
             this.gameSocket.on(SOCKET_MESSAGE.GAME_MESSAGE, (data: GameMessage) => {
@@ -52,7 +49,7 @@ export class GameRunner {
                 console.log("Connection lost!");
             });
         } catch (e) {
-            console.error("tournament-server Unable to connect to Game Server:", e);
+            console.log("tournament-server: Unable to connect to Game Server:", e);
         }
 
         // PubSub Subscriptions
@@ -63,8 +60,7 @@ export class GameRunner {
     /**
      * Play an individual game between two players
      */
-    public start(game: Game) {
-        this.game = game;
+    private start() {
         this.sendToGame({
             payload: {
                 players: this.game.players,

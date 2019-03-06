@@ -1,30 +1,28 @@
 "use strict";
 exports.__esModule = true;
-var io = require("socket.io-client");
-var ioProxy = require("socket.io-proxy");
 var constants_1 = require("@socialgorithm/game-server/dist/constants");
+var io = require("socket.io-client");
 var PubSub_1 = require("../../../../lib/PubSub");
 var events_1 = require("../../../../socket/events");
 var GameRunner = (function () {
-    function GameRunner(matchID, options) {
+    function GameRunner(matchID, game, options) {
         var _this = this;
         this.matchID = matchID;
+        this.game = game;
         try {
-            var host = options.host || "localhost:3333";
+            var host = options.host || "localhost:5433";
             if (host.substr(0, 4) !== "http") {
                 host = "http://" + host;
             }
-            if (options.proxy || process.env.http_proxy) {
-                if (options.proxy) {
-                    ioProxy.init(options.proxy);
-                }
-                this.gameSocket = ioProxy.connect(host);
-            }
-            else {
-                this.gameSocket = io.connect(host);
-            }
+            console.log("Initialising Game Runner");
+            console.log("Connecting to " + host);
+            this.gameSocket = io(host, {
+                reconnection: true,
+                timeout: 2000
+            });
             this.gameSocket.on("connect", function () {
-                console.log("Connected to Game Server");
+                console.log("Connected to Game Server, starting game");
+                _this.start();
             });
             this.gameSocket.on(constants_1.SOCKET_MESSAGE.GAME_MESSAGE, function (data) {
                 console.log("Received a game message", data);
@@ -39,13 +37,12 @@ var GameRunner = (function () {
             });
         }
         catch (e) {
-            console.error("tournament-server Unable to connect to Game Server:", e);
+            console.log("tournament-server: Unable to connect to Game Server:", e);
         }
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
-    GameRunner.prototype.start = function (game) {
-        this.game = game;
+    GameRunner.prototype.start = function () {
         this.sendToGame({
             payload: {
                 players: this.game.players

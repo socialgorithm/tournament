@@ -17,5 +17,6 @@ export enum EVENTS {
     LOBBY_PLAYER_KICK = "lobby player kick",
     LOBBY_PLAYER_BAN = "lobby player ban",
     LOBBY_JOIN = "lobby join",
+    LOBBY_EXCEPTION = "lobby exception",
     TOURNAMENT_STATS = "tournament stats",
 }

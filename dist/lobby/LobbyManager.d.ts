@@ -3,4 +3,5 @@ export declare class LobbyManager {
     private pubSub;
     constructor();
     private createLobby;
+    private checkLobby;
 }

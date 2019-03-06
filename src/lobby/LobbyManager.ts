@@ -1,6 +1,6 @@
 import PubSub from "../lib/PubSub";
 import { EVENTS } from "../socket/events";
-import { LOBBY_CREATE_MESSAGE } from "../socket/messages";
+import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../socket/messages";
 import { LobbyRunner } from "./LobbyRunner";
 
 export class LobbyManager {
@@ -11,6 +11,7 @@ export class LobbyManager {
         // Add PubSub listeners
         this.pubSub = new PubSub();
         this.pubSub.subscribe(EVENTS.LOBBY_CREATE, this.createLobby);
+        this.pubSub.subscribe(EVENTS.LOBBY_JOIN, this.checkLobby);
     }
 
     private createLobby = (data: LOBBY_CREATE_MESSAGE) => {
@@ -32,5 +33,21 @@ export class LobbyManager {
             },
             player: data.player,
         });
+    }
+
+    private checkLobby = (data: LOBBY_JOIN_MESSAGE) => {
+        const lobbyRunner = this.lobbyRunners.find(
+            each => each.getLobby().token === data.payload.token,
+        );
+        if (!lobbyRunner) {
+            // Joining a non-existing lobby
+            this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+                event: EVENTS.LOBBY_EXCEPTION,
+                payload: {
+                    error: "Unable to join lobby, ensure token is correct",
+                },
+                player: data.player,
+            });
+        }
     }
 }
