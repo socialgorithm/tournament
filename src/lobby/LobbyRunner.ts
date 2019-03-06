@@ -64,12 +64,15 @@ export class LobbyRunner {
       },
     });
 
+    const tournament = this.tournamentRunner ? this.tournamentRunner.tournament : null;
+
     // Send join confirmation to player
     this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
       event: "lobby joined",
       payload: {
         isAdmin: this.lobby.admin === player,
         lobby: {
+          tournament,
           ...this.lobby,
         },
       },

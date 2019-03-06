@@ -42,11 +42,12 @@ var LobbyRunner = (function () {
                     lobby: __assign({}, _this.lobby)
                 }
             });
+            var tournament = _this.tournamentRunner ? _this.tournamentRunner.tournament : null;
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
                 event: "lobby joined",
                 payload: {
                     isAdmin: _this.lobby.admin === player,
-                    lobby: __assign({}, _this.lobby)
+                    lobby: __assign({ tournament: tournament }, _this.lobby)
                 },
                 player: player
             });
