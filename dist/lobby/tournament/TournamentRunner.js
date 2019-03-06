@@ -46,8 +46,6 @@ var TournamentRunner = (function () {
                 break;
         }
         var matches = this.matchmaker.getRemainingMatches();
-        if (this.tournament.options.autoPlay) {
-        }
         this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
             event: events_1.EVENTS.LOBBY_TOURNAMENT_STARTED,
             namespace: this.tournament.lobby,
