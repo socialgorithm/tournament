@@ -46,6 +46,11 @@ export class TournamentRunner {
   }
 
   public start() {
+    if (this.tournament.started) {
+      console.log("Tournament already started, not starting", this.getTournament());
+      return;
+    }
+
     this.tournament.started = true;
 
     const matchOptions: MatchOptions = {

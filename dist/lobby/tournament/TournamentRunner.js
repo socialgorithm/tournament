@@ -34,6 +34,10 @@ var TournamentRunner = (function () {
         return __assign({ matches: this.matches }, this.tournament);
     };
     TournamentRunner.prototype.start = function () {
+        if (this.tournament.started) {
+            console.log("Tournament already started, not starting", this.getTournament());
+            return;
+        }
         this.tournament.started = true;
         var matchOptions = {
             autoPlay: this.tournament.options.autoPlay,
