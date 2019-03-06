@@ -17,6 +17,7 @@ export declare class LobbyRunner {
             started: boolean;
             finished: boolean;
             ranking: string[];
+            waiting: boolean;
             matches: import("./tournament/match/Match").Match[];
         };
     };

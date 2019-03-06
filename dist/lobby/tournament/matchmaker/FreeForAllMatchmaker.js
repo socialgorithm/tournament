@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var uuid = require("uuid/v4");
+var Match_1 = require("../match/Match");
 var FreeForAllMatchmaker = (function () {
     function FreeForAllMatchmaker(players, options) {
         this.players = players;
@@ -36,7 +37,8 @@ var FreeForAllMatchmaker = (function () {
                     options: _this.options,
                     players: [playerA, playerB],
                     state: "upcoming",
-                    winner: -1
+                    winner: -1,
+                    stats: Match_1.INITIAL_STATS
                 };
                 return newMatch;
             });

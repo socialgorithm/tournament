@@ -1,5 +1,7 @@
 "use strict";
 exports.__esModule = true;
+var uuid = require("uuid/v4");
+var Match_1 = require("../match/Match");
 var RESULT_TIE = -1;
 var DoubleEliminationMatchmaker = (function () {
     function DoubleEliminationMatchmaker(players, options) {
@@ -166,12 +168,13 @@ var DoubleEliminationMatchmaker = (function () {
         var finalOptions = Object.assign(this.options, optionOverrides || {});
         var match = {
             games: [],
-            matchID: "",
+            matchID: uuid(),
             options: finalOptions,
             parentMatches: parentMatches,
             players: [playerA, playerB],
             state: "upcoming",
-            winner: -1
+            winner: -1,
+            stats: Match_1.INITIAL_STATS
         };
         if (parentMatches) {
             match.parentMatches = parentMatches;

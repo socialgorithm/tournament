@@ -79,10 +79,10 @@ var SocketServer = (function () {
             });
             socket.on("game", function (data) { return _this.pubSub.publish(events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
             socket.on("disconnect", _this.onPlayerDisconnect(player));
-            _this.pubSub.subscribe(events_1.EVENTS.SERVER_TO_PLAYER, _this.sendMessageToPlayer);
-            _this.pubSub.subscribe(events_1.EVENTS.BROADCAST_NAMESPACED, _this.sendMessageToNamespace);
-            _this.pubSub.subscribe(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, _this.addPlayerToNamespace);
         });
+        this.pubSub.subscribe(events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
+        this.pubSub.subscribe(events_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
+        this.pubSub.subscribe(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
     };
     SocketServer.prototype.handler = function (req, res) {
         fs.readFile(__dirname + "/../../public/index.html", function (err, data) {

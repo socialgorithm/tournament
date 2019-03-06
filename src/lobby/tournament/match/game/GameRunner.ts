@@ -13,11 +13,11 @@ export type GameRunnerOptions = {
 };
 
 export class GameRunner {
-    public game: Game;
-    public gameSocket: any;
-    public pubsub: PubSub;
+    private game: Game;
+    private gameSocket: any;
+    private pubSub: PubSub;
 
-    constructor(options: GameRunnerOptions) {
+    constructor(private matchID: string, options: GameRunnerOptions) {
         // Game Server Socket Setup
         try {
             let host = options.host || "localhost:3333";
@@ -56,25 +56,21 @@ export class GameRunner {
         }
 
         // PubSub Subscriptions
-        this.pubsub = new PubSub();
-
-        this.pubsub.subscribe(EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
+        this.pubSub = new PubSub();
+        this.pubSub.subscribe(EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
 
     /**
      * Play an individual game between two players
      */
-    public start() {
+    public start(game: Game) {
+        this.game = game;
         this.sendToGame({
             payload: {
                 players: this.game.players,
             },
             type: "START",
         });
-    }
-
-    public onGameEnd() {
-        this.pubsub.unsubscribeAll();
     }
 
     private onFinish(data: GameEndPayload) {
@@ -84,7 +80,13 @@ export class GameRunner {
         this.game.duration = data.duration;
         this.game.message = data.message;
 
-        // publish game end event
+        this.pubSub.unsubscribeAll();
+
+        this.pubSub.publishNamespaced(
+            this.matchID,
+            EVENTS.GAME_ENDED,
+            null,
+        );
     }
 
     private onUpdate(data: GameUpdatePayload) {
@@ -100,7 +102,7 @@ export class GameRunner {
                 this.onFinish(data.payload);
                 break;
             default:
-                console.warn("Unsupported message from game server");
+                console.error("Unsupported message from game server");
         }
     }
 

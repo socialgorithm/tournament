@@ -71,12 +71,12 @@ export class SocketServer {
             // Special events
             socket.on("game", (data: any) => this.pubSub.publish(EVENTS.PLAYER_TO_GAME, { player, data }));
             socket.on("disconnect", this.onPlayerDisconnect(player));
-
-            // Senders
-            this.pubSub.subscribe(EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
-            this.pubSub.subscribe(EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
-            this.pubSub.subscribe(EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
         });
+
+        // Senders
+        this.pubSub.subscribe(EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
+        this.pubSub.subscribe(EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
+        this.pubSub.subscribe(EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
     }
 
     private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {

@@ -1,7 +1,7 @@
 import * as uuid from "uuid/v4";
 
 import { Player } from "@socialgorithm/game-server/src/constants";
-import { Match, MatchOptions } from "../match/Match";
+import { INITIAL_STATS, Match, MatchOptions } from "../match/Match";
 import { Tournament } from "../Tournament";
 import IMatchmaker from "./Matchmaker";
 
@@ -53,6 +53,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
           players: [playerA, playerB],
           state: "upcoming",
           winner: -1,
+          stats: INITIAL_STATS,
         };
         return newMatch;
       },

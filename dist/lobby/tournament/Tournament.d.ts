@@ -8,4 +8,5 @@ export declare type Tournament = {
     started: boolean;
     finished: boolean;
     ranking: Player[];
+    waiting: boolean;
 };

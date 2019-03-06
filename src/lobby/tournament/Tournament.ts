@@ -10,4 +10,5 @@ export type Tournament = {
     started: boolean,
     finished: boolean,
     ranking: Player[],
+    waiting: boolean, // whether we're waiting for the user (for non automatic tournament mode)
 };

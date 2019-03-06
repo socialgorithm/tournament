@@ -6,8 +6,9 @@ var constants_1 = require("@socialgorithm/game-server/src/constants");
 var PubSub_1 = require("../../../../lib/PubSub");
 var events_1 = require("../../../../socket/events");
 var GameRunner = (function () {
-    function GameRunner(options) {
+    function GameRunner(matchID, options) {
         var _this = this;
+        this.matchID = matchID;
         try {
             var host = options.host || "localhost:3333";
             if (host.substr(0, 4) !== "http") {
@@ -40,10 +41,11 @@ var GameRunner = (function () {
         catch (e) {
             console.error("tournament-server Unable to connect to Game Server:", e);
         }
-        this.pubsub = new PubSub_1["default"]();
-        this.pubsub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
+        this.pubSub = new PubSub_1["default"]();
+        this.pubSub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
-    GameRunner.prototype.start = function () {
+    GameRunner.prototype.start = function (game) {
+        this.game = game;
         this.sendToGame({
             payload: {
                 players: this.game.players
@@ -51,15 +53,14 @@ var GameRunner = (function () {
             type: "START"
         });
     };
-    GameRunner.prototype.onGameEnd = function () {
-        this.pubsub.unsubscribeAll();
-    };
     GameRunner.prototype.onFinish = function (data) {
         this.game.stats = data.stats;
         this.game.winner = data.winner;
         this.game.tie = data.tie;
         this.game.duration = data.duration;
         this.game.message = data.message;
+        this.pubSub.unsubscribeAll();
+        this.pubSub.publishNamespaced(this.matchID, events_1.EVENTS.GAME_ENDED, null);
     };
     GameRunner.prototype.onUpdate = function (data) {
         this.game.stats = data.stats;
@@ -73,7 +74,7 @@ var GameRunner = (function () {
                 this.onFinish(data.payload);
                 break;
             default:
-                console.warn("Unsupported message from game server");
+                console.error("Unsupported message from game server");
         }
     };
     GameRunner.prototype.onPlayerToGame = function (data) {

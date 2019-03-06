@@ -1,5 +1,6 @@
 import { Player } from "@socialgorithm/game-server/src/constants";
-import { Match, MatchOptions } from "../match/Match";
+import * as uuid from "uuid/v4";
+import { INITIAL_STATS, Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";
 
@@ -223,12 +224,13 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     const finalOptions = Object.assign(this.options, optionOverrides || {});
     const match: DoubleEliminationMatch = {
       games: [],
-      matchID: "",
+      matchID: uuid(),
       options: finalOptions,
       parentMatches,
       players: [playerA, playerB],
       state: "upcoming",
       winner: -1,
+      stats: INITIAL_STATS,
     };
 
     if (parentMatches) {

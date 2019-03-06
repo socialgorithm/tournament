@@ -20,8 +20,12 @@ export declare class TournamentRunner {
         started: boolean;
         finished: boolean;
         ranking: string[];
+        waiting: boolean;
         matches: Match[];
     };
     start(): void;
     continue(): void;
+    private onTournamentEnd;
+    private playNextMatch;
+    private sendStats;
 }
