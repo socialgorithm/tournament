@@ -90,10 +90,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@socialgorithm/game-server@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@socialgorithm/game-server/-/game-server-0.0.1.tgz#7cff433125b125dd2a7659db1d8bcc4fafb753d0"
-  integrity sha512-d5VH2KR35gCWj/fZYuFBDNs4TfigG+95WlUO418ly833lKDQM+T3NWI4IfNBdoRXGRvwYH6mLzOCxpTiFM9MhQ==
+"@socialgorithm/game-server@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@socialgorithm/game-server/-/game-server-0.0.5.tgz#2dda73376e816c74839da65f6fe007a66b498a8f"
+  integrity sha512-LnoKAz6EIc55DeFo8SgCVe9kKSMnVu3lGafDdqBIgo17bR/aD05FJXvNEU/ia40OBtUuFDDHnSqVvYs5Tuk8BA==
   dependencies:
     socket.io "^2.2.0"
     ts-node "^8.0.2"
