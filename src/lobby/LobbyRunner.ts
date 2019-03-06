@@ -1,6 +1,6 @@
 import * as randomWord from "random-word";
 
-import { Player } from "@socialgorithm/game-server/src/constants";
+import { Player } from "@socialgorithm/game-server/dist/constants";
 import PubSub from "../lib/PubSub";
 import { EVENTS } from "../socket/events";
 import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE } from "../socket/messages";

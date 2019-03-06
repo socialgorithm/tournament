@@ -1,7 +1,7 @@
 import * as io from "socket.io-client";
 import * as ioProxy from "socket.io-proxy";
 
-import { GameEndPayload, GameMessage, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/src/constants";
+import { GameEndPayload, GameMessage, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/dist/constants";
 
 import PubSub from "../../../../lib/PubSub";
 import { EVENTS } from "../../../../socket/events";

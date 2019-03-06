@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/src/constants";
+import { Player } from "@socialgorithm/game-server/dist/constants";
 import * as uuid from "uuid/v4";
 import { INITIAL_STATS, Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";

@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/src/constants";
+import { Player } from "@socialgorithm/game-server/dist/constants";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";

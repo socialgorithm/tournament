@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/src/constants";
+import { Player } from "@socialgorithm/game-server/dist/constants";
 import { Game } from "./game/Game";
 export declare type Match = {
     matchID: string;
