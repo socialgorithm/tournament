@@ -2,7 +2,7 @@ import { Game } from "./game/Game";
 import { Match } from "./Match";
 
 export class MatchRunner {
-    match: Match;
+    public match: Match;
 
     public start() {}
 

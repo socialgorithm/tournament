@@ -4,14 +4,14 @@ import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";
 
 type PlayerStats = {
-    player: Player;
-    wins: number;
-    losses: number;
+  player: Player;
+  wins: number;
+  losses: number;
 };
 
 type MatchingResult = {
-    matches?: DoubleEliminationMatch[];
-    oddPlayer?: Player;
+  matches?: DoubleEliminationMatch[];
+  oddPlayer?: Player;
 };
 
 const RESULT_TIE = -1;
@@ -22,261 +22,257 @@ const RESULT_TIE = -1;
  *
  */
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
-    private finished: boolean;
-    private allMatches: Match[];
-    private ranking: string[];
-    private processedMatches: string[];
-    private playerStats: { [key: string]: PlayerStats };
-    private zeroLossOddPlayer: Player;
-    private oneLossOddPlayer: Player;
-    private waitingForFinal: Player[];
-    private unlinkedMatches: DoubleEliminationMatch[] = [];
+  private finished: boolean;
+  private playedMatches: Match[];
+  private ranking: string[];
+  private processedMatches: string[];
+  private playerStats: { [key: string]: PlayerStats };
+  private zeroLossOddPlayer: Player;
+  private oneLossOddPlayer: Player;
+  private waitingForFinal: Player[];
+  private unlinkedMatches: DoubleEliminationMatch[] = [];
 
-    constructor(private players: Player[], private options: MatchOptions) {
-        this.allMatches = [];
-        this.processedMatches = [];
-        this.ranking = this.players.map(player => player);
-        this.playerStats = {};
-        this.players.forEach(player => {
-            this.playerStats[player] = { player, wins: 0, losses: 0 };
-        });
-        this.waitingForFinal = [];
+  constructor(private players: Player[], private options: MatchOptions) {
+    this.playedMatches = [];
+    this.processedMatches = [];
+    this.ranking = this.players.map(player => player);
+    this.playerStats = {};
+    this.players.forEach(player => {
+      this.playerStats[player] = { player, wins: 0, losses: 0 };
+    });
+    this.waitingForFinal = [];
+  }
+
+  public isFinished(): boolean {
+    return this.finished;
+  }
+
+  public updateStats(playedMatches: Match[], tournamentFinished: boolean = false) {
+    this.playedMatches = playedMatches;
+
+    const justPlayedMatches = this.playedMatches.filter(match =>
+      this.processedMatches.indexOf(match.matchID) === -1,
+    );
+
+    let tiedMatches = 0;
+
+    justPlayedMatches.forEach((match: DoubleEliminationMatch) => {
+      if (match.winner !== RESULT_TIE) {
+        const winner = match.players[match.winner];
+        const loser = match.players[match.winner === 1 ? 0 : 1];
+        this.playerStats[winner].wins++;
+        this.playerStats[loser].losses++;
+      } else {
+        tiedMatches++;
+      }
+    });
+
+    if (!tournamentFinished) {
+      this.ranking = this.unfinishedRanking();
     }
 
-    public isFinished(): boolean {
-        return this.finished;
+    if (tiedMatches < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
+      this.finished = true;
+      this.ranking = this.finishedRanking();
+    }
+  }
+
+  public getRemainingMatches(): DoubleEliminationMatch[] {
+    const matches: DoubleEliminationMatch[] = [];
+
+    if (this.playedMatches.length === 0) {
+      const matchResult = this.matchPlayers(this.players);
+      this.zeroLossOddPlayer = matchResult.oddPlayer;
+      return matchResult.matches;
     }
 
-    public updateStats(allMatches: Match[]) {
-        this.allMatches = allMatches;
+    const justPlayedMatches = this.playedMatches.filter(match =>
+      this.processedMatches.indexOf(match.matchID) === -1,
+    );
 
-        const justPlayedMatches = this.allMatches.filter(match =>
-            this.processedMatches.indexOf(match.matchID) === -1,
+    const tiedPlayers: Player[] = [];
+
+    justPlayedMatches.forEach((match: DoubleEliminationMatch) => {
+      this.processedMatches.push(match.matchID);
+      if (match.winner === RESULT_TIE) {
+        matches.push(
+          this.createMatch(
+            match.players[0],
+            match.players[1],
+            { timeout: match.options.timeout / 2 },
+            [{ playerIndex: 0, parent: match.matchID }, { playerIndex: 1, parent: match.matchID }],
+          ),
         );
-        const tiedMatches = 0;
+        tiedPlayers.push(...match.players);
+      }
+    },
+    );
 
-        justPlayedMatches.forEach((match: DoubleEliminationMatch) => {
-            // TODO Use match stats calculator
-            // if (match.stats.winner !== RESULT_TIE) {
-            //     const winnerToken = match.players[match.stats.winner].token;
-            //     const loserToken = match.players[match.stats.winner === 1 ? 0 : 1].token;
-            //     this.playerStats[winnerToken].wins++;
-            //     this.playerStats[loserToken].losses++;
-            // } else {
-            //     tiedMatches++;
-            // }
-        });
-
-        const tournamentFinished = allMatches.every(match => match.state === "finished");
-
-        if (!tournamentFinished) {
-            this.ranking = this.unfinishedRanking();
-        }
-
-        if (tiedMatches < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
-            this.finished = true;
-            this.ranking = this.finishedRanking();
-        }
+    if (matches.length < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
+      this.finished = true;
+      this.ranking = this.finishedRanking();
+      return [];
     }
 
-    public getRemainingMatches(): DoubleEliminationMatch[] {
-        const matches: DoubleEliminationMatch[] = [];
+    const zeroLossPlayers: Player[] = [];
+    const oneLossPlayers: Player[] = [];
 
-        if (this.allMatches.length === 0) {
-            const matchResult = this.matchPlayers(this.players);
-            this.zeroLossOddPlayer = matchResult.oddPlayer;
-            return matchResult.matches;
+    Object.keys(this.playerStats).forEach(playerToken => {
+      const stats = this.playerStats[playerToken];
+      if (!this.playerIsWaitingForMatch(stats.player) && tiedPlayers.indexOf(stats.player) === -1) {
+        if (stats.losses === 0) {
+          zeroLossPlayers.push(stats.player);
+        } else if (stats.losses === 1) {
+          oneLossPlayers.push(stats.player);
         }
+      }
+    });
 
-        const justPlayedMatches = this.allMatches.filter(match =>
-            this.processedMatches.indexOf(match.matchID) === -1,
-        );
-
-        const tiedPlayers: Player[] = [];
-
-        justPlayedMatches.forEach((match: DoubleEliminationMatch) => {
-                this.processedMatches.push(match.matchID);
-                // TODO match stats
-                // if (match.stats.winner === RESULT_TIE) {
-                //     matches.push(
-                //         this.createMatch(
-                //             match.players[0],
-                //             match.players[1],
-                //             { timeout: match.options.timeout / 2 },
-                //             [{playerIndex: 0, parent: match.matchID}, {playerIndex: 1, parent: match.matchID}],
-                //         ),
-                //     );
-                //     tiedPlayers.push(...match.players);
-                // }
-            },
-        );
-
-        if (matches.length < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
-            this.finished = true;
-            this.ranking = this.finishedRanking();
-            return [];
-        }
-
-        const zeroLossPlayers: Player[] = [];
-        const oneLossPlayers: Player[] = [];
-
-        Object.keys(this.playerStats).forEach(playerToken => {
-            const stats = this.playerStats[playerToken];
-            if (!this.playerIsWaitingForMatch(stats.player) && tiedPlayers.indexOf(stats.player) === -1) {
-                if (stats.losses === 0) {
-                    zeroLossPlayers.push(stats.player);
-                } else if (stats.losses === 1) {
-                    oneLossPlayers.push(stats.player);
-                }
-            }
-        });
-
-        if (this.zeroLossOddPlayer != null) {
-            zeroLossPlayers.unshift(this.zeroLossOddPlayer);
-            delete this.zeroLossOddPlayer;
-        }
-        if (this.oneLossOddPlayer != null) {
-            oneLossPlayers.unshift(this.oneLossOddPlayer);
-            delete this.oneLossOddPlayer;
-        }
-
-        if (zeroLossPlayers.length > 1) {
-            const matchResult = this.matchPlayers(zeroLossPlayers);
-            matches.push(...matchResult.matches);
-            this.zeroLossOddPlayer = matchResult.oddPlayer;
-        } else if (zeroLossPlayers.length === 1) {
-            this.waitingForFinal.push(zeroLossPlayers[0]);
-        }
-        if (oneLossPlayers.length > 1) {
-            const matchResult = this.matchPlayers(oneLossPlayers);
-            matches.push(...matchResult.matches);
-            this.oneLossOddPlayer = matchResult.oddPlayer;
-        } else if (oneLossPlayers.length === 1) {
-            this.waitingForFinal.push(oneLossPlayers[0]);
-        }
-
-        if (this.waitingForFinal.length > 1) {
-            const matchResult = this.matchPlayers(this.waitingForFinal);
-            matches.push(...matchResult.matches);
-            this.waitingForFinal = [];
-        }
-
-        return matches;
+    if (this.zeroLossOddPlayer != null) {
+      zeroLossPlayers.unshift(this.zeroLossOddPlayer);
+      delete this.zeroLossOddPlayer;
+    }
+    if (this.oneLossOddPlayer != null) {
+      oneLossPlayers.unshift(this.oneLossOddPlayer);
+      delete this.oneLossOddPlayer;
     }
 
-    public getRanking(): string[] {
-        return this.ranking;
+    if (zeroLossPlayers.length > 1) {
+      const matchResult = this.matchPlayers(zeroLossPlayers);
+      matches.push(...matchResult.matches);
+      this.zeroLossOddPlayer = matchResult.oddPlayer;
+    } else if (zeroLossPlayers.length === 1) {
+      this.waitingForFinal.push(zeroLossPlayers[0]);
+    }
+    if (oneLossPlayers.length > 1) {
+      const matchResult = this.matchPlayers(oneLossPlayers);
+      matches.push(...matchResult.matches);
+      this.oneLossOddPlayer = matchResult.oddPlayer;
+    } else if (oneLossPlayers.length === 1) {
+      this.waitingForFinal.push(oneLossPlayers[0]);
     }
 
-    private finishedRanking(): string[] {
-        const ranking: string[] = [];
-        const matches = this.allMatches.map(match => match); // mapping to copy
-        matches.reverse().forEach(match => {
-            // TODO Calculate the ranking
-            // if (match.winner !== RESULT_TIE) {
-            //     const winner = match.players[match.stats.winner].token;
-            //     const loser = match.players[match.stats.winner === 1 ? 0 : 1].token;
-            //     if (ranking.indexOf(winner) === -1) {
-            //         ranking.push(winner);
-            //     }
-            //     if (ranking.indexOf(loser) === -1) {
-            //         ranking.push(loser);
-            //     }
-            // }
-        });
-        const playersAwaitingMatch = this.players.map(player => player).filter(token => ranking.indexOf(token) === -1);
-        ranking.push(...playersAwaitingMatch);
-        return ranking;
+    if (this.waitingForFinal.length > 1) {
+      const matchResult = this.matchPlayers(this.waitingForFinal);
+      matches.push(...matchResult.matches);
+      this.waitingForFinal = [];
     }
 
-    private unfinishedRanking(): string[] {
-        return this.players
-            .map(player => player) // mapping to copy
-            .sort(
-                (a: Player, b: Player) => this.getPlayerScore(b) - this.getPlayerScore(a),
-            ).map(player => player);
-    }
+    return matches;
+  }
 
-    private getPlayerScore(player: Player): number {
-        return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
-    }
+  public getRanking(): string[] {
+    return this.ranking;
+  }
 
-    private matchPlayers(players: Player[]): MatchingResult {
-        const matches: DoubleEliminationMatch[] = [];
-        let oddPlayer: Player;
-
-        if (players.length < 2) {
-            return {};
+  private finishedRanking(): string[] {
+    const ranking: string[] = [];
+    const matches = this.playedMatches.map(match => match); // mapping to copy
+    matches.reverse().forEach(match => {
+      if (match.winner !== RESULT_TIE) {
+        const winner = match.players[match.winner];
+        const loser = match.players[match.winner === 1 ? 0 : 1];
+        if (ranking.indexOf(winner) === -1) {
+          ranking.push(winner);
         }
-
-        if (players.length % 2 !== 0) {
-            oddPlayer = players[players.length - 1];
-            players = players.slice(0, -1);
+        if (ranking.indexOf(loser) === -1) {
+          ranking.push(loser);
         }
+      }
+    });
+    const playersAwaitingMatch = this.players.map(player => player).filter(token => ranking.indexOf(token) === -1);
+    ranking.push(...playersAwaitingMatch);
+    return ranking;
+  }
 
-        for (let i = 0; i < players.length; i += 2) {
-            const playerA = players[i];
-            const playerB = players[i + 1];
-            matches.push(this.createMatch(playerA, playerB));
-        }
+  private unfinishedRanking(): string[] {
+    return this.players
+      .map(player => player) // mapping to copy
+      .sort(
+        (a: Player, b: Player) => this.getPlayerScore(b) - this.getPlayerScore(a),
+      ).map(player => player);
+  }
 
-        return { matches, oddPlayer };
+  private getPlayerScore(player: Player): number {
+    return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
+  }
+
+  private matchPlayers(players: Player[]): MatchingResult {
+    const matches: DoubleEliminationMatch[] = [];
+    let oddPlayer: Player;
+
+    if (players.length < 2) {
+      return {};
     }
 
-    private createMatch(playerA: Player, playerB: Player, optionOverrides?: any, parentMatches?: MatchParent[]): DoubleEliminationMatch {
-        const finalOptions = Object.assign(this.options, optionOverrides || {});
-        const match: DoubleEliminationMatch = {
-            games: [],
-            matchID: "",
-            parentMatches,
-            players: [playerA, playerB],
-            state: "upcoming",
-            winner: -1,
-        };
-
-        if (parentMatches) {
-            match.parentMatches = parentMatches;
-        } else {
-            this.setParentMatches(match);
-        }
-        this.unlinkedMatches.push(match);
-
-        return match;
+    if (players.length % 2 !== 0) {
+      oddPlayer = players[players.length - 1];
+      players = players.slice(0, -1);
     }
 
-    private playerIsWaitingForMatch(player: Player): boolean {
-        return this.waitingForFinal.indexOf(player) >= 0 || player === this.zeroLossOddPlayer || player === this.oneLossOddPlayer;
+    for (let i = 0; i < players.length; i += 2) {
+      const playerA = players[i];
+      const playerB = players[i + 1];
+      matches.push(this.createMatch(playerA, playerB));
     }
 
-    private anyPlayersWaiting(): boolean {
-        return this.waitingForFinal.length > 0 || !!this.zeroLossOddPlayer || !!this.oneLossOddPlayer;
+    return { matches, oddPlayer };
+  }
+
+  private createMatch(playerA: Player, playerB: Player, optionOverrides?: any, parentMatches?: MatchParent[]): DoubleEliminationMatch {
+    const finalOptions = Object.assign(this.options, optionOverrides || {});
+    const match: DoubleEliminationMatch = {
+      games: [],
+      matchID: "",
+      options: finalOptions,
+      parentMatches,
+      players: [playerA, playerB],
+      state: "upcoming",
+      winner: -1,
+    };
+
+    if (parentMatches) {
+      match.parentMatches = parentMatches;
+    } else {
+      this.setParentMatches(match);
     }
+    this.unlinkedMatches.push(match);
 
-    private setParentMatches(match: DoubleEliminationMatch) {
-        // TODO Use Match stats calculator
-        // const playerTokens = match.players.map(player => player);
+    return match;
+  }
 
-        // // find out if this match came from another
-        // const parentMatches = this.unlinkedMatches.filter((eachMatch): boolean => {
-        //     const winner = eachMatch.players[eachMatch.stats.winner];
-        //     if (!winner) {
-        //         return false;
-        //     }
-        //     return playerTokens.indexOf(winner) > -1;
-        // }).map(eachMatch => {
-        //         const winner = eachMatch.players[eachMatch.stats.winner];
-        //         return {
-        //             parent: eachMatch.matchID,
-        //             playerIndex: playerTokens.indexOf(winner),
-        //         };
-        //     },
-        // );
+  private playerIsWaitingForMatch(player: Player): boolean {
+    return this.waitingForFinal.indexOf(player) >= 0 || player === this.zeroLossOddPlayer || player === this.oneLossOddPlayer;
+  }
 
-        // parentMatches.forEach(matchParent => {
-        //     const unlinkedIndex = this.unlinkedMatches.findIndex(eachMatch => eachMatch.matchID === matchParent.parent);
-        //     this.unlinkedMatches.splice(unlinkedIndex, 1);
-        // });
+  private anyPlayersWaiting(): boolean {
+    return this.waitingForFinal.length > 0 || !!this.zeroLossOddPlayer || !!this.oneLossOddPlayer;
+  }
 
-        // match.parentMatches = parentMatches;
-    }
+  private setParentMatches(match: DoubleEliminationMatch) {
+    const playerTokens = match.players.map(player => player);
+
+    // find out if this match came from another
+    const parentMatches = this.unlinkedMatches.filter((eachMatch): boolean => {
+      const winner = eachMatch.players[eachMatch.winner];
+      if (!winner) {
+        return false;
+      }
+      return playerTokens.indexOf(winner) > -1;
+    }).map(eachMatch => {
+      const winner = eachMatch.players[eachMatch.winner];
+      return {
+        parent: eachMatch.matchID,
+        playerIndex: playerTokens.indexOf(winner),
+      };
+    },
+    );
+
+    parentMatches.forEach(matchParent => {
+      const unlinkedIndex = this.unlinkedMatches.findIndex(eachMatch => eachMatch.matchID === matchParent.parent);
+      this.unlinkedMatches.splice(unlinkedIndex, 1);
+    });
+
+    match.parentMatches = parentMatches;
+  }
 }

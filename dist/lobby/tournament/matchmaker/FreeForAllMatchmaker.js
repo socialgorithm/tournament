@@ -10,7 +10,8 @@ var FreeForAllMatchmaker = (function () {
     FreeForAllMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
-    FreeForAllMatchmaker.prototype.updateStats = function (allMatches) {
+    FreeForAllMatchmaker.prototype.updateStats = function (allMatches, tournamentFinished) {
+        if (tournamentFinished === void 0) { tournamentFinished = false; }
         this.allMatches = allMatches;
     };
     FreeForAllMatchmaker.prototype.getRemainingMatches = function () {
@@ -32,6 +33,7 @@ var FreeForAllMatchmaker = (function () {
                 var newMatch = {
                     games: [],
                     matchID: uuid(),
+                    options: _this.options,
                     players: [playerA, playerB],
                     state: "upcoming",
                     winner: -1

@@ -6,6 +6,7 @@ export enum EVENTS {
     ADD_PLAYER_TO_NAMESPACE = "ADD_PLAYER_TO_NAMESPACE",
     LOBBY_CREATE = "lobby create",
     LOBBY_TOURNAMENT_START = "lobby tournament start",
+    LOBBY_TOURNAMENT_STARTED = "lobby tournament started",
     LOBBY_TOURNAMENT_CONTINUE = "lobby tournament continue",
     LOBBY_PLAYER_KICK = "lobby player kick",
     LOBBY_PLAYER_BAN = "lobby player ban",

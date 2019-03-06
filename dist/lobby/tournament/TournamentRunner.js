@@ -30,7 +30,6 @@ var TournamentRunner = (function () {
         this.pubSub = new PubSub_1["default"]();
     }
     TournamentRunner.prototype.start = function () {
-        console.log("Starting tournament", this.tournament, this.tournament.options);
         this.tournament.started = true;
         var matchOptions = {
             autoPlay: this.tournament.options.autoPlay,
@@ -39,18 +38,18 @@ var TournamentRunner = (function () {
         };
         switch (this.tournament.options.type) {
             case "DoubleElimination":
-                console.log("Doing Double Elim");
                 this.matchmaker = new DoubleEliminationMatchmaker_1["default"](this.tournament.players, matchOptions);
                 break;
             case "FreeForAll":
             default:
-                console.log("Doing Default");
                 this.matchmaker = new FreeForAllMatchmaker_1["default"](this.tournament.players, matchOptions);
                 break;
         }
         var matches = this.matchmaker.getRemainingMatches();
+        if (this.tournament.options.autoPlay) {
+        }
         this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
-            event: "lobby tournament started",
+            event: events_1.EVENTS.LOBBY_TOURNAMENT_STARTED,
             namespace: this.tournament.lobby,
             payload: {
                 tournament: __assign({ matches: matches }, this.tournament)

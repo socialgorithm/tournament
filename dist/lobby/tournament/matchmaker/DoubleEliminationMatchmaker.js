@@ -7,7 +7,7 @@ var DoubleEliminationMatchmaker = (function () {
         this.players = players;
         this.options = options;
         this.unlinkedMatches = [];
-        this.allMatches = [];
+        this.playedMatches = [];
         this.processedMatches = [];
         this.ranking = this.players.map(function (player) { return player; });
         this.playerStats = {};
@@ -19,16 +19,25 @@ var DoubleEliminationMatchmaker = (function () {
     DoubleEliminationMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
-    DoubleEliminationMatchmaker.prototype.updateStats = function (allMatches) {
+    DoubleEliminationMatchmaker.prototype.updateStats = function (playedMatches, tournamentFinished) {
         var _this = this;
-        this.allMatches = allMatches;
-        var justPlayedMatches = this.allMatches.filter(function (match) {
+        if (tournamentFinished === void 0) { tournamentFinished = false; }
+        this.playedMatches = playedMatches;
+        var justPlayedMatches = this.playedMatches.filter(function (match) {
             return _this.processedMatches.indexOf(match.matchID) === -1;
         });
         var tiedMatches = 0;
         justPlayedMatches.forEach(function (match) {
+            if (match.winner !== RESULT_TIE) {
+                var winner = match.players[match.winner];
+                var loser = match.players[match.winner === 1 ? 0 : 1];
+                _this.playerStats[winner].wins++;
+                _this.playerStats[loser].losses++;
+            }
+            else {
+                tiedMatches++;
+            }
         });
-        var tournamentFinished = allMatches.every(function (match) { return match.state === "finished"; });
         if (!tournamentFinished) {
             this.ranking = this.unfinishedRanking();
         }
@@ -40,17 +49,21 @@ var DoubleEliminationMatchmaker = (function () {
     DoubleEliminationMatchmaker.prototype.getRemainingMatches = function () {
         var _this = this;
         var matches = [];
-        if (this.allMatches.length === 0) {
+        if (this.playedMatches.length === 0) {
             var matchResult = this.matchPlayers(this.players);
             this.zeroLossOddPlayer = matchResult.oddPlayer;
             return matchResult.matches;
         }
-        var justPlayedMatches = this.allMatches.filter(function (match) {
+        var justPlayedMatches = this.playedMatches.filter(function (match) {
             return _this.processedMatches.indexOf(match.matchID) === -1;
         });
         var tiedPlayers = [];
         justPlayedMatches.forEach(function (match) {
             _this.processedMatches.push(match.matchID);
+            if (match.winner === RESULT_TIE) {
+                matches.push(_this.createMatch(match.players[0], match.players[1], { timeout: match.options.timeout / 2 }, [{ playerIndex: 0, parent: match.matchID }, { playerIndex: 1, parent: match.matchID }]));
+                tiedPlayers.push.apply(tiedPlayers, match.players);
+            }
         });
         if (matches.length < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
             this.finished = true;
@@ -106,8 +119,18 @@ var DoubleEliminationMatchmaker = (function () {
     };
     DoubleEliminationMatchmaker.prototype.finishedRanking = function () {
         var ranking = [];
-        var matches = this.allMatches.map(function (match) { return match; });
+        var matches = this.playedMatches.map(function (match) { return match; });
         matches.reverse().forEach(function (match) {
+            if (match.winner !== RESULT_TIE) {
+                var winner = match.players[match.winner];
+                var loser = match.players[match.winner === 1 ? 0 : 1];
+                if (ranking.indexOf(winner) === -1) {
+                    ranking.push(winner);
+                }
+                if (ranking.indexOf(loser) === -1) {
+                    ranking.push(loser);
+                }
+            }
         });
         var playersAwaitingMatch = this.players.map(function (player) { return player; }).filter(function (token) { return ranking.indexOf(token) === -1; });
         ranking.push.apply(ranking, playersAwaitingMatch);
@@ -144,6 +167,7 @@ var DoubleEliminationMatchmaker = (function () {
         var match = {
             games: [],
             matchID: "",
+            options: finalOptions,
             parentMatches: parentMatches,
             players: [playerA, playerB],
             state: "upcoming",
@@ -165,6 +189,26 @@ var DoubleEliminationMatchmaker = (function () {
         return this.waitingForFinal.length > 0 || !!this.zeroLossOddPlayer || !!this.oneLossOddPlayer;
     };
     DoubleEliminationMatchmaker.prototype.setParentMatches = function (match) {
+        var _this = this;
+        var playerTokens = match.players.map(function (player) { return player; });
+        var parentMatches = this.unlinkedMatches.filter(function (eachMatch) {
+            var winner = eachMatch.players[eachMatch.winner];
+            if (!winner) {
+                return false;
+            }
+            return playerTokens.indexOf(winner) > -1;
+        }).map(function (eachMatch) {
+            var winner = eachMatch.players[eachMatch.winner];
+            return {
+                parent: eachMatch.matchID,
+                playerIndex: playerTokens.indexOf(winner)
+            };
+        });
+        parentMatches.forEach(function (matchParent) {
+            var unlinkedIndex = _this.unlinkedMatches.findIndex(function (eachMatch) { return eachMatch.matchID === matchParent.parent; });
+            _this.unlinkedMatches.splice(unlinkedIndex, 1);
+        });
+        match.parentMatches = parentMatches;
     };
     return DoubleEliminationMatchmaker;
 }());

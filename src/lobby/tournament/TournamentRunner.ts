@@ -38,7 +38,6 @@ export class TournamentRunner {
   }
 
   public start() {
-    console.log("Starting tournament", this.tournament, this.tournament.options);
     this.tournament.started = true;
 
     const matchOptions: MatchOptions = {
@@ -49,12 +48,10 @@ export class TournamentRunner {
 
     switch (this.tournament.options.type) {
       case "DoubleElimination":
-        console.log("Doing Double Elim");
         this.matchmaker = new DoubleEliminationMatchmaker(this.tournament.players, matchOptions);
         break;
       case "FreeForAll":
       default:
-        console.log("Doing Default");
         this.matchmaker = new FreeForAllMatchmaker(this.tournament.players, matchOptions);
         break;
     }
@@ -63,7 +60,7 @@ export class TournamentRunner {
 
     // Notify
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
-      event: "lobby tournament started",
+      event: EVENTS.LOBBY_TOURNAMENT_STARTED,
       namespace: this.tournament.lobby,
       payload: {
         tournament: {

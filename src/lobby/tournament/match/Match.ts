@@ -3,6 +3,7 @@ import { Game } from "./game/Game";
 
 export type Match = {
     matchID: string,
+    options: MatchOptions
     players: Player[],
     games: Game[],
     state: "playing" | "finished" | "upcoming",

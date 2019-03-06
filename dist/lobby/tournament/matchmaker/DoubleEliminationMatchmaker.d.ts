@@ -6,7 +6,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private players;
     private options;
     private finished;
-    private allMatches;
+    private playedMatches;
     private ranking;
     private processedMatches;
     private playerStats;
@@ -16,7 +16,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private unlinkedMatches;
     constructor(players: Player[], options: MatchOptions);
     isFinished(): boolean;
-    updateStats(allMatches: Match[]): void;
+    updateStats(playedMatches: Match[], tournamentFinished?: boolean): void;
     getRemainingMatches(): DoubleEliminationMatch[];
     getRanking(): string[];
     private finishedRanking;

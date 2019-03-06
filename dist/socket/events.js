@@ -9,6 +9,7 @@ var EVENTS;
     EVENTS["ADD_PLAYER_TO_NAMESPACE"] = "ADD_PLAYER_TO_NAMESPACE";
     EVENTS["LOBBY_CREATE"] = "lobby create";
     EVENTS["LOBBY_TOURNAMENT_START"] = "lobby tournament start";
+    EVENTS["LOBBY_TOURNAMENT_STARTED"] = "lobby tournament started";
     EVENTS["LOBBY_TOURNAMENT_CONTINUE"] = "lobby tournament continue";
     EVENTS["LOBBY_PLAYER_KICK"] = "lobby player kick";
     EVENTS["LOBBY_PLAYER_BAN"] = "lobby player ban";
