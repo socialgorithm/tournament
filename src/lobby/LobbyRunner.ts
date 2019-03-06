@@ -8,8 +8,8 @@ import { Lobby } from "./Lobby";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 
 export class LobbyRunner {
-  public lobby: Lobby;
-  public tournamentRunner: TournamentRunner;
+  private lobby: Lobby;
+  private tournamentRunner: TournamentRunner;
   private pubSub: PubSub;
 
   constructor(admin: Player) {
@@ -27,6 +27,15 @@ export class LobbyRunner {
     this.pubSub.subscribe(EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+  }
+
+  public getLobby() {
+    const tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;
+
+    return {
+      tournament,
+      ...this.lobby,
+    };
   }
 
   private addPlayerToLobby = (data: LOBBY_JOIN_MESSAGE) => {
@@ -47,6 +56,8 @@ export class LobbyRunner {
       this.lobby.players.push(player);
     }
 
+    const lobby = this.getLobby();
+
     // Join the lobby namespace
     this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
       namespace: lobbyName,
@@ -58,23 +69,16 @@ export class LobbyRunner {
       event: "connected",
       namespace: lobbyName,
       payload: {
-        lobby: {
-          ...this.lobby,
-        },
+        lobby,
       },
     });
-
-    const tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;
 
     // Send join confirmation to player
     this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
       event: "lobby joined",
       payload: {
         isAdmin: this.lobby.admin === player,
-        lobby: {
-          tournament,
-          ...this.lobby,
-        },
+        lobby,
       },
       player,
     });
@@ -118,7 +122,7 @@ export class LobbyRunner {
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby tournament continued",
       namespace: lobbyName,
-      payload: this.lobby,
+      payload: this.getLobby(),
     });
   });
 
@@ -130,7 +134,7 @@ export class LobbyRunner {
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby player kicked",
       namespace: lobbyName,
-      payload: this.lobby,
+      payload: this.getLobby(),
     });
 
     // Send confirmation to player
@@ -155,7 +159,7 @@ export class LobbyRunner {
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby player banned",
       namespace: lobbyName,
-      payload: this.lobby,
+      payload: this.getLobby(),
     });
 
     // Send confirmation to player

@@ -3,12 +3,11 @@ import * as uuid from "uuid/v4";
 import { Player } from "@socialgorithm/game-server/src/constants";
 import PubSub from "../../lib/PubSub";
 import { EVENTS } from "../../socket/events";
-import { MatchOptions, Match } from "./match/Match";
+import { Match, MatchOptions } from "./match/Match";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
 import FreeForAllMatchmaker from "./matchmaker/FreeForAllMatchmaker";
 import IMatchMaker from "./matchmaker/MatchMaker";
 import { Tournament } from "./Tournament";
-import { match } from 'minimatch';
 
 export type TournamentOptions = {
   autoPlay: boolean,

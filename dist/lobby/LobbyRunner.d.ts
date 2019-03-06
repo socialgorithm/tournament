@@ -1,11 +1,25 @@
 import { Player } from "@socialgorithm/game-server/src/constants";
-import { Lobby } from "./Lobby";
-import { TournamentRunner } from "./tournament/TournamentRunner";
 export declare class LobbyRunner {
-    lobby: Lobby;
-    tournamentRunner: TournamentRunner;
+    private lobby;
+    private tournamentRunner;
     private pubSub;
     constructor(admin: Player);
+    getLobby(): {
+        admin: string;
+        token: string;
+        players: string[];
+        bannedPlayers: string[];
+        tournament: {
+            tournamentID: string;
+            players: string[];
+            lobby: string;
+            options: import("./tournament/TournamentRunner").TournamentOptions;
+            started: boolean;
+            finished: boolean;
+            ranking: string[];
+            matches: import("./tournament/match/Match").Match[];
+        };
+    };
     private addPlayerToLobby;
     private ifAdmin;
     private startTournament;

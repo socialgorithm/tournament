@@ -20,7 +20,7 @@ export class LobbyManager {
 
         // Join the lobby namespace
         this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
-            namespace: lobbyRunner.lobby.token,
+            namespace: lobbyRunner.getLobby().token,
             player: data.player,
         });
 
@@ -28,9 +28,7 @@ export class LobbyManager {
         this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
             event: "lobby created",
             payload: {
-                lobby: {
-                    ...lobbyRunner.lobby,
-                },
+                lobby: lobbyRunner.getLobby(),
             },
             player: data.player,
         });
