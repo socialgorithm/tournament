@@ -10,12 +10,12 @@ export const parseStats = stats => {
   // Prepare a map of matches for quick reference
   const matchesRef = {};
   matches.forEach(match => {
-    matchesRef[match.uuid] = match;
+    matchesRef[match.matchID] = match;
   });
 
   // Figure out the top level matches
   // these are matches that are not parents of any match
-  const topLevelMatches = matches.map(match => match.uuid);
+  const topLevelMatches = matches.map(match => match.matchID);
   matches.filter(
     match => match.parentMatches && match.parentMatches.length > 0
   ).forEach(match => {
@@ -28,7 +28,7 @@ export const parseStats = stats => {
   });
 
   topLevelMatches.forEach(matchUUID => {
-    const match = matches.find(eachMatch => eachMatch.uuid === matchUUID);
+    const match = matches.find(eachMatch => eachMatch.matchID === matchUUID);
     brackets.push(addMatch(match, matchesRef, false, false, true));
   });
 
@@ -59,7 +59,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
   }
 
   if (currentMatch) {
-    matchBracket.playerIndex = currentMatch.players.findIndex(player => player.token === matchBracket.name);
+    matchBracket.playerIndex = currentMatch.players.findIndex(player => player === matchBracket.name);
   }
 
   // add the parents
@@ -98,7 +98,7 @@ const addMatch = (match, matchesRef, winner, loser, topLevel, currentMatch) => {
     if (!parentLessPlayers[playerIndex]) {
       return;
     }
-    const player = match.players[playerIndex].token;
+    const player = match.players[playerIndex];
     matchBracket.children.push({
       name: player,
       playerIndex: playerIndex,

@@ -35,7 +35,7 @@ export default class Brackets extends React.PureComponent {
     return (
       <div>
         {this.state.data.map((bracket, $index) => (
-          <div className="tournament-bracket" key={ bracket.match.uuid }>
+          <div className="tournament-bracket" key={ bracket.match.matchID }>
               <Bracket
                 finished={ this.props.stats.finished }
                 item={bracket}
