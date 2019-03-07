@@ -1,10 +1,8 @@
-# Ultimate TTT Web Client
+# Socialgorithm Game/Tournament Web Client
 
-This is the web client for Ultimate Tic Tac Toe Algorithm Battles :1:
+This is the web client that participants use to play, administer or spectate Socialgorithm games. 
 
-It can connect to a running server and display info about the games being played, the users online...
-
-You can also upload game logs and visualize the games move by move to debug your strategy.
+It connects to a running [Tournament Server](https://github.com/socialgorithm/tournament-server/) and allows you to navigate the [Socialgorithm API](https://socialgorithm.org/docs/sections/architecture/api.html).
 
 ## Getting started
 
