@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/aurbano/ultimate-ttt-web/issues"
   },
-  "homepage": "https://uttt.socialgorithm.org",
+  "homepage": "https://play.socialgorithm.org",
   "dependencies": {
     "@socialgorithm/ultimate-ttt": "^4.19.0",
     "classnames": "^2.2.6",
