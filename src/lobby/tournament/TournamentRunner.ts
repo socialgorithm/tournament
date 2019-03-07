@@ -110,14 +110,14 @@ export class TournamentRunner {
     }
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
+    this.matchmaker.updateStats(this.matches);
+    this.sendStats();
+
     if (upcomingMatches.length < 1) {
       this.matches.push(...this.matchmaker.getRemainingMatches());
       this.playNextMatch();
       return;
     }
-
-    this.matchmaker.updateStats(this.matches);
-    this.sendStats();
 
     const nextMatch = upcomingMatches[0];
     // Run the match

@@ -77,13 +77,13 @@ var TournamentRunner = (function () {
                 return;
             }
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
+            _this.matchmaker.updateStats(_this.matches);
+            _this.sendStats();
             if (upcomingMatches.length < 1) {
                 (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());
                 _this.playNextMatch();
                 return;
             }
-            _this.matchmaker.updateStats(_this.matches);
-            _this.sendStats();
             var nextMatch = upcomingMatches[0];
             _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID);
         };
