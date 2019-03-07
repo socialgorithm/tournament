@@ -4,7 +4,7 @@ import { EVENTS } from "../../../socket/events";
 import * as funcs from "./funcs";
 import { Game } from "./game/Game";
 import { GameRunner } from "./game/GameRunner";
-import { INITIAL_STATS, IStats, Match, MatchStats } from "./Match";
+import { Match, MatchStats } from "./Match";
 
 export class MatchRunner {
     private pubSub: PubSub;
