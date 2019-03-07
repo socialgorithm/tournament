@@ -65,17 +65,25 @@ var TournamentRunner = (function () {
             _this.matchmaker.updateStats(_this.matches, true);
             _this.sendStats();
         };
+        this.onMatchEnd = function () {
+            _this.tournament.waiting = !_this.tournament.options.autoPlay;
+            if (_this.tournament.waiting) {
+                _this.sendStats();
+                return;
+            }
+            _this.playNextMatch();
+        };
         this.playNextMatch = function () {
             var _a;
             if (_this.currentMatchRunner) {
                 _this.currentMatchRunner.onEnd();
             }
-            _this.tournament.waiting = false;
             _this.tournament.ranking = _this.matchmaker.getRanking();
             if (_this.matchmaker.isFinished()) {
                 _this.onTournamentEnd();
                 return;
             }
+            _this.matchmaker.updateStats(_this.matches);
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
                 (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());
@@ -84,6 +92,9 @@ var TournamentRunner = (function () {
             }
             _this.matchmaker.updateStats(_this.matches);
             _this.sendStats();
+            if (_this.tournament.waiting) {
+                return;
+            }
             var nextMatch = upcomingMatches[0];
             _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID);
         };
@@ -105,7 +116,7 @@ var TournamentRunner = (function () {
             waiting: !options.autoPlay
         };
         this.pubSub = new PubSub_1["default"]();
-        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, events_1.EVENTS.MATCH_ENDED, this.playNextMatch);
+        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, events_1.EVENTS.MATCH_ENDED, this.onMatchEnd);
         this.pubSub.subscribeNamespaced(this.tournament.tournamentID, events_1.EVENTS.MATCH_UPDATE, this.sendStats);
     }
     return TournamentRunner;

@@ -39,7 +39,7 @@ export class TournamentRunner {
     };
 
     this.pubSub = new PubSub();
-    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_ENDED, this.playNextMatch);
+    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_ENDED, this.onMatchEnd);
     this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_UPDATE, this.sendStats);
   }
 
@@ -98,16 +98,30 @@ export class TournamentRunner {
     this.sendStats();
   }
 
+  private onMatchEnd = () => {
+    this.tournament.waiting = !this.tournament.options.autoPlay;
+
+    if (this.tournament.waiting) {
+      this.sendStats();
+      return;
+    }
+
+    this.playNextMatch();
+  }
+
   private playNextMatch = () => {
     if (this.currentMatchRunner) {
       this.currentMatchRunner.onEnd();
     }
-    this.tournament.waiting = false;
+
     this.tournament.ranking = this.matchmaker.getRanking();
     if (this.matchmaker.isFinished()) {
       this.onTournamentEnd();
       return;
     }
+
+    this.matchmaker.updateStats(this.matches);
+
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
     if (upcomingMatches.length < 1) {
@@ -118,6 +132,10 @@ export class TournamentRunner {
 
     this.matchmaker.updateStats(this.matches);
     this.sendStats();
+
+    if (this.tournament.waiting) {
+      return;
+    }
 
     const nextMatch = upcomingMatches[0];
     // Run the match
