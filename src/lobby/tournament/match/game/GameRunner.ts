@@ -11,7 +11,7 @@ export type GameRunnerOptions = {
 };
 
 export class GameRunner {
-    private gameSocket: any;
+    private gameSocket: SocketIOClient.Socket;
     private pubSub: PubSub;
 
     constructor(private matchID: string, private game: Game, options: GameRunnerOptions) {
@@ -44,7 +44,7 @@ export class GameRunner {
             });
 
             this.gameSocket.on("disconnect", () => {
-                console.log("Connection lost!");
+                console.log(`Connection to Game Server ${host} lost!`);
             });
         } catch (e) {
             console.log("tournament-server: Unable to connect to Game Server:", e);
@@ -55,17 +55,21 @@ export class GameRunner {
         this.pubSub.subscribe(EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
 
+    public close() {
+        this.gameSocket.close();
+    }
+
     /**
      * Play an individual game between two players
      */
     private start() {
-        console.log('emitting message', SOCKET_MESSAGE.START_GAME);
+        console.log("SEND START GAME");
         this.gameSocket.emit(SOCKET_MESSAGE.START_GAME, {
             players: this.game.players,
         });
     }
 
-    private onFinish(data: GameEndPayload) {
+    private onFinish = (data: GameEndPayload) => {
         this.game.stats = data.stats;
         this.game.winner = data.winner;
         this.game.tie = data.tie;
@@ -77,27 +81,29 @@ export class GameRunner {
         this.pubSub.publishNamespaced(
             this.matchID,
             EVENTS.GAME_ENDED,
-            null,
+            this.game,
         );
     }
 
-    private onUpdate(data: GameUpdatePayload) {
+    private onUpdate = (data: GameUpdatePayload) => {
         this.game.stats = data.stats;
     }
 
-    private onPlayerToGame(data: any) {
+    private onPlayerToGame = (payload: any) => {
+        console.log("SEND PLAYER TO GAME", payload);
         // receives all player messages, check if it belongs here
-        if (this.game.players.indexOf(data.player) < 0) {
+        if (this.game.players.indexOf(payload.player) < 0) {
             return;
         }
+        console.log("  EMITTING");
         // received message from player, relay it to the game server
         this.gameSocket.emit(SOCKET_MESSAGE.GAME__PLAYER, {
-            payload: data.payload,
-            player: data.player,
+            payload: payload.data,
+            player: payload.player,
         });
     }
 
-    private onGameToPlayer(player: Player, payload: any) {
+    private onGameToPlayer = (player: Player, payload: any) => {
         this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
             player,
             event: "game",

@@ -40,14 +40,14 @@ export class TournamentRunner {
     this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_UPDATE, this.sendStats);
   }
 
-  public getTournament() {
+  public getTournament = () => {
     return {
       matches: this.matches,
       ...this.tournament,
     };
   }
 
-  public start() {
+  public start = () => {
     if (this.tournament.started) {
       console.log("Tournament already started, not starting", this.getTournament());
       return;
@@ -83,17 +83,17 @@ export class TournamentRunner {
     });
   }
 
-  public continue() {
+  public continue = () => {
     this.playNextMatch();
   }
 
-  private onTournamentEnd() {
+  private onTournamentEnd = () => {
     this.tournament.finished = true;
     this.tournament.waiting = false;
     this.sendStats();
   }
 
-  private playNextMatch() {
+  private playNextMatch = () => {
     this.sendStats();
     this.tournament.waiting = false;
     this.tournament.ranking = this.matchmaker.getRanking();

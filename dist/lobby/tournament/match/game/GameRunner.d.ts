@@ -9,6 +9,7 @@ export declare class GameRunner {
     private gameSocket;
     private pubSub;
     constructor(matchID: string, game: Game, options: GameRunnerOptions);
+    close(): void;
     private start;
     private onFinish;
     private onUpdate;

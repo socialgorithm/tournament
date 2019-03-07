@@ -12,7 +12,7 @@ export declare class TournamentRunner {
     private matchmaker;
     private matches;
     constructor(options: TournamentOptions, players: Player[], lobby: string);
-    getTournament(): {
+    getTournament: () => {
         tournamentID: string;
         players: string[];
         lobby: string;
@@ -23,8 +23,8 @@ export declare class TournamentRunner {
         waiting: boolean;
         matches: Match[];
     };
-    start(): void;
-    continue(): void;
+    start: () => void;
+    continue: () => void;
     private onTournamentEnd;
     private playNextMatch;
     private sendStats;

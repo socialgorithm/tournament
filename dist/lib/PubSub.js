@@ -22,7 +22,7 @@ var PubSub = (function () {
         this.subscribe(namespaced, fn);
     };
     PubSub.prototype.subscribe = function (event, fn) {
-        var token = PubSubJS.subscribe(event, function (event, data) { return fn(data); });
+        var token = PubSubJS.subscribe(event, function (events, data) { return fn(data); });
         this.subscriptionTokens.push(token);
     };
     PubSub.prototype.unsubscribeAll = function () {

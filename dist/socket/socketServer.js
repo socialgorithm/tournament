@@ -21,11 +21,12 @@ var SocketServer = (function () {
             _this.io["in"](data.namespace).emit(data.event, data.payload);
         };
         this.sendMessageToPlayer = function (data) {
-            if (!_this.playerSockets[data.player]) {
+            var socket = _this.playerSockets[data.player];
+            if (!socket) {
                 console.error("Error sending message to player, player socket does not exist", data.player);
                 return;
             }
-            _this.playerSockets[data.player].emit(data.event, data.payload);
+            socket.emit(data.event, data.payload);
         };
         this.onMessageFromSocket = function (player, type) { return function (payload) {
             var data = {

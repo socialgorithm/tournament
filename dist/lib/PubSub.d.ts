@@ -1,5 +1,5 @@
-import { EVENTS } from '../socket/events';
-import * as msg from '../socket/messages';
+import { EVENTS } from "../socket/events";
+import * as msg from "../socket/messages";
 export default class PubSub {
     private subscriptionTokens;
     publish(event: EVENTS.BROADCAST_NAMESPACED, data: msg.BROADCAST_NAMESPACED_MESSAGE): void;

@@ -93,11 +93,12 @@ export class SocketServer {
     }
 
     private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
-        if (!this.playerSockets[data.player]) {
+        const socket = this.playerSockets[data.player];
+        if (!socket) {
             console.error("Error sending message to player, player socket does not exist", data.player);
             return;
         }
-        this.playerSockets[data.player].emit(data.event, data.payload);
+        socket.emit(data.event, data.payload);
     }
 
     /**

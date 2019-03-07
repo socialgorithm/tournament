@@ -8,6 +8,7 @@ import { INITIAL_STATS, IStats, Match, MatchStats } from "./Match";
 
 export class MatchRunner {
     private pubSub: PubSub;
+    private gameRunner: GameRunner;
 
     constructor(private match: Match, private tournamentID: string) {
         this.pubSub = new PubSub();
@@ -19,7 +20,7 @@ export class MatchRunner {
         this.playNextGame();
     }
 
-    private playNextGame() {
+    private playNextGame = () => {
         const gamesPlayed = this.match.games.length;
         // TODO also stop if more games have been won by one player than games are remaining
         if (gamesPlayed >= this.match.options.maxGames) {
@@ -38,17 +39,18 @@ export class MatchRunner {
         // The game runner will connect to the game server and automatically start the game
         // after connecting
         // tslint:disable-next-line:no-unused-expression
-        new GameRunner(this.match.matchID, game, {});
+        this.gameRunner = new GameRunner(this.match.matchID, game, {});
     }
 
-    private onGameEnd(game: Game) {
+    private onGameEnd = (game: Game) => {
         this.match.games.push(game);
         this.updateMatchStats();
         this.sendStats();
+        this.gameRunner.close();
         this.playNextGame();
     }
 
-    private onMatchEnd() {
+    private onMatchEnd = () => {
         this.updateMatchStats();
         this.pubSub.publishNamespaced(
             this.tournamentID,
@@ -57,9 +59,10 @@ export class MatchRunner {
         );
     }
 
-    private updateMatchStats() {
+    private updateMatchStats = () => {
         // Calculate match stats here
-        const stats: MatchStats = INITIAL_STATS;
+        // TODO use games array
+        const stats: MatchStats = this.match.stats;
         const gameStats: IStats = {};
         // Get winner
         if (stats.wins[0] === stats.wins[1]) {
@@ -98,10 +101,12 @@ export class MatchRunner {
             gameStats.avg = funcs.round(gameStats.avg);
         }
 
+        console.log("Updated Match Stats", stats);
+
         this.match.stats = stats;
     }
 
-    private sendStats() {
+    private sendStats = () => {
         this.pubSub.publishNamespaced(
             this.tournamentID,
             EVENTS.MATCH_UPDATE,

@@ -9,14 +9,44 @@ var GameRunner = (function () {
         var _this = this;
         this.matchID = matchID;
         this.game = game;
+        this.onFinish = function (data) {
+            _this.game.stats = data.stats;
+            _this.game.winner = data.winner;
+            _this.game.tie = data.tie;
+            _this.game.duration = data.duration;
+            _this.game.message = data.message;
+            _this.pubSub.unsubscribeAll();
+            _this.pubSub.publishNamespaced(_this.matchID, events_1.EVENTS.GAME_ENDED, null);
+        };
+        this.onUpdate = function (data) {
+            _this.game.stats = data.stats;
+        };
+        this.onPlayerToGame = function (payload) {
+            console.log("SEND PLAYER TO GAME", payload);
+            if (_this.game.players.indexOf(payload.player) < 0) {
+                return;
+            }
+            console.log("  EMITTING");
+            _this.gameSocket.emit(constants_1.SOCKET_MESSAGE.GAME__PLAYER, {
+                payload: payload.data,
+                player: payload.player
+            });
+        };
+        this.onGameToPlayer = function (player, payload) {
+            _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+                player: player,
+                event: "game",
+                payload: payload
+            });
+        };
         try {
-            var host = options.host || "localhost:5433";
-            if (host.substr(0, 4) !== "http") {
-                host = "http://" + host;
+            var host_1 = options.host || "localhost:5433";
+            if (host_1.substr(0, 4) !== "http") {
+                host_1 = "http://" + host_1;
             }
             console.log("Initialising Game Runner");
-            console.log("Connecting to " + host);
-            this.gameSocket = io(host, {
+            console.log("Connecting to " + host_1);
+            this.gameSocket = io(host_1, {
                 reconnection: true,
                 timeout: 2000
             });
@@ -31,7 +61,7 @@ var GameRunner = (function () {
                 _this.onGameToPlayer(data.player, data.payload);
             });
             this.gameSocket.on("disconnect", function () {
-                console.log("Connection lost!");
+                console.log("Connection to Game Server " + host_1 + " lost!");
             });
         }
         catch (e) {
@@ -40,38 +70,13 @@ var GameRunner = (function () {
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(events_1.EVENTS.PLAYER_TO_GAME, this.onPlayerToGame);
     }
+    GameRunner.prototype.close = function () {
+        this.gameSocket.close();
+    };
     GameRunner.prototype.start = function () {
-        console.log('emitting message', constants_1.SOCKET_MESSAGE.START_GAME);
+        console.log("SEND START GAME");
         this.gameSocket.emit(constants_1.SOCKET_MESSAGE.START_GAME, {
             players: this.game.players
-        });
-    };
-    GameRunner.prototype.onFinish = function (data) {
-        this.game.stats = data.stats;
-        this.game.winner = data.winner;
-        this.game.tie = data.tie;
-        this.game.duration = data.duration;
-        this.game.message = data.message;
-        this.pubSub.unsubscribeAll();
-        this.pubSub.publishNamespaced(this.matchID, events_1.EVENTS.GAME_ENDED, null);
-    };
-    GameRunner.prototype.onUpdate = function (data) {
-        this.game.stats = data.stats;
-    };
-    GameRunner.prototype.onPlayerToGame = function (data) {
-        if (this.game.players.indexOf(data.player) < 0) {
-            return;
-        }
-        this.gameSocket.emit(constants_1.SOCKET_MESSAGE.GAME__PLAYER, {
-            payload: data.payload,
-            player: data.player
-        });
-    };
-    GameRunner.prototype.onGameToPlayer = function (player, payload) {
-        this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
-            player: player,
-            event: "game",
-            payload: payload
         });
     };
     return GameRunner;
