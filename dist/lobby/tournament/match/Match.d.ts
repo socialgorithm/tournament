@@ -28,4 +28,3 @@ export declare type MatchOptions = {
     timeout: number;
     autoPlay: boolean;
 };
-export declare const INITIAL_STATS: MatchStats;

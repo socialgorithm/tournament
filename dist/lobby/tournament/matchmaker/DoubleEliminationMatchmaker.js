@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
 var uuid = require("uuid/v4");
-var Match_1 = require("../match/Match");
 var RESULT_TIE = -1;
 var DoubleEliminationMatchmaker = (function () {
     function DoubleEliminationMatchmaker(players, options) {
@@ -145,6 +144,9 @@ var DoubleEliminationMatchmaker = (function () {
             .sort(function (a, b) { return _this.getPlayerScore(b) - _this.getPlayerScore(a); }).map(function (player) { return player; });
     };
     DoubleEliminationMatchmaker.prototype.getPlayerScore = function (player) {
+        if (this.playerStats[player].wins + this.playerStats[player].losses < 1) {
+            return 0;
+        }
         return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
     };
     DoubleEliminationMatchmaker.prototype.matchPlayers = function (players) {
@@ -174,7 +176,11 @@ var DoubleEliminationMatchmaker = (function () {
             players: [playerA, playerB],
             state: "upcoming",
             winner: -1,
-            stats: Match_1.INITIAL_STATS
+            stats: {
+                gamesCompleted: 0,
+                gamesTied: 0,
+                wins: []
+            }
         };
         if (parentMatches) {
             match.parentMatches = parentMatches;

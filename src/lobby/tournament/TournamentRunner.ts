@@ -1,4 +1,6 @@
 import * as uuid from "uuid/v4";
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:tournamentRunner");
 
 import { Player } from "@socialgorithm/game-server/dist/constants";
 import PubSub from "../../lib/PubSub";
@@ -22,6 +24,7 @@ export class TournamentRunner {
   private pubSub: PubSub;
   private matchmaker: IMatchMaker;
   private matches: Match[] = [];
+  private currentMatchRunner?: MatchRunner = null;
 
   constructor(options: TournamentOptions, players: Player[], lobby: string) {
     this.tournament = {
@@ -49,7 +52,7 @@ export class TournamentRunner {
 
   public start = () => {
     if (this.tournament.started) {
-      console.log("Tournament already started, not starting", this.getTournament());
+      debug("Tournament already started, not starting %O", this.getTournament());
       return;
     }
 
@@ -88,6 +91,7 @@ export class TournamentRunner {
   }
 
   private onTournamentEnd = () => {
+    debug("Tournament Ended in %s", this.tournament.lobby);
     this.tournament.finished = true;
     this.tournament.waiting = false;
     this.matchmaker.updateStats(this.matches, true);
@@ -95,13 +99,15 @@ export class TournamentRunner {
   }
 
   private playNextMatch = () => {
-    this.matchmaker.updateStats(this.matches);
+    if (this.currentMatchRunner) {
+      this.currentMatchRunner.onEnd();
+    }
     this.tournament.waiting = false;
     this.tournament.ranking = this.matchmaker.getRanking();
     if (this.matchmaker.isFinished()) {
       this.onTournamentEnd();
+      return;
     }
-    this.sendStats();
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
     if (upcomingMatches.length < 1) {
@@ -110,10 +116,12 @@ export class TournamentRunner {
       return;
     }
 
+    this.matchmaker.updateStats(this.matches);
+    this.sendStats();
+
     const nextMatch = upcomingMatches[0];
     // Run the match
-    const matchRunner = new MatchRunner(nextMatch, this.tournament.tournamentID);
-    matchRunner.start();
+    this.currentMatchRunner = new MatchRunner(nextMatch, this.tournament.tournamentID);
   }
 
   private sendStats = (): void => {

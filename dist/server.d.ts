@@ -4,5 +4,4 @@ export declare class Server {
     private LobbyManager;
     constructor(options: IOptions);
     start(): void;
-    private log;
 }

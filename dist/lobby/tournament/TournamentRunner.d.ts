@@ -11,6 +11,7 @@ export declare class TournamentRunner {
     private pubSub;
     private matchmaker;
     private matches;
+    private currentMatchRunner?;
     constructor(options: TournamentOptions, players: Player[], lobby: string);
     getTournament: () => {
         tournamentID: string;

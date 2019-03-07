@@ -1,6 +1,6 @@
 import { Player } from "@socialgorithm/game-server/dist/constants";
 import * as uuid from "uuid/v4";
-import { INITIAL_STATS, Match, MatchOptions } from "../match/Match";
+import { Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";
 
@@ -195,6 +195,9 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
   }
 
   private getPlayerScore(player: Player): number {
+    if (this.playerStats[player].wins + this.playerStats[player].losses < 1) {
+      return 0;
+    }
     return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
   }
 
@@ -230,7 +233,11 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
       players: [playerA, playerB],
       state: "upcoming",
       winner: -1,
-      stats: INITIAL_STATS,
+      stats: {
+        gamesCompleted: 0,
+        gamesTied: 0,
+        wins: [],
+      },
     };
 
     if (parentMatches) {

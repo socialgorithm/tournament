@@ -1,4 +1,6 @@
 import * as randomWord from "random-word";
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:lobbyRunner");
 
 import { Player } from "@socialgorithm/game-server/dist/constants";
 import PubSub from "../lib/PubSub";
@@ -90,6 +92,8 @@ export class LobbyRunner {
         player,
       });
     }
+
+    debug("Added player %s to lobby %s", player, lobbyName);
   }
 
   /**
@@ -111,12 +115,16 @@ export class LobbyRunner {
       this.lobby.token,
     );
 
+    debug("Starting tournament in lobby %s", lobbyName);
+
     this.tournamentRunner.start();
   });
 
   // tslint:disable-next-line:member-ordering
   private continueTournament = this.ifAdmin((lobbyName: string) => {
     this.tournamentRunner.continue();
+
+    debug("Continue tournament in lobby %s", lobbyName);
 
     // Notify
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
@@ -130,6 +138,8 @@ export class LobbyRunner {
   private kickPlayer = this.ifAdmin((lobbyName: string, data: LOBBY_PLAYER_KICK_MESSAGE) => {
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
+
+    debug("Kick player %s in lobby %s", data.player, lobbyName);
 
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby player kicked",
@@ -155,6 +165,8 @@ export class LobbyRunner {
     }
 
     this.lobby.bannedPlayers.push(data.player);
+
+    debug("Ban player %s in lobby %s", data.player, lobbyName);
 
     this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
       event: "lobby player banned",

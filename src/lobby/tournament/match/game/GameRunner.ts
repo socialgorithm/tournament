@@ -1,4 +1,7 @@
-import { GameEndPayload, GameMessage, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/dist/constants";
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:gameRunner");
+
+import { GameEndPayload, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/dist/constants";
 import * as io from "socket.io-client";
 
 import PubSub from "../../../../lib/PubSub";
@@ -22,8 +25,8 @@ export class GameRunner {
                 host = "http://" + host;
             }
 
-            console.log("Initialising Game Runner");
-            console.log("Connecting to " + host);
+            debug("Initialising Game Runner");
+            debug("Connecting to %s", host);
 
             this.gameSocket = io(host, {
                 reconnection: true,
@@ -31,7 +34,7 @@ export class GameRunner {
             });
 
             this.gameSocket.on("connect", () => {
-                console.log(`Connected to Game Server, starting game`);
+                debug(`Connected to Game Server, starting game`);
                 this.start();
             });
 
@@ -39,15 +42,14 @@ export class GameRunner {
             this.gameSocket.on(SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
 
             this.gameSocket.on(SOCKET_MESSAGE.GAME__PLAYER, (data: any) => {
-                console.log("Proxy message to player", data);
                 this.onGameToPlayer(data.player, data.payload);
             });
 
             this.gameSocket.on("disconnect", () => {
-                console.log(`Connection to Game Server ${host} lost!`);
+                debug("Connection to Game Server %s lost!", host);
             });
         } catch (e) {
-            console.log("tournament-server: Unable to connect to Game Server:", e);
+            debug("sg: Unable to connect to Game Server. %O", e);
         }
 
         // PubSub Subscriptions
@@ -63,18 +65,18 @@ export class GameRunner {
      * Play an individual game between two players
      */
     private start() {
-        console.log("SEND START GAME");
+        debug("Start game");
         this.gameSocket.emit(SOCKET_MESSAGE.START_GAME, {
             players: this.game.players,
         });
     }
 
-    private onFinish = (data: GameEndPayload) => {
-        this.game.stats = data.stats;
-        this.game.winner = data.winner;
-        this.game.tie = data.tie;
-        this.game.duration = data.duration;
-        this.game.message = data.message;
+    private onFinish = (data: { payload: GameEndPayload }) => {
+        this.game.stats = data.payload.stats;
+        this.game.winner = data.payload.winner;
+        this.game.tie = data.payload.tie;
+        this.game.duration = data.payload.duration;
+        this.game.message = data.payload.message;
 
         this.pubSub.unsubscribeAll();
 
@@ -90,12 +92,10 @@ export class GameRunner {
     }
 
     private onPlayerToGame = (payload: any) => {
-        console.log("SEND PLAYER TO GAME", payload);
         // receives all player messages, check if it belongs here
         if (this.game.players.indexOf(payload.player) < 0) {
             return;
         }
-        console.log("  EMITTING");
         // received message from player, relay it to the game server
         this.gameSocket.emit(SOCKET_MESSAGE.GAME__PLAYER, {
             payload: payload.data,

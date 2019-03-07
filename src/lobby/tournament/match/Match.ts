@@ -34,11 +34,3 @@ export type MatchOptions = {
     timeout: number,
     autoPlay: boolean,
 };
-
-export const INITIAL_STATS: MatchStats = {
-    gamesCompleted: 0,
-    gamesTied: 0,
-    wins: [],
-    // times: [],
-    // timeouts: [],
-};

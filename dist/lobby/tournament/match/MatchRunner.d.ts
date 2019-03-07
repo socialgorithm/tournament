@@ -5,7 +5,7 @@ export declare class MatchRunner {
     private pubSub;
     private gameRunner;
     constructor(match: Match, tournamentID: string);
-    start(): void;
+    onEnd(): void;
     private playNextGame;
     private onGameEnd;
     private onMatchEnd;

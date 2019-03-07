@@ -1,8 +1,7 @@
-import { SocketServer } from "./socket/socketServer";
-import { banner } from "./lib/banner";
 import { IOptions } from "./cli/options";
-import { LobbyRunner } from './lobby/LobbyRunner';
-import { LobbyManager } from './lobby/LobbyManager';
+import { banner } from "./lib/banner";
+import { LobbyManager } from "./lobby/LobbyManager";
+import { SocketServer } from "./socket/socketServer";
 
 /**
  * Entrypoint for the SG Tournament Server
@@ -22,15 +21,5 @@ export class Server {
         console.log(banner);
 
         this.socketServer.start();
-    }
-
-    /**
-     * Log a message to the console
-     * @param message
-     */
-    private log(message: string): void {
-        const time = (new Date()).toTimeString().substr(0, 5);
-        // tslint:disable-next-line:no-console
-        console.log(`[${time}]`, message);
     }
 }

@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+var debug = require("debug")("sg:lobbyManager");
 var PubSub_1 = require("../lib/PubSub");
 var events_1 = require("../socket/events");
 var LobbyRunner_1 = require("./LobbyRunner");
@@ -15,6 +16,7 @@ var LobbyManager = (function () {
                 namespace: lobbyRunner.getLobby().token,
                 player: data.player
             });
+            debug("Created lobby %s", lobbyRunner.getLobby().token);
             _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
                 event: "lobby created",
                 payload: {

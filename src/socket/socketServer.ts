@@ -2,6 +2,8 @@ import { Player } from "@socialgorithm/game-server/dist/constants";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:socketServer");
 import PubSub from "../lib/PubSub";
 import { EVENTS } from "./events";
 import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "./messages";
@@ -23,7 +25,7 @@ export class SocketServer {
         app.listen(this.port);
 
         // tslint:disable-next-line:no-console
-        console.log(`Socket Listening on port ${this.port}`);
+        debug("Socket Listening on port: %d", this.port);
 
         this.io.use((socket: SocketIO.Socket, next: any) => {
             const isClient = socket.request._query.client || false;
@@ -45,12 +47,12 @@ export class SocketServer {
             if (this.playerSockets[player]) {
                 // Token already in use
                 // tslint:disable-next-line:no-console
-                console.warn("Player already connected", player);
+                debug("Player already connected %s", player);
                 return false;
             }
 
             // tslint:disable-next-line:no-console
-            console.log("Connected ", player);
+            debug("Connected %s", player);
 
             // Store the socket
             this.playerSockets[token] = socket;
@@ -82,7 +84,7 @@ export class SocketServer {
     private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
             // tslint:disable-next-line:no-console
-            console.warn("Error adding player to namespace, player socket does not exist", data.player);
+            debug("Error adding player (%s) to namespace, player socket does not exist", data.player);
             return;
         }
         this.playerSockets[data.player].join(data.namespace);
@@ -95,7 +97,7 @@ export class SocketServer {
     private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
         const socket = this.playerSockets[data.player];
         if (!socket) {
-            console.error("Error sending message to player, player socket does not exist", data.player);
+            debug("Error sending message to player (%s), player socket does not exist", data.player);
             return;
         }
         socket.emit(data.event, data.payload);
@@ -115,7 +117,7 @@ export class SocketServer {
 
     private onPlayerDisconnect = (player: Player) => () => {
         // Just remove the player from the list
-        console.log("Removing " + player + " from server");
+        debug("Removing player (%s) from server", player);
         delete this.playerSockets[player];
     }
 

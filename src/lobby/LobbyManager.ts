@@ -1,3 +1,6 @@
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:lobbyManager");
+
 import PubSub from "../lib/PubSub";
 import { EVENTS } from "../socket/events";
 import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../socket/messages";
@@ -24,6 +27,8 @@ export class LobbyManager {
             namespace: lobbyRunner.getLobby().token,
             player: data.player,
         });
+
+        debug("Created lobby %s", lobbyRunner.getLobby().token);
 
         // Send confirmation to player
         this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {

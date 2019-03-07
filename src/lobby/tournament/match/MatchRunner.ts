@@ -1,7 +1,9 @@
 import * as uuid from "uuid/v4";
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:matchRunner");
+
 import PubSub from "../../../lib/PubSub";
 import { EVENTS } from "../../../socket/events";
-import * as funcs from "./funcs";
 import { Game } from "./game/Game";
 import { GameRunner } from "./game/GameRunner";
 import { Match, MatchStats } from "./Match";
@@ -13,11 +15,18 @@ export class MatchRunner {
     constructor(private match: Match, private tournamentID: string) {
         this.pubSub = new PubSub();
         this.pubSub.subscribeNamespaced(this.match.matchID, EVENTS.GAME_ENDED, this.onGameEnd);
-    }
 
-    public start() {
+        debug("Starting match");
         this.match.state = "playing";
         this.playNextGame();
+    }
+
+    public onEnd() {
+        this.pubSub.unsubscribeAll();
+        if (this.gameRunner) {
+            this.gameRunner.close();
+        }
+        delete this.gameRunner;
     }
 
     private playNextGame = () => {
@@ -43,6 +52,7 @@ export class MatchRunner {
     }
 
     private onGameEnd = (game: Game) => {
+        debug("Finished game, winner %s", game.winner);
         this.match.games.push(game);
         this.updateMatchStats();
         this.sendStats();
@@ -53,6 +63,7 @@ export class MatchRunner {
     private onMatchEnd = () => {
         this.match.state = "finished";
         this.updateMatchStats();
+        debug("Finished match %o", this.match.stats);
         this.pubSub.publishNamespaced(
             this.tournamentID,
             EVENTS.MATCH_ENDED,
@@ -62,29 +73,27 @@ export class MatchRunner {
 
     private updateMatchStats = () => {
         // Calculate match stats here
-        const stats: MatchStats = this.match.stats;
-        stats.gamesCompleted = this.match.games.length;
-        stats.gamesTied = this.match.games.filter(game => game.tie).length;
-        stats.wins = this.match.players.map(() => 0);
+        this.match.stats.gamesCompleted = this.match.games.length;
+        this.match.stats.gamesTied = this.match.games.filter(game => game.tie).length;
+        this.match.stats.wins = this.match.players.map(() => 0);
         this.match.games.forEach(game => {
             if (!game.tie && game.winner) {
-                stats.wins[this.match.players.indexOf(game.winner)]++;
+                this.match.stats.wins[this.match.players.indexOf(game.winner)]++;
             }
         });
 
         // Get the match winner
-        let maxWins = stats.wins[0];
+        let maxWins = this.match.stats.wins[0];
         let maxIndex = 0;
 
-        for (let i = 1; i < stats.wins.length; i++) {
-            if (stats.wins[i] > maxWins) {
+        for (let i = 1; i < this.match.stats.wins.length; i++) {
+            if (this.match.stats.wins[i] > maxWins) {
                 maxIndex = i;
-                maxWins = stats.wins[i];
+                maxWins = this.match.stats.wins[i];
             }
         }
 
         this.match.winner = maxIndex;
-        this.match.stats = stats;
     }
 
     private sendStats = () => {

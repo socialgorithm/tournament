@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var randomWord = require("random-word");
+var debug = require("debug")("sg:lobbyRunner");
 var PubSub_1 = require("../lib/PubSub");
 var events_1 = require("../socket/events");
 var TournamentRunner_1 = require("./tournament/TournamentRunner");
@@ -57,6 +58,7 @@ var LobbyRunner = (function () {
                     player: player
                 });
             }
+            debug("Added player %s to lobby %s", player, lobbyName);
         };
         this.ifAdmin = function (next) { return function (data) {
             var lobbyName = data.payload.token;
@@ -67,10 +69,12 @@ var LobbyRunner = (function () {
         }; };
         this.startTournament = this.ifAdmin(function (lobbyName, data) {
             _this.tournamentRunner = new TournamentRunner_1.TournamentRunner(data.payload.options, _this.lobby.players, _this.lobby.token);
+            debug("Starting tournament in lobby %s", lobbyName);
             _this.tournamentRunner.start();
         });
         this.continueTournament = this.ifAdmin(function (lobbyName) {
             _this.tournamentRunner["continue"]();
+            debug("Continue tournament in lobby %s", lobbyName);
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby tournament continued",
                 namespace: lobbyName,
@@ -80,6 +84,7 @@ var LobbyRunner = (function () {
         this.kickPlayer = this.ifAdmin(function (lobbyName, data) {
             var playerIndex = _this.lobby.players.indexOf(data.player);
             _this.lobby.players.splice(playerIndex, 1);
+            debug("Kick player %s in lobby %s", data.player, lobbyName);
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby player kicked",
                 namespace: lobbyName,
@@ -98,6 +103,7 @@ var LobbyRunner = (function () {
                 return;
             }
             _this.lobby.bannedPlayers.push(data.player);
+            debug("Ban player %s in lobby %s", data.player, lobbyName);
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby player banned",
                 namespace: lobbyName,

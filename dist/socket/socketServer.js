@@ -3,6 +3,7 @@ exports.__esModule = true;
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
+var debug = require("debug")("sg:socketServer");
 var PubSub_1 = require("../lib/PubSub");
 var events_1 = require("./events");
 var SocketServer = (function () {
@@ -12,7 +13,7 @@ var SocketServer = (function () {
         this.playerSockets = {};
         this.addPlayerToNamespace = function (data) {
             if (!_this.playerSockets[data.player]) {
-                console.warn("Error adding player to namespace, player socket does not exist", data.player);
+                debug("Error adding player (%s) to namespace, player socket does not exist", data.player);
                 return;
             }
             _this.playerSockets[data.player].join(data.namespace);
@@ -23,7 +24,7 @@ var SocketServer = (function () {
         this.sendMessageToPlayer = function (data) {
             var socket = _this.playerSockets[data.player];
             if (!socket) {
-                console.error("Error sending message to player, player socket does not exist", data.player);
+                debug("Error sending message to player (%s), player socket does not exist", data.player);
                 return;
             }
             socket.emit(data.event, data.payload);
@@ -36,7 +37,7 @@ var SocketServer = (function () {
             _this.pubSub.publish(type, data);
         }; };
         this.onPlayerDisconnect = function (player) { return function () {
-            console.log("Removing " + player + " from server");
+            debug("Removing player (%s) from server", player);
             delete _this.playerSockets[player];
         }; };
         this.pubSub = new PubSub_1["default"]();
@@ -46,7 +47,7 @@ var SocketServer = (function () {
         var app = http.createServer(this.handler);
         this.io = io(app);
         app.listen(this.port);
-        console.log("Socket Listening on port " + this.port);
+        debug("Socket Listening on port: %d", this.port);
         this.io.use(function (socket, next) {
             var isClient = socket.request._query.client || false;
             if (isClient) {
@@ -63,10 +64,10 @@ var SocketServer = (function () {
             var token = socket.handshake.query.token;
             var player = token;
             if (_this.playerSockets[player]) {
-                console.warn("Player already connected", player);
+                debug("Player already connected %s", player);
                 return false;
             }
-            console.log("Connected ", player);
+            debug("Connected %s", player);
             _this.playerSockets[token] = socket;
             var listenToEvents = [
                 events_1.EVENTS.LOBBY_CREATE,

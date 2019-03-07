@@ -12,6 +12,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var uuid = require("uuid/v4");
+var debug = require("debug")("sg:tournamentRunner");
 var PubSub_1 = require("../../lib/PubSub");
 var events_1 = require("../../socket/events");
 var MatchRunner_1 = require("./match/MatchRunner");
@@ -21,12 +22,13 @@ var TournamentRunner = (function () {
     function TournamentRunner(options, players, lobby) {
         var _this = this;
         this.matches = [];
+        this.currentMatchRunner = null;
         this.getTournament = function () {
             return __assign({ matches: _this.matches }, _this.tournament);
         };
         this.start = function () {
             if (_this.tournament.started) {
-                console.log("Tournament already started, not starting", _this.getTournament());
+                debug("Tournament already started, not starting %O", _this.getTournament());
                 return;
             }
             _this.tournament.started = true;
@@ -57,6 +59,7 @@ var TournamentRunner = (function () {
             _this.playNextMatch();
         };
         this.onTournamentEnd = function () {
+            debug("Tournament Ended in %s", _this.tournament.lobby);
             _this.tournament.finished = true;
             _this.tournament.waiting = false;
             _this.matchmaker.updateStats(_this.matches, true);
@@ -64,22 +67,25 @@ var TournamentRunner = (function () {
         };
         this.playNextMatch = function () {
             var _a;
-            _this.matchmaker.updateStats(_this.matches);
+            if (_this.currentMatchRunner) {
+                _this.currentMatchRunner.onEnd();
+            }
             _this.tournament.waiting = false;
             _this.tournament.ranking = _this.matchmaker.getRanking();
             if (_this.matchmaker.isFinished()) {
                 _this.onTournamentEnd();
+                return;
             }
-            _this.sendStats();
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
                 (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());
                 _this.playNextMatch();
                 return;
             }
+            _this.matchmaker.updateStats(_this.matches);
+            _this.sendStats();
             var nextMatch = upcomingMatches[0];
-            var matchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID);
-            matchRunner.start();
+            _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID);
         };
         this.sendStats = function () {
             _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
