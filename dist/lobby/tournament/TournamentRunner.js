@@ -67,8 +67,9 @@ var TournamentRunner = (function () {
         };
         this.onMatchEnd = function () {
             _this.tournament.waiting = !_this.tournament.options.autoPlay;
+            _this.matchmaker.updateStats(_this.matches);
+            _this.sendStats();
             if (_this.tournament.waiting) {
-                _this.sendStats();
                 return;
             }
             _this.playNextMatch();
@@ -83,8 +84,6 @@ var TournamentRunner = (function () {
                 _this.onTournamentEnd();
                 return;
             }
-            _this.matchmaker.updateStats(_this.matches);
-            _this.sendStats();
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
                 (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());

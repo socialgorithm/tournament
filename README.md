@@ -20,7 +20,7 @@ You can directly deploy the server to Heroku for a quick start:
 
 When deploying, choose any available App Name (or let Heroku decide for you), and click on Deploy. Once it's finished browse to `https://{app-name}.herokuapp.com` and you should see the server welcome message.
 
-If you open our [web client](https://uttt.socialgorithm.org), you can then connect it to the server by clicking on "Connect" and entering `https://{app-name}.herokuapp.com` as the server host.
+If you open our [web client](https://play.socialgorithm.org), you can then connect it to the server by clicking on "Connect" and entering `https://{app-name}.herokuapp.com` as the server host.
 
 ## Run locally
 
