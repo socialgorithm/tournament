@@ -16,7 +16,7 @@ var GameRunner = (function () {
             _this.game.duration = data.duration;
             _this.game.message = data.message;
             _this.pubSub.unsubscribeAll();
-            _this.pubSub.publishNamespaced(_this.matchID, events_1.EVENTS.GAME_ENDED, null);
+            _this.pubSub.publishNamespaced(_this.matchID, events_1.EVENTS.GAME_ENDED, _this.game);
         };
         this.onUpdate = function (data) {
             _this.game.stats = data.stats;

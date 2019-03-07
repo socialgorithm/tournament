@@ -5,7 +5,6 @@ var PubSub_1 = require("../../../lib/PubSub");
 var events_1 = require("../../../socket/events");
 var funcs = require("./funcs");
 var GameRunner_1 = require("./game/GameRunner");
-var Match_1 = require("./Match");
 var MatchRunner = (function () {
     function MatchRunner(match, tournamentID) {
         var _this = this;
@@ -40,7 +39,7 @@ var MatchRunner = (function () {
             _this.pubSub.publishNamespaced(_this.tournamentID, events_1.EVENTS.MATCH_ENDED, null);
         };
         this.updateMatchStats = function () {
-            var stats = Match_1.INITIAL_STATS;
+            var stats = _this.match.stats;
             var gameStats = {};
             if (stats.wins[0] === stats.wins[1]) {
                 gameStats.winner = -1;
