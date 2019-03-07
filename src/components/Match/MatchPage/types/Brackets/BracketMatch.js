@@ -75,9 +75,9 @@ export default class BracketMatch extends React.PureComponent {
               { content }
               <div className="bottom">
                 <span>
-                  W { bracket.currentMatch.wins[playerIndex] || 0 } - 
-                  L { bracket.currentMatch.wins[1 - playerIndex] || 0 } - 
-                  T { bracket.currentMatch.gamesTied || 0 }
+                  W { bracket.currentMatch.stats.wins[playerIndex] || 0 } - 
+                  L { bracket.currentMatch.stats.wins[1 - playerIndex] || 0 } - 
+                  T { bracket.currentMatch.stats.gamesTied || 0 }
                 </span>
               </div>
             </Fragment>
