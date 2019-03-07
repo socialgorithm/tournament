@@ -61,47 +61,27 @@ export class MatchRunner {
 
     private updateMatchStats = () => {
         // Calculate match stats here
-        // TODO use games array
         const stats: MatchStats = this.match.stats;
-        const gameStats: IStats = {};
-        // Get winner
-        if (stats.wins[0] === stats.wins[1]) {
-            gameStats.winner = -1;
-        } else if (stats.wins[0] > stats.wins[1]) {
-            gameStats.winner = 0;
-        } else {
-            gameStats.winner = 1;
+        stats.gamesCompleted = this.match.games.length;
+        stats.gamesTied = this.match.games.filter(game => game.tie).length;
+        stats.wins = this.match.players.map(() => 0);
+        this.match.games.forEach(game => {
+            if (!game.tie && game.winner) {
+                stats.wins[this.match.players.indexOf(game.winner)]++;
+            }
+        });
+
+        // Get the match winner
+        let maxWins = stats.wins[0];
+        let maxIndex = 0;
+
+        for (let i = 1; i < stats.wins.length; i++) {
+            if (stats.wins[i] > maxWins) {
+                maxIndex = i;
+                maxWins = stats.wins[i];
+            }
         }
-
-        gameStats.winPercentages = [
-            funcs.getPercentage(stats.wins[0], stats.gamesCompleted),
-            funcs.getPercentage(stats.wins[1], stats.gamesCompleted),
-        ];
-
-        gameStats.tiePercentage = funcs.getPercentage(stats.gamesTied, stats.gamesCompleted);
-
-        // Get avg exec time
-        let sum = 0;
-        gameStats.total = 0;
-        gameStats.max = 0;
-        gameStats.avg = 0;
-        gameStats.min = 1000;
-
-        if (stats.times.length > 0) {
-            stats.times.forEach(eachTime => {
-                gameStats.total += eachTime;
-                sum += eachTime;
-                gameStats.max = Math.max(gameStats.max, eachTime);
-                gameStats.min = Math.min(gameStats.min, eachTime);
-            });
-            gameStats.avg = funcs.round(sum / stats.times.length);
-            gameStats.total = funcs.round(gameStats.total);
-            gameStats.max = funcs.round(gameStats.max);
-            gameStats.min = funcs.round(gameStats.min);
-            gameStats.avg = funcs.round(gameStats.avg);
-        }
-
-        console.log("Updated Match Stats", stats);
+        stats.winner = maxIndex;
 
         this.match.stats = stats;
     }
