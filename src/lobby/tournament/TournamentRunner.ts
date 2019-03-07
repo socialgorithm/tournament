@@ -90,16 +90,18 @@ export class TournamentRunner {
   private onTournamentEnd = () => {
     this.tournament.finished = true;
     this.tournament.waiting = false;
+    this.matchmaker.updateStats(this.matches, true);
     this.sendStats();
   }
 
   private playNextMatch = () => {
-    this.sendStats();
+    this.matchmaker.updateStats(this.matches);
     this.tournament.waiting = false;
     this.tournament.ranking = this.matchmaker.getRanking();
     if (this.matchmaker.isFinished()) {
       this.onTournamentEnd();
     }
+    this.sendStats();
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
     if (upcomingMatches.length < 1) {

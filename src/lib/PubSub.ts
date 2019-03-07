@@ -19,10 +19,6 @@ export default class PubSub {
     public publish(event: EVENTS.PLAYER_TO_GAME, data: msg.PLAYER_TO_GAME_MESSAGE): void;
     public publish(event: EVENTS.SERVER_TO_PLAYER, data: msg.SERVER_TO_PLAYER_MESSAGE): void;
     public publish(event: string, data: any) {
-        console.log(`Publish event: ${event}`);
-        if (event === EVENTS.SERVER_TO_PLAYER) {
-            console.log(data);
-        }
         PubSubJS.publish(event, data);
     }
 

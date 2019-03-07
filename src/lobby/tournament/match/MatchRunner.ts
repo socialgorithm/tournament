@@ -51,11 +51,12 @@ export class MatchRunner {
     }
 
     private onMatchEnd = () => {
+        this.match.state = "finished";
         this.updateMatchStats();
         this.pubSub.publishNamespaced(
             this.tournamentID,
             EVENTS.MATCH_ENDED,
-            null,
+            this.match,
         );
     }
 
@@ -81,8 +82,8 @@ export class MatchRunner {
                 maxWins = stats.wins[i];
             }
         }
-        stats.winner = maxIndex;
 
+        this.match.winner = maxIndex;
         this.match.stats = stats;
     }
 

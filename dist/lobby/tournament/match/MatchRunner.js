@@ -34,8 +34,9 @@ var MatchRunner = (function () {
             _this.playNextGame();
         };
         this.onMatchEnd = function () {
+            _this.match.state = "finished";
             _this.updateMatchStats();
-            _this.pubSub.publishNamespaced(_this.tournamentID, events_1.EVENTS.MATCH_ENDED, null);
+            _this.pubSub.publishNamespaced(_this.tournamentID, events_1.EVENTS.MATCH_ENDED, _this.match);
         };
         this.updateMatchStats = function () {
             var stats = _this.match.stats;
@@ -55,7 +56,7 @@ var MatchRunner = (function () {
                     maxWins = stats.wins[i];
                 }
             }
-            stats.winner = maxIndex;
+            _this.match.winner = maxIndex;
             _this.match.stats = stats;
         };
         this.sendStats = function () {

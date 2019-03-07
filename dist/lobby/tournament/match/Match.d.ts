@@ -13,10 +13,6 @@ export declare type MatchStats = {
     gamesCompleted: number;
     gamesTied: number;
     wins: number[];
-    times: number[];
-    timeouts: number[];
-    state: "playing" | "finished" | "upcoming";
-    winner: number;
 };
 export interface IStats {
     winner?: number;

@@ -59,16 +59,18 @@ var TournamentRunner = (function () {
         this.onTournamentEnd = function () {
             _this.tournament.finished = true;
             _this.tournament.waiting = false;
+            _this.matchmaker.updateStats(_this.matches, true);
             _this.sendStats();
         };
         this.playNextMatch = function () {
             var _a;
-            _this.sendStats();
+            _this.matchmaker.updateStats(_this.matches);
             _this.tournament.waiting = false;
             _this.tournament.ranking = _this.matchmaker.getRanking();
             if (_this.matchmaker.isFinished()) {
                 _this.onTournamentEnd();
             }
+            _this.sendStats();
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
                 (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());
