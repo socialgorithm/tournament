@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import { Match, MatchOptions } from "../match/Match";
 import IMatchmaker from "./Matchmaker";
 export default class FreeForAllMatchmaker implements IMatchmaker {

@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import { TournamentOptions } from "../lobby/tournament/TournamentRunner";
 
 /**

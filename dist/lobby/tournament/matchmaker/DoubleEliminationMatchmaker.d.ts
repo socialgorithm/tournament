@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import { Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";

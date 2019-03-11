@@ -1,9 +1,10 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:gameRunner");
 
-import { GameEndPayload, GameUpdatePayload, Player, SOCKET_MESSAGE } from "@socialgorithm/game-server/dist/constants";
 import * as io from "socket.io-client";
 
+import { GAME_SOCKET_MESSAGE, Player } from "@socialgorithm/game-server";
+import { GameEndedMessage, GameToPlayerMessage, GameUpdatedMessage } from "@socialgorithm/game-server/dist/GameMessage";
 import PubSub from "../../../../lib/PubSub";
 import { EVENTS } from "../../../../socket/events";
 import { Game } from "./Game";
@@ -38,10 +39,10 @@ export class GameRunner {
                 this.start();
             });
 
-            this.gameSocket.on(SOCKET_MESSAGE.UPDATE, this.onUpdate);
-            this.gameSocket.on(SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
+            this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_UPDATED, this.onUpdate);
+            this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
 
-            this.gameSocket.on(SOCKET_MESSAGE.GAME__PLAYER, (data: any) => {
+            this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME__PLAYER, (data: GameToPlayerMessage) => {
                 this.onGameToPlayer(data.player, data.payload);
             });
 
@@ -66,17 +67,17 @@ export class GameRunner {
      */
     private start() {
         debug("Start game");
-        this.gameSocket.emit(SOCKET_MESSAGE.START_GAME, {
+        this.gameSocket.emit(GAME_SOCKET_MESSAGE.START_GAME, {
             players: this.game.players,
         });
     }
 
-    private onFinish = (data: { payload: GameEndPayload }) => {
-        this.game.stats = data.payload.stats;
-        this.game.winner = data.payload.winner;
-        this.game.tie = data.payload.tie;
-        this.game.duration = data.payload.duration;
-        this.game.message = data.payload.message;
+    private onFinish = (message: GameEndedMessage) => {
+        this.game.stats = message.payload;
+        this.game.winner = message.winner;
+        this.game.tie = message.tie;
+        this.game.duration = message.duration;
+        this.game.message = message.message;
 
         this.pubSub.unsubscribeAll();
 
@@ -87,8 +88,8 @@ export class GameRunner {
         );
     }
 
-    private onUpdate = (data: GameUpdatePayload) => {
-        this.game.stats = data.stats;
+    private onUpdate = (message: GameUpdatedMessage) => {
+        this.game.stats = message.payload;
     }
 
     private onPlayerToGame = (payload: any) => {
@@ -97,7 +98,7 @@ export class GameRunner {
             return;
         }
         // received message from player, relay it to the game server
-        this.gameSocket.emit(SOCKET_MESSAGE.GAME__PLAYER, {
+        this.gameSocket.emit(GAME_SOCKET_MESSAGE.GAME__PLAYER, {
             payload: payload.data,
             player: payload.player,
         });

@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import { TournamentOptions } from "./TournamentRunner";
 export declare type Tournament = {
     tournamentID: string;

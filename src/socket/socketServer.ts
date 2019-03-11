@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
@@ -25,6 +25,7 @@ export class SocketServer {
         app.listen(this.port);
 
         // tslint:disable-next-line:no-console
+        console.log(`Socket Listening on port: ${this.port}`);
         debug("Socket Listening on port: %d", this.port);
 
         this.io.use((socket: SocketIO.Socket, next: any) => {

@@ -2,7 +2,7 @@ import * as uuid from "uuid/v4";
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:tournamentRunner");
 
-import { Player } from "@socialgorithm/game-server/dist/constants";
+import { Player } from "@socialgorithm/game-server";
 import PubSub from "../../lib/PubSub";
 import { EVENTS } from "../../socket/events";
 import { Match, MatchOptions } from "./match/Match";
