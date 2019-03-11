@@ -21,7 +21,7 @@ export class GameRunner {
     constructor(private matchID: string, private game: Game, options: GameRunnerOptions) {
         // Game Server Socket Setup
         try {
-            let host = options.host || "localhost:5433";
+            let host = process.env.GAME_SERVER || options.host || "localhost:5433";
             if (host.substr(0, 4) !== "http") {
                 host = "http://" + host;
             }

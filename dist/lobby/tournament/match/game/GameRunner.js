@@ -39,7 +39,7 @@ var GameRunner = (function () {
             });
         };
         try {
-            var host_1 = options.host || "localhost:5433";
+            var host_1 = process.env.GAME_SERVER || options.host || "localhost:5433";
             if (host_1.substr(0, 4) !== "http") {
                 host_1 = "http://" + host_1;
             }
