@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Header, Icon, Segment, Message } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 
-import './index.css';
+import './index.scss';
 
 class Uploader extends React.Component {
   constructor(props) {

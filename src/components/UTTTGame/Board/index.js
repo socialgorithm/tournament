@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import '../style.css';
+import '../style.scss';
 
 class Board extends React.Component {
   render() {
@@ -57,7 +57,7 @@ Board.propTypes = {
   height: PropTypes.number,
   game: PropTypes.object.isRequired,
   lastMove: PropTypes.number,
-  highlightBoard: PropTypes.boolean,
+  highlightBoard: PropTypes.bool,
   highlightMove: PropTypes.array,
 };
 

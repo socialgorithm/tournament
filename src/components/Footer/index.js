@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 
-import './index.css';
+import './index.scss';
 
 export default () => {
     return (

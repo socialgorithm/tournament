@@ -5,7 +5,7 @@ import UTTT from '@socialgorithm/ultimate-ttt';
 import Slider from 'rc-slider';
 
 import Board from './Board';
-import './style.css';
+import './style.scss';
 import 'rc-slider/assets/index.css';
 
 class UTTTGame extends React.Component {

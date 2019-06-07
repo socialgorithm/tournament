@@ -12,7 +12,7 @@ import Match from '../Match';
 import Replay from '../Replay';
 import NotFound from '../NotFoundPage';
 
-import './index.css';
+import './index.scss';
 class App extends React.PureComponent {
   render() {
     const params = queryString.parse(this.props.location.search.substr(1));
