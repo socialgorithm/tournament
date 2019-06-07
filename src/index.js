@@ -8,7 +8,7 @@ import 'semantic-ui-css/semantic.css';
 
 import App from './sections/App';
 import configureStore from './store';
-import './index.css';
+import './index.scss';
 
 const initialState = {};
 const history = createHistory();

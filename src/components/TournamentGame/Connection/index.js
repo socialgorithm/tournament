@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './index.css';
+import './index.scss';
 
 export default class Connection extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {

@@ -54,3 +54,15 @@ $marginTop: 1em;
         }
     }
 }
+
+.ui.list .item.inactive {
+    color: #777;
+}
+
+.ui.list.draggable .item {
+    cursor: move;
+    margin-left: -1em;
+    margin-right: -1em;
+    padding-left: 1em;
+    padding-right: 1em;
+}

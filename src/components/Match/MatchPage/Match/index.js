@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { Grid, Progress } from 'semantic-ui-react';
 
-import './index.css';
+import './index.scss';
 
 export default (props) => {
     const { match, totalGames } = props;

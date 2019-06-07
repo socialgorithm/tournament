@@ -14,6 +14,7 @@ import {
 	Form,
 	Dropdown, Popup
 } from 'semantic-ui-react';
+import classNames from 'classnames';
 
 import MatchPage from '../MatchPage';
 
@@ -37,6 +38,7 @@ class JoinMatch extends React.PureComponent {
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
             activePlayers: [],
             activePlayersDrop: false,
+            connectedPlayersDrop: false,
             showTournament: true,
         };
     }
@@ -72,7 +74,6 @@ class JoinMatch extends React.PureComponent {
         });
         this.props.socket.socket.on('lobby joined', data => {
             const {lobby, isAdmin} = data;
-            console.log('lobby joined', lobby);
             this.setState({
                 admin: isAdmin,
                 lobby,
@@ -139,7 +140,6 @@ class JoinMatch extends React.PureComponent {
             options: this.state.tournamentOptions,
 	        players: this.state.activePlayers.map(p => p.token)
         });
-        console.log('start tournament!');
 	    this.setState({showTournament: true});
     };
 
@@ -188,11 +188,24 @@ class JoinMatch extends React.PureComponent {
         });
         this.removeActivePlayer(token);
     };
+
+    addActivePlayer = (token) => {
+        const activePlayers = [...this.state.activePlayers];
+        if (!activePlayers.find(player => player === token)) {
+            const player = this.state.lobby.players.find(player => player === token);
+            if (player) {
+                activePlayers.push(player);
+                this.setState({
+                    activePlayers,
+                });
+            }
+        }
+    }
     
     removeActivePlayer = (token) => {
-        const index = this.state.activePlayers.findIndex(player => player === token);
+        const index = this.state.activePlayers.indexOf(token);
         if (index > -1) {
-            const activePlayers = this.state.activePlayers;
+            const activePlayers = [...this.state.activePlayers];
             activePlayers.splice(index, 1);
             this.setState({
                 activePlayers,
@@ -208,31 +221,23 @@ class JoinMatch extends React.PureComponent {
 	onDragPlayerDrop = (e, type) => {
 		e.preventDefault();
 		const token = e.dataTransfer.getData("text");
-		let activePlayers = [...this.state.activePlayers];
 		if (type === 'active') {
-			if (!activePlayers.find(p => p.token === token)) {
-				const player = this.state.lobby.players.find(p => p.token === token);
-				activePlayers.push(player);
-			}
+			this.addActivePlayer(token);
 		} else {
-			const index = activePlayers.find(p => p.token === token);
-			if (index !== -1) {
-				activePlayers.splice(index, 1);
-			}
-		}
-
-		const key = type + 'PlayersDrop';
-		const update = {activePlayers};
-		update[key] = false;
-		this.setState(update);
+            this.removeActivePlayer(token);
+        }
+		this.setState({
+            activePlayersDrop: false,
+            connectedPlayersDrop: false,
+        });
 	};
 
 	onDragPlayerMouseMove = (e, type, playersDrop) => {
 		e.preventDefault();
 		const key = type + 'PlayersDrop';
-		const update = {};
-		update[key] = playersDrop;
-		this.setState(update);
+		this.setState({
+            [key]: playersDrop,
+        });
 	};
 
 	onDragPlayerOver = (e, type) => {
@@ -364,7 +369,8 @@ class JoinMatch extends React.PureComponent {
 			background: '#efefef',
 			fontSize: '0.7em',
 		};
-		const players = type === 'connected' ? this.state.lobby.players : this.state.activePlayers;
+        const players = type === 'connected' ? this.state.lobby.players : this.state.activePlayers;
+        players.sort();
         const playerDropKey = type + 'PlayersDrop';
         
         let addAll = (
@@ -390,19 +396,24 @@ class JoinMatch extends React.PureComponent {
 				     style={{height: '100%', position: 'relative', background: this.state[playerDropKey] && '#efefef', borderRadius: this.state[playerDropKey] && '0.28571429rem'}}>
 					{
 						!this.state[playerDropKey] &&
-						<List>
-							{ players.map(player => (
-								<List.Item key={ player } draggable onDragStart={(e) => this.onDragPlayerStart(player, e)}>
-									<Icon name='circle' color='green' style={{display: 'inline-block', marginRight: '1rem'}}/>
-									{ player }
-									<Dropdown style={{float: 'right'}}>
-										<Dropdown.Menu>
-											<Dropdown.Item text="Kick player" onClick={() => this.kickPlayer(player)}/>
-											<Dropdown.Item text="Ban player" onClick={() => this.banPlayer(player)}/>
-										</Dropdown.Menu>
-									</Dropdown>
-								</List.Item>
-							)) }
+						<List className='draggable relaxed divided'>
+							{ players.map(player => {
+                                const isActive = this.state.activePlayers.indexOf(player) > -1;
+                                return (
+                                    <List.Item key={ player } draggable className={ classNames({ inactive: !isActive }) } onDragStart={(e) => this.onDragPlayerStart(player, e)}>
+                                        <Icon name='circle' className={ classNames({ outline: !isActive }) } color='green' style={{display: 'inline-block', marginRight: '1rem'}}/>
+                                        { player }
+                                        <Dropdown style={{float: 'right'}}>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item text="Kick player" onClick={() => this.kickPlayer(player)}/>
+                                                <Dropdown.Item text="Ban player" onClick={() => this.banPlayer(player)}/>
+                                                { !isActive && (<Dropdown.Item text="Add player" onClick={() => this.addActivePlayer(player)}/>) }
+                                                { isActive && (<Dropdown.Item text="Remove player" onClick={() => this.removeActivePlayer(player)}/>) }
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </List.Item>
+                                );
+                            }) }
 						</List>
 					}
 					{

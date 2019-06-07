@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Menu, Icon } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
-import './index.css';
+import './index.scss';
 
 class Header extends React.Component {
   constructor() {

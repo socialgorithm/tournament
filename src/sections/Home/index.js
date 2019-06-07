@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Container, Grid, Icon } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-import './index.css';
+import './index.scss';
 
 export default class Home extends React.Component {
 

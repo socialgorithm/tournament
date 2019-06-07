@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './index.css';
+import './index.scss';
 import Connection from './Connection/index';
 import Player from './Player/index';
 

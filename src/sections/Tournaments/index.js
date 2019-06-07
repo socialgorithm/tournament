@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Table, Loader, Container } from 'semantic-ui-react';
 
-import './index.css';
+import './index.scss';
 
 class Tournaments extends React.Component {
 

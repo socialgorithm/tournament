@@ -2,7 +2,7 @@ import React from "react";
 import { Message } from "semantic-ui-react";
 
 import Bracket from "./Bracket";
-import "./index.css";
+import "./index.scss";
 import parseStats from './parseStats';
 
 export default class Brackets extends React.PureComponent {

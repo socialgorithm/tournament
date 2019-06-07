@@ -12,7 +12,7 @@ import FlipMove from 'react-flip-move';
 import DoubleElimination from './types/DoubleElimination';
 import FreeForAll from './types/FreeForAll';
 
-import './index.css';
+import './index.scss';
 
 export default class MatchPage extends React.PureComponent {
   
