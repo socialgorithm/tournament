@@ -38,6 +38,7 @@ class JoinMatch extends React.PureComponent {
             update: 0, // since we are not using immutable data structures (yet), bump this when making a deep change
             activePlayers: [],
             activePlayersDrop: false,
+            connectedPlayersDrop: false,
             showTournament: true,
         };
     }
@@ -139,7 +140,6 @@ class JoinMatch extends React.PureComponent {
             options: this.state.tournamentOptions,
 	        players: this.state.activePlayers.map(p => p.token)
         });
-        console.log('start tournament!');
 	    this.setState({showTournament: true});
     };
 
@@ -226,18 +226,18 @@ class JoinMatch extends React.PureComponent {
 		} else {
             this.removeActivePlayer(token);
         }
-		const key = type + 'PlayersDrop';
 		this.setState({
-            [key]: false,
+            activePlayersDrop: false,
+            connectedPlayersDrop: false,
         });
 	};
 
 	onDragPlayerMouseMove = (e, type, playersDrop) => {
 		e.preventDefault();
 		const key = type + 'PlayersDrop';
-		const update = {};
-		update[key] = playersDrop;
-		this.setState(update);
+		this.setState({
+            [key]: playersDrop,
+        });
 	};
 
 	onDragPlayerOver = (e, type) => {
@@ -396,7 +396,7 @@ class JoinMatch extends React.PureComponent {
 				     style={{height: '100%', position: 'relative', background: this.state[playerDropKey] && '#efefef', borderRadius: this.state[playerDropKey] && '0.28571429rem'}}>
 					{
 						!this.state[playerDropKey] &&
-						<List>
+						<List className='draggable relaxed divided'>
 							{ players.map(player => {
                                 const isActive = this.state.activePlayers.indexOf(player) > -1;
                                 return (
