@@ -59,7 +59,7 @@ $marginTop: 1em;
     color: #777;
 }
 
-.ui.list.draggable .item {
+.ui.list.draggable > .item {
     cursor: move;
     margin-left: -1em;
     margin-right: -1em;

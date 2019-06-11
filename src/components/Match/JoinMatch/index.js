@@ -226,7 +226,7 @@ class JoinMatch extends React.PureComponent {
 		} else {
             this.removeActivePlayer(token);
         }
-		this.setState({
+                                                                        		this.setState({
             activePlayersDrop: false,
             connectedPlayersDrop: false,
         });
