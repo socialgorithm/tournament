@@ -45,6 +45,12 @@ pre.code {
     text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
+.socialgorithm-hue-bg {
+  background: linear-gradient(to left, #79f1a4,#52daf8) !important;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
 .animated-hue {
     -webkit-animation: hue-animation 15s infinite;
     animation: hue-animation 15s infinite;

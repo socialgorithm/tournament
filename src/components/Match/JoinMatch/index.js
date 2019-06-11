@@ -287,37 +287,27 @@ class JoinMatch extends React.PureComponent {
         ];
         const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
 	    return (
-            <Grid columns={ 2 }>
+            <Grid columns={ 1 }>
                 <Grid.Row>
-                    <Grid.Column>
-                        <Header content='Admin' />
-                        <p>You are the admin for this lobby</p>
-                        <Button
-                            primary
-                            icon='play'
-                            title={ title }
-                            disabled={ this.state.activePlayers.length < 2}
-                            content='Start Game'
-                            onClick={ this.startTournament }
-                        />
-                    </Grid.Column>
                     <Grid.Column>
                         <h3>Tournament Settings:</h3>
                         <Form size='small'>
-                            <Form.Input
-                                label='Timeout (Per Move, in ms)'
-                                type='number'
-                                placeholder='100'
-                                value={ this.state.tournamentOptions.timeout }
-                                onChange={ this.updateOption('timeout') }
-                            />
-                            <Form.Input
-                                label='Number of Games per Match'
-                                type='number'
-                                placeholder='10'
-                                value={ this.state.tournamentOptions.numberOfGames }
-                                onChange={ this.updateOption('numberOfGames') }
-                            />
+                            <Form.Group widths='equal'>
+                                <Form.Input
+                                    label='Timeout (Per Move, in ms)'
+                                    type='number'
+                                    placeholder='100'
+                                    value={ this.state.tournamentOptions.timeout }
+                                    onChange={ this.updateOption('timeout') }
+                                />
+                                <Form.Input
+                                    label='Number of Games per Match'
+                                    type='number'
+                                    placeholder='10'
+                                    value={ this.state.tournamentOptions.numberOfGames }
+                                    onChange={ this.updateOption('numberOfGames') }
+                                />
+                            </Form.Group>
                             <Form.Select
                                 label='Tournament Type'
                                 options={ tournamentModes }
@@ -329,6 +319,14 @@ class JoinMatch extends React.PureComponent {
 		                        checked={ this.state.tournamentOptions.autoPlay }
 		                        onChange={ this.updateCheckedOption('autoPlay') }
 	                        />
+                            <Button
+                                primary
+                                icon='play'
+                                title={ title }
+                                disabled={ this.state.activePlayers.length < 2}
+                                content='Start Game'
+                                onClick={ this.startTournament }
+                            />
                         </Form>
                     </Grid.Column>
                 </Grid.Row>
@@ -448,8 +446,10 @@ class JoinMatch extends React.PureComponent {
     
         return (
             <Container textAlign='center' fluid style={{width: '80%'}}>
-                <h1><Icon name='game' /><br /> Joined Match!</h1>
-                <Segment textAlign='left'>
+                <Segment attached='top' className='socialgorithm-hue-bg animated-hue'>
+                    <h1><Icon name='game' /> Joined Match!</h1>
+                </Segment>
+                <Segment attached='bottom' textAlign='left'>
                     <Grid columns={ 3 } divided>
 	                    <Grid.Column width={ 3 }>
 		                    { this.renderPlayers({titleText: 'Connected Players', type: 'connected', dropText: 'Exclude player from game', infoText: 'Players connected to the lobby', displayAddAll: true}) }
