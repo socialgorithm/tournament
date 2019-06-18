@@ -12,14 +12,14 @@ export default class Home extends React.Component {
       <Fragment>
         <div className='hero'>
             <Container>
-                <h1>Welcome to the Ultimate TTT Workshop!</h1>
+                <h1>Welcome to the Socialgorithm Workshop!</h1>
             </Container>
         </div>
         <div className='section big-links'>
             <Grid columns={ 3 }>
                     <Grid.Row>
                         <Grid.Column>
-                            <h1><a href='https://socialgorithm.org/ultimate-ttt-docs' title='Documentation for Ultimate TTT'>
+                            <h1><a href='https://socialgorithm.org/docs' title='Documentation'>
                                 <Icon name='book' /><br/ >
                                 Documentation
                             </a></h1>
