@@ -25,6 +25,9 @@ class SocketProvider extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.status === 'connecting') {
+      // update the saved host
+      localStorage.setItem('host', props.host);
+      // connect
       return connect(props, state);
     }
     if (props.status === 'disconnecting') {
