@@ -1,7 +1,7 @@
 {
-  "name": "@socialgorithm/ultimate-ttt-web",
+  "name": "@socialgorithm/ui",
   "version": "6.4.0",
-  "description": "Ultimate Tic Tac Toe Algorithm - Web Client",
+  "description": "Socialgorithm Battle UI",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aurbano/ultimate-ttt-web.git"
+    "url": "git+https://github.com/socialgorithm/ui.git"
   },
   "keywords": [
     "ultimate",
@@ -22,10 +22,10 @@
     "algorithm",
     "battle"
   ],
-  "author": "Alejandro U. Alvarez",
-  "license": "MIT",
+  "author": "Socialgorithm",
+  "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/aurbano/ultimate-ttt-web/issues"
+    "url": "https://github.com/socialgorithm/ui/issues"
   },
   "homepage": "https://play.socialgorithm.org",
   "dependencies": {
