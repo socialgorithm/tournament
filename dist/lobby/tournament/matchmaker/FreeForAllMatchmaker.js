@@ -3,56 +3,43 @@ exports.__esModule = true;
 var uuid = require("uuid/v4");
 var FreeForAllMatchmaker = (function () {
     function FreeForAllMatchmaker(players, options) {
+        var _this = this;
         this.players = players;
         this.options = options;
-        this.index = 0;
+        this.matches = [];
+        this.players.forEach(function (playerA) {
+            _this.players.forEach(function (playerB) {
+                if (playerA !== playerB && !_this.playersAlreadyMatched(playerA, playerB)) {
+                    _this.matches.push({
+                        games: [],
+                        matchID: uuid(),
+                        options: _this.options,
+                        players: [playerA, playerB],
+                        state: "upcoming",
+                        winner: -1,
+                        stats: {
+                            gamesCompleted: 0,
+                            gamesTied: 0,
+                            wins: []
+                        }
+                    });
+                }
+            });
+        });
     }
     FreeForAllMatchmaker.prototype.isFinished = function () {
-        return this.finished;
+        return this.getRemainingMatches().length === 0;
     };
     FreeForAllMatchmaker.prototype.updateStats = function (allMatches, tournamentFinished) {
         if (tournamentFinished === void 0) { tournamentFinished = false; }
-        this.allMatches = allMatches;
+        this.matches = allMatches;
     };
     FreeForAllMatchmaker.prototype.getRemainingMatches = function () {
-        var _this = this;
-        if (this.index >= this.players.length) {
-            return [];
-        }
-        var match = [];
-        var matches = this.players.map(function (playerA, $index) {
-            if (_this.index === $index) {
-                return [];
-            }
-            return [_this.players[_this.index]].filter(function (playerB) {
-                return !(_this.allMatches.find(function (eachMatch) {
-                    return eachMatch.players[0] === playerA && eachMatch.players[1] === playerB ||
-                        eachMatch.players[1] === playerA && eachMatch.players[0] === playerB;
-                }));
-            }).map(function (playerB) {
-                var newMatch = {
-                    games: [],
-                    matchID: uuid(),
-                    options: _this.options,
-                    players: [playerA, playerB],
-                    state: "upcoming",
-                    winner: -1,
-                    stats: {
-                        gamesCompleted: 0,
-                        gamesTied: 0,
-                        wins: []
-                    }
-                };
-                return newMatch;
-            });
-        }).reduce(function (result, current, idx) { return result.concat(current); }, []);
-        ++this.index;
-        this.finished = this.index >= this.players.length;
-        return matches;
+        return this.matches.filter(function (match) { return match.state !== "finished"; });
     };
     FreeForAllMatchmaker.prototype.getRanking = function () {
         var playerStats = {};
-        this.allMatches.forEach(function (match) {
+        this.matches.forEach(function (match) {
             if (!playerStats[match.players[0]]) {
                 playerStats[match.players[0]] = 0;
             }
@@ -64,6 +51,12 @@ var FreeForAllMatchmaker = (function () {
             gamesWon: playerStats[token],
             player: token
         }); }).sort(function (a, b) { return b.gamesWon - a.gamesWon; }).map(function (playerRank) { return playerRank.player; });
+    };
+    FreeForAllMatchmaker.prototype.playersAlreadyMatched = function (playerA, playerB) {
+        return this.matches.find(function (match) {
+            return match.players[0] === playerA && match.players[1] === playerB ||
+                match.players[1] === playerA && match.players[0] === playerB;
+        });
     };
     return FreeForAllMatchmaker;
 }());

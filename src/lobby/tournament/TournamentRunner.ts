@@ -84,6 +84,10 @@ export class TournamentRunner {
         tournament: this.getTournament(),
       },
     });
+
+    if (this.tournament.options.autoPlay) {
+      this.continue();
+    }
   }
 
   public continue = () => {

@@ -10,68 +10,50 @@ import IMatchmaker from "./Matchmaker";
  *
  * The winner will be the player that has won the most games.
  *
- * In case of a tie the tied players will play against each other once more.
  */
 export default class FreeForAllMatchmaker implements IMatchmaker {
 
-  private maxMatches: number;
-  private finished: boolean;
-  private allMatches: Match[];
-  private index: number = 0;
+  private matches: Match[];
 
   constructor(private players: Player[], private options: MatchOptions) {
+    this.matches = [];
+
+    this.players.forEach(playerA => {
+      this.players.forEach(playerB => {
+        if (playerA !== playerB && !this.playersAlreadyMatched(playerA, playerB)) {
+          this.matches.push({
+            games: [],
+            matchID: uuid(),
+            options: this.options,
+            players: [playerA, playerB],
+            state: "upcoming",
+            winner: -1,
+            stats: {
+              gamesCompleted: 0,
+              gamesTied: 0,
+              wins: [],
+            },
+          });
+        }
+      });
+    });
   }
 
   public isFinished(): boolean {
-    return this.finished;
+    return this.getRemainingMatches().length === 0;
   }
 
   public updateStats(allMatches: Match[], tournamentFinished: boolean = false) {
-    this.allMatches = allMatches;
+    this.matches = allMatches;
   }
 
   public getRemainingMatches(): Match[] {
-    if (this.index >= this.players.length) {
-      return [];
-    }
-
-    const match: Match[] = [];
-    const matches = this.players.map((playerA, $index) => {
-      if (this.index === $index) { return []; }
-      return [this.players[this.index]].filter(playerB => {
-        return !(this.allMatches.find(eachMatch =>
-          eachMatch.players[0] === playerA && eachMatch.players[1] === playerB ||
-          eachMatch.players[1] === playerA && eachMatch.players[0] === playerB,
-        ));
-      },
-      ).map(playerB => {
-        const newMatch: Match = {
-          games: [],
-          matchID: uuid(),
-          options: this.options,
-          players: [playerA, playerB],
-          state: "upcoming",
-          winner: -1,
-          stats: {
-            gamesCompleted: 0,
-            gamesTied: 0,
-            wins: [],
-          },
-        };
-        return newMatch;
-      },
-      );
-    }).reduce((result, current, idx) => result.concat(current), []);
-
-    ++this.index;
-    this.finished = this.index >= this.players.length;
-
-    return matches;
+    return this.matches.filter(match => match.state !== "finished");
   }
 
   public getRanking(): string[] {
     const playerStats: any = {};
-    this.allMatches.forEach(match => {
+    this.matches.forEach(match => {
       if (!playerStats[match.players[0]]) {
         playerStats[match.players[0]] = 0;
       }
@@ -98,5 +80,11 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
       (a: any, b: any) => b.gamesWon - a.gamesWon,
     ).map(playerRank => playerRank.player,
     );
+  }
+
+  private playersAlreadyMatched(playerA: Player, playerB: Player) {
+    return this.matches.find(match =>
+      match.players[0] === playerA && match.players[1] === playerB ||
+      match.players[1] === playerA && match.players[0] === playerB);
   }
 }

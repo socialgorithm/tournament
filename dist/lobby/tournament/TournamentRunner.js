@@ -54,6 +54,9 @@ var TournamentRunner = (function () {
                     tournament: _this.getTournament()
                 }
             });
+            if (_this.tournament.options.autoPlay) {
+                _this["continue"]();
+            }
         };
         this["continue"] = function () {
             _this.playNextMatch();
