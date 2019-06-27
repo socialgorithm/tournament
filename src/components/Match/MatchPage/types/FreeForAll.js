@@ -16,7 +16,7 @@ export default class MatchPage extends React.PureComponent {
       return null;
     }
     const matches = this.props.tournament.matches;
-    const currentMatch = matches.find(match => match.stats.state === "playing");
+    const currentMatch = matches.find(match => match.state === "playing");
     return (
       <Fragment>
         <h2>Current Match</h2>
@@ -69,13 +69,14 @@ export default class MatchPage extends React.PureComponent {
    */
   renderMatches() {
     const matches = this.props.tournament.matches;
+    console.log(matches);
     return (
       <Fragment>
         {this.renderCurrentMatch()}
 
         <h3>Finished</h3>
         {matches
-          .filter(match => match.stats.state === "finished")
+          .filter(match => match.state === "finished")
           .map(match => (
             <Segment>
               <Match
@@ -89,7 +90,7 @@ export default class MatchPage extends React.PureComponent {
 
   renderUpcoming() {
     const matches = this.props.tournament.matches;
-    const upcoming = matches.filter(match => match.stats.state === "upcoming");
+    const upcoming = matches.filter(match => match.state === "upcoming");
     if (upcoming.length < 1) {
       return null;
     }
