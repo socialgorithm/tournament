@@ -7,7 +7,6 @@ import {
 	Loader,
 	Button,
 	Segment,
-	Header,
 	Grid,
 	List,
 	Label,
