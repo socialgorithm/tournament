@@ -16,6 +16,10 @@ This client is built with React, and some other modern libraries. It was bootstr
 
 We use [Semantic UI](http://semantic-ui.com/) for the UI/UX.
 
+### Deploying Changes
+
+To deploy changes, run `npm run deploy`, then go to Settings > GitHub Pages > Custom Domain > Type 'play.socialgorithm.org'
+
 ## Contributing
 
 Feel free to improve this in any way! You'll be added to the list of contributors here and you'll help people build awesome things :)
