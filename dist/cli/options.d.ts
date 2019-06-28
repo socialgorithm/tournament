@@ -1,7 +1,6 @@
 export interface IOptions {
     game?: string[];
     port?: number;
-    host?: string;
     version?: boolean;
     help?: number;
 }
