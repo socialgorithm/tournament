@@ -25,9 +25,9 @@ export default class Home extends React.Component {
                             </a></h1>
                         </Grid.Column>
                         <Grid.Column>
-                            <h1><NavLink to='/match'>
+                            <h1><NavLink to='/tournaments'>
                                 <Icon name='game' /><br/ >
-                                Create Match
+                                Create/Join Tournaments
                             </NavLink></h1>
                         </Grid.Column>
                         <Grid.Column>

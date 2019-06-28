@@ -8,7 +8,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SocketContainer from '../../containers/SocketContainer';
 import Home from '../Home';
-import Match from '../Match';
+import Tournaments from '../Tournaments';
 import Replay from '../Replay';
 import NotFound from '../NotFoundPage';
 
@@ -28,7 +28,7 @@ class App extends React.PureComponent {
         <div className='main-content'>
           <Switch>
             <Route exact path='/' component={ Home } />
-            <Route path='/match' component={ Match } />
+            <Route path='/tournaments' component={ Tournaments } />
             <Route path='/replay' component={ Replay } />
             <Route path='' component={ NotFound } />
           </Switch>

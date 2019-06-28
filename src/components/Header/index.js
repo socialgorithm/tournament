@@ -17,8 +17,8 @@ class Header extends React.Component {
         exact: true,
       },
       {
-        url: '/match',
-        name: 'Match',
+        url: '/tournaments',
+        name: 'Tournaments',
         icon: 'game',
       },
       {
@@ -53,7 +53,7 @@ class Header extends React.Component {
             />
           ))
         }
-        <Menu.Item href="https://socialgorithm.org/ultimate-ttt-docs" target='_blank'>
+        <Menu.Item href="https://socialgorithm.org/docs/" target='_blank'>
           <Icon name='book'/>
           Docs
         </Menu.Item>

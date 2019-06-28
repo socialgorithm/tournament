@@ -15,9 +15,9 @@ import {
 } from 'semantic-ui-react';
 import classNames from 'classnames';
 
-import MatchPage from '../MatchPage';
+import Tournament from '../Tournament'
 
-class JoinMatch extends React.PureComponent {
+class LobbyAdmin extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -272,6 +272,13 @@ class JoinMatch extends React.PureComponent {
         if (!this.state.admin) {
             return null;
         }
+        const availableGames = [
+            {
+                text: 'Test1',
+                value: 'Test1',
+                title: 'Tic-Tac-Toe'
+            }
+        ]
         const tournamentModes = [
             {
                 text: 'Free For All',
@@ -291,6 +298,12 @@ class JoinMatch extends React.PureComponent {
                     <Grid.Column>
                         <h3>Tournament Settings:</h3>
                         <Form size='small'>
+                            <Form.Select
+                                label='Game'
+                                options={ availableGames }
+                                value={ this.state.tournamentOptions.gameType }
+                                onChange={ this.updateOption('gameType') }
+                            />
                             <Form.Group widths='equal'>
                                 <Form.Input
                                     label='Timeout (Per Move, in ms)'
@@ -434,7 +447,7 @@ class JoinMatch extends React.PureComponent {
 
         if (this.state.lobby.tournament && this.state.showTournament) {
             return (
-                <MatchPage
+                <Tournament
                   tournamentOptions={ this.state.tournamentOptions }
                   tournament={ this.state.lobby.tournament }
                   backToLobby={this.backToLobby}
@@ -446,7 +459,7 @@ class JoinMatch extends React.PureComponent {
         return (
             <Container textAlign='center' fluid style={{width: '80%'}}>
                 <Segment attached='top' className='socialgorithm-hue-bg animated-hue'>
-                    <h1><Icon name='game' /> Joined Match!</h1>
+                    <h1><Icon name='game' /> Welcome to { this.state.lobby.token }!</h1>
                 </Segment>
                 <Segment attached='bottom' textAlign='left'>
                     <Grid columns={ 3 } divided>
@@ -468,4 +481,4 @@ class JoinMatch extends React.PureComponent {
     }
 };
 
-export default withRouter(JoinMatch);
+export default withRouter(LobbyAdmin);
