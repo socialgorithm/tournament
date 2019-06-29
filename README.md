@@ -4,13 +4,24 @@ Game-agnostic tournament server
 
 ## Development
 
-Clone the repo locally and run `yarn`. Once dependencies are installed you can run:
+Clone the repo locally and run `npm install`. Once dependencies are installed you can run:
 
 ```
-$ yarn start:dev
+$ npm run start:dev
 ```
 
 This will run the typescript compiler and start the server, restarting the server whenever a file changes.
+
+
+## Debugging
+
+The server uses the `debug` library to aid debugging. Simply run:
+
+```
+DEBUG=sg:* npm run start:dev
+```
+
+This will enable verbose logging of Socialgorithm related messages (use `*` to log everything).
 
 ## Deploy
 
@@ -40,14 +51,5 @@ tournament-server v1.0.0
 
 Options
 
-  --verbose         The input to process.
-  -v, --version     Display the server version
-  -p, --port 3141   Port on which the server should be started (defaults to 3141)
-  -h, --help        Print this guide
-
-Synopsis
-
-  $ tournament-server --games 100
-  $ tournament-server --port 5000
-  $ tournament-server --help
+...
 ```
