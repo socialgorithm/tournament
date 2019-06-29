@@ -11,6 +11,7 @@ var EVENTS;
     EVENTS["MATCH_ENDED"] = "MATCH_ENDED";
     EVENTS["GAME_ENDED"] = "GAME_ENDED";
     EVENTS["MATCH_UPDATE"] = "MATCH_UPDATE";
+    EVENTS["GAME_LIST"] = "game list";
     EVENTS["LOBBY_CREATE"] = "lobby create";
     EVENTS["LOBBY_TOURNAMENT_START"] = "lobby tournament start";
     EVENTS["LOBBY_TOURNAMENT_STARTED"] = "lobby tournament started";

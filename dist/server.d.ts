@@ -1,7 +1,7 @@
 import { IOptions } from "./cli/options";
-export declare class Server {
+export default class TournamentServer {
     private socketServer;
+    private gameServers;
     private LobbyManager;
     constructor(options: IOptions);
-    start(): void;
 }

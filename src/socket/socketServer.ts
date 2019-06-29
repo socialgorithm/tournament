@@ -47,12 +47,10 @@ export class SocketServer {
 
             if (this.playerSockets[player]) {
                 // Token already in use
-                // tslint:disable-next-line:no-console
                 debug("Player already connected %s", player);
                 return false;
             }
 
-            // tslint:disable-next-line:no-console
             debug("Connected %s", player);
 
             // Store the socket
@@ -84,7 +82,6 @@ export class SocketServer {
 
     private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
         if (!this.playerSockets[data.player]) {
-            // tslint:disable-next-line:no-console
             debug("Error adding player (%s) to namespace, player socket does not exist", data.player);
             return;
         }
