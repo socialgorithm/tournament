@@ -1,7 +1,6 @@
 import { Game } from "./Game";
 export declare type GameRunnerOptions = {
-    host?: string;
-    proxy?: string;
+    gameServerAddress: string;
 };
 export declare class GameRunner {
     private matchID;

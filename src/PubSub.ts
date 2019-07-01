@@ -1,6 +1,7 @@
 import * as PubSubJS from "pubsub-js";
-import { EVENTS } from "../socket/events";
-import * as msg from "../socket/messages";
+import { EVENTS } from "./Events";
+import { GameServerStatus } from "./game-server/GameServerInfoConnection";
+import * as msg from "./Messages";
 
 /**
  * Any class that wants to use the PubSub bus needs to extend this class.
@@ -18,6 +19,8 @@ export default class PubSub {
     public publish(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, data: msg.ADD_PLAYER_TO_NAMESPACE_MESSAGE): void;
     public publish(event: EVENTS.PLAYER_TO_GAME, data: msg.PLAYER_TO_GAME_MESSAGE): void;
     public publish(event: EVENTS.SERVER_TO_PLAYER, data: msg.SERVER_TO_PLAYER_MESSAGE): void;
+    public publish(event: EVENTS.GAME_SERVER_UPDATE, data: GameServerStatus): void;
+    public publish(event: EVENTS.GAME_LIST, data: GameServerStatus[]): void;
     public publish(event: string, data: any) {
         PubSubJS.publish(event, data);
     }
@@ -43,6 +46,7 @@ export default class PubSub {
     public subscribe(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, fn: (data: msg.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => void): void;
     public subscribe(event: EVENTS.PLAYER_TO_GAME, fn: (data: msg.PLAYER_TO_GAME_MESSAGE) => void): void;
     public subscribe(event: EVENTS.SERVER_TO_PLAYER, fn: (data: msg.SERVER_TO_PLAYER_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.GAME_SERVER_UPDATE, fn: (data: GameServerStatus) => void): void;
     // Socket relayed events
     public subscribe(event: EVENTS.LOBBY_JOIN, fn: (data: msg.LOBBY_JOIN_MESSAGE) => void): void;
     public subscribe(event: EVENTS.LOBBY_CREATE, fn: (data: msg.LOBBY_CREATE_MESSAGE) => void): void;
@@ -50,6 +54,7 @@ export default class PubSub {
     public subscribe(event: EVENTS.LOBBY_TOURNAMENT_CONTINUE, fn: (data: msg.LOBBY_TOURNAMENT_CONTINUE_MESSAGE) => void): void;
     public subscribe(event: EVENTS.LOBBY_PLAYER_BAN, fn: (data: msg.LOBBY_PLAYER_BAN_MESSAGE) => void): void;
     public subscribe(event: EVENTS.LOBBY_PLAYER_KICK, fn: (data: msg.LOBBY_PLAYER_KICK_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.GAME_LIST, fn: (data: GameServerStatus[]) => void): void;
     public subscribe(event: EVENTS, fn: (data: any) => void): void {
         const token = PubSubJS.subscribe(event, (events: EVENTS, data: any) => fn(data));
         this.subscriptionTokens.push(token);

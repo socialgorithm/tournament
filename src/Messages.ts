@@ -1,5 +1,5 @@
 import { Player } from "@socialgorithm/game-server";
-import { TournamentOptions } from "../lobby/tournament/TournamentRunner";
+import { TournamentOptions } from "./lobby/tournament/TournamentRunner";
 
 /**
  * PubSub/Socket API: Message Definitions

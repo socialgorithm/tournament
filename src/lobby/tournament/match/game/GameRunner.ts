@@ -5,13 +5,12 @@ import * as io from "socket.io-client";
 
 import { GAME_SOCKET_MESSAGE, Player } from "@socialgorithm/game-server";
 import { GameEndedMessage, GameToPlayerMessage, GameUpdatedMessage } from "@socialgorithm/game-server/dist/GameMessage";
-import PubSub from "../../../../lib/PubSub";
-import { EVENTS } from "../../../../socket/events";
+import { EVENTS } from "../../../../Events";
+import PubSub from "../../../../PubSub";
 import { Game } from "./Game";
 
 export type GameRunnerOptions = {
-    host?: string,
-    proxy?: string,
+    gameServerAddress: string,
 };
 
 export class GameRunner {
@@ -21,15 +20,10 @@ export class GameRunner {
     constructor(private matchID: string, private game: Game, options: GameRunnerOptions) {
         // Game Server Socket Setup
         try {
-            let host = process.env.GAME_SERVER || options.host || "localhost:5433";
-            if (host.substr(0, 4) !== "http") {
-                host = "http://" + host;
-            }
-
             debug("Initialising Game Runner");
-            debug("Connecting to %s", host);
+            debug("Connecting to %s", options.gameServerAddress);
 
-            this.gameSocket = io(host, {
+            this.gameSocket = io(options.gameServerAddress, {
                 reconnection: true,
                 timeout: 2000,
             });
@@ -47,7 +41,7 @@ export class GameRunner {
             });
 
             this.gameSocket.on("disconnect", () => {
-                debug("Connection to Game Server %s lost!", host);
+                debug("Connection to Game Server %s lost!", options.gameServerAddress);
             });
         } catch (e) {
             debug("sg: Unable to connect to Game Server. %O", e);

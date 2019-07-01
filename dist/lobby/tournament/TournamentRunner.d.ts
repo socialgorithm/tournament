@@ -1,6 +1,7 @@
 import { Player } from "@socialgorithm/game-server";
 import { Match } from "./match/Match";
 export declare type TournamentOptions = {
+    gameServerAddress: string;
     autoPlay: boolean;
     numberOfGames: number;
     timeout: number;

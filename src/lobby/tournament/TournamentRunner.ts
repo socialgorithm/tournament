@@ -3,8 +3,8 @@ import * as uuid from "uuid/v4";
 const debug = require("debug")("sg:tournamentRunner");
 
 import { Player } from "@socialgorithm/game-server";
-import PubSub from "../../lib/PubSub";
-import { EVENTS } from "../../socket/events";
+import { EVENTS } from "../../Events";
+import PubSub from "../../PubSub";
 import { Match, MatchOptions } from "./match/Match";
 import { MatchRunner } from "./match/MatchRunner";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
@@ -13,6 +13,7 @@ import IMatchMaker from "./matchmaker/MatchMaker";
 import { Tournament } from "./Tournament";
 
 export type TournamentOptions = {
+  gameServerAddress: string,
   autoPlay: boolean,
   numberOfGames: number,
   timeout: number,
@@ -136,7 +137,7 @@ export class TournamentRunner {
 
     const nextMatch = upcomingMatches[0];
     // Run the match
-    this.currentMatchRunner = new MatchRunner(nextMatch, this.tournament.tournamentID);
+    this.currentMatchRunner = new MatchRunner(nextMatch, this.tournament.tournamentID, this.tournament.options.gameServerAddress);
   }
 
   private sendStats = (): void => {

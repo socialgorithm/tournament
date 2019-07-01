@@ -2,17 +2,17 @@ import * as uuid from "uuid/v4";
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:matchRunner");
 
-import PubSub from "../../../lib/PubSub";
-import { EVENTS } from "../../../socket/events";
+import { EVENTS } from "../../../Events";
+import PubSub from "../../../PubSub";
 import { Game } from "./game/Game";
-import { GameRunner } from "./game/GameRunner";
+import { GameRunner, GameRunnerOptions } from "./game/GameRunner";
 import { Match, MatchStats } from "./Match";
 
 export class MatchRunner {
     private pubSub: PubSub;
     private gameRunner: GameRunner;
 
-    constructor(private match: Match, private tournamentID: string) {
+    constructor(private match: Match, private tournamentID: string, private gameServerAddress: string) {
         this.pubSub = new PubSub();
         this.pubSub.subscribeNamespaced(this.match.matchID, EVENTS.GAME_ENDED, this.onGameEnd);
 
@@ -48,7 +48,7 @@ export class MatchRunner {
         // The game runner will connect to the game server and automatically start the game
         // after connecting
         // tslint:disable-next-line:no-unused-expression
-        this.gameRunner = new GameRunner(this.match.matchID, game, {});
+        this.gameRunner = new GameRunner(this.match.matchID, game, { gameServerAddress: this.gameServerAddress });
     }
 
     private onGameEnd = (game: Game) => {

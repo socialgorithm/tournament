@@ -2,14 +2,15 @@
 exports.__esModule = true;
 var uuid = require("uuid/v4");
 var debug = require("debug")("sg:matchRunner");
-var PubSub_1 = require("../../../lib/PubSub");
-var events_1 = require("../../../socket/events");
+var Events_1 = require("../../../Events");
+var PubSub_1 = require("../../../PubSub");
 var GameRunner_1 = require("./game/GameRunner");
 var MatchRunner = (function () {
-    function MatchRunner(match, tournamentID) {
+    function MatchRunner(match, tournamentID, gameServerAddress) {
         var _this = this;
         this.match = match;
         this.tournamentID = tournamentID;
+        this.gameServerAddress = gameServerAddress;
         this.playNextGame = function () {
             var gamesPlayed = _this.match.games.length;
             if (gamesPlayed >= _this.match.options.maxGames) {
@@ -25,7 +26,7 @@ var MatchRunner = (function () {
                 duration: 0,
                 message: ""
             };
-            _this.gameRunner = new GameRunner_1.GameRunner(_this.match.matchID, game, {});
+            _this.gameRunner = new GameRunner_1.GameRunner(_this.match.matchID, game, { gameServerAddress: _this.gameServerAddress });
         };
         this.onGameEnd = function (game) {
             debug("Finished game, winner %s", game.winner);
@@ -39,7 +40,7 @@ var MatchRunner = (function () {
             _this.match.state = "finished";
             _this.updateMatchStats();
             debug("Finished match %o", _this.match.stats);
-            _this.pubSub.publishNamespaced(_this.tournamentID, events_1.EVENTS.MATCH_ENDED, _this.match);
+            _this.pubSub.publishNamespaced(_this.tournamentID, Events_1.EVENTS.MATCH_ENDED, _this.match);
         };
         this.updateMatchStats = function () {
             _this.match.stats.gamesCompleted = _this.match.games.length;
@@ -61,10 +62,10 @@ var MatchRunner = (function () {
             _this.match.winner = maxIndex;
         };
         this.sendStats = function () {
-            _this.pubSub.publishNamespaced(_this.tournamentID, events_1.EVENTS.MATCH_UPDATE, null);
+            _this.pubSub.publishNamespaced(_this.tournamentID, Events_1.EVENTS.MATCH_UPDATE, null);
         };
         this.pubSub = new PubSub_1["default"]();
-        this.pubSub.subscribeNamespaced(this.match.matchID, events_1.EVENTS.GAME_ENDED, this.onGameEnd);
+        this.pubSub.subscribeNamespaced(this.match.matchID, Events_1.EVENTS.GAME_ENDED, this.onGameEnd);
         debug("Starting match");
         this.match.state = "playing";
         this.playNextGame();
