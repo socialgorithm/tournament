@@ -3,8 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 import { Icon, Container } from 'semantic-ui-react';
 
 import ServerContainer from '../../containers/ServerContainer';
-import CreateMatch from '../../components/Match/CreateMatch';
-import JoinMatch from '../../components/Match/JoinMatch';
+import LobbySelector from '../../components/Lobby';
+import LobbyAdmin from '../../components/Lobby/Admin';
 
 export default (props) => {
     if (!props.socket || !props.socket.socket || !props.socket.socket.connected) {
@@ -25,11 +25,11 @@ export default (props) => {
     return (
         <Switch>
             <Route
-                path='/match/:name'
-                render={ render(JoinMatch) }
+                path='/tournaments/:name'
+                render={ render(LobbyAdmin) }
             />
             <Route
-                render={ render(CreateMatch) }
+                render={ render(LobbySelector) }
             />
         </Switch>
     );

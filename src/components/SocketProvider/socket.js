@@ -31,12 +31,12 @@ export const connect = (props, state) => {
     socket.on('lobby created', (data) => {
         const lobby = data.lobby;
         // Redirect to this token
-        props.history.push(`/match/${lobby.token}`);
+        props.history.push(`/tournaments/${lobby.token}`);
     });
 
     socket.on('lobby exception', (data) => {
         toast.error(data.error);
-        props.history.push('/match');
+        props.history.push('/tournaments');
     });
 
     socket.on('exception', (data) => {

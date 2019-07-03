@@ -15,20 +15,22 @@ import {
 } from 'semantic-ui-react';
 import classNames from 'classnames';
 
-import MatchPage from '../MatchPage';
+import Tournament from '../Tournament'
 
-class JoinMatch extends React.PureComponent {
+class LobbyAdmin extends React.PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             admin: false,
+            availableGames: [],
             lobby: {
                 token: null,
                 players: [],
                 tournament: null,
             },
             tournamentOptions: {
+                gameAddress: null,
                 timeout: 100,
                 numberOfGames: 50,
                 type: 'DoubleElimination',
@@ -78,6 +80,10 @@ class JoinMatch extends React.PureComponent {
                 lobby,
                 showTournament: true,
             });
+        });
+        
+        this.props.socket.socket.on('game list', data => {
+            this.setState({availableGames: data});
         });
 
 	    this.props.socket.socket.on('lobby tournament started', data => {
@@ -272,6 +278,15 @@ class JoinMatch extends React.PureComponent {
         if (!this.state.admin) {
             return null;
         }
+        const availableGames = this.state.availableGames.map(game => {
+            return {
+                text: `${game.info.name}`,
+                value: game.address,
+                title: game.address,
+                icon: game.healthy ? 'green circle' : 'yellow warning sign',
+                disabled: !game.healthy,
+            }
+        });
         const tournamentModes = [
             {
                 text: 'Free For All',
@@ -291,6 +306,12 @@ class JoinMatch extends React.PureComponent {
                     <Grid.Column>
                         <h3>Tournament Settings:</h3>
                         <Form size='small'>
+                            <Form.Select
+                                label='Game'
+                                options={ availableGames }
+                                value={ this.state.tournamentOptions.gameAddress }
+                                onChange={ this.updateOption('gameAddress') }
+                            />
                             <Form.Group widths='equal'>
                                 <Form.Input
                                     label='Timeout (Per Move, in ms)'
@@ -434,7 +455,7 @@ class JoinMatch extends React.PureComponent {
 
         if (this.state.lobby.tournament && this.state.showTournament) {
             return (
-                <MatchPage
+                <Tournament
                   tournamentOptions={ this.state.tournamentOptions }
                   tournament={ this.state.lobby.tournament }
                   backToLobby={this.backToLobby}
@@ -446,7 +467,7 @@ class JoinMatch extends React.PureComponent {
         return (
             <Container textAlign='center' fluid style={{width: '80%'}}>
                 <Segment attached='top' className='socialgorithm-hue-bg animated-hue'>
-                    <h1><Icon name='game' /> Joined Match!</h1>
+                    <h1><Icon name='game' /> Welcome to { this.state.lobby.token }!</h1>
                 </Segment>
                 <Segment attached='bottom' textAlign='left'>
                     <Grid columns={ 3 } divided>
@@ -468,4 +489,4 @@ class JoinMatch extends React.PureComponent {
     }
 };
 
-export default withRouter(JoinMatch);
+export default withRouter(LobbyAdmin);
