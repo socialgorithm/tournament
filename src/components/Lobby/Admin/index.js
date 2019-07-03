@@ -343,7 +343,7 @@ class LobbyAdmin extends React.PureComponent {
                                 primary
                                 icon='play'
                                 title={ title }
-                                disabled={ this.state.activePlayers.length < 2}
+                                disabled={ this.state.activePlayers.length < 2 || this.invalidGameServerSelected() }
                                 content='Start Game'
                                 onClick={ this.startTournament }
                             />
@@ -374,6 +374,12 @@ class LobbyAdmin extends React.PureComponent {
         this.setState({
             activePlayers: this.state.lobby.players,
         });
+    };
+
+    invalidGameServerSelected = () => {
+        return this.state.tournamentOptions.gameAddress === undefined ||
+            this.state.tournamentOptions.gameAddress === null ||
+            this.state.tournamentOptions.gameAddress.length === 0;
     };
 
 	renderPlayers = ({titleText, type, dropText, infoText, displayAddAll}) => {
