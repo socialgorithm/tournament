@@ -9,7 +9,9 @@ export enum EVENTS {
     MATCH_ENDED = "MATCH_ENDED",
     GAME_ENDED = "GAME_ENDED",
     MATCH_UPDATE = "MATCH_UPDATE",
+    GAME_SERVER_UPDATE = "GAME_SERVER_UPDATE",
     // Socket Events
+    GAME_LIST = "game list",
     LOBBY_CREATE = "lobby create",
     LOBBY_TOURNAMENT_START = "lobby tournament start",
     LOBBY_TOURNAMENT_STARTED = "lobby tournament started",

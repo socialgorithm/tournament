@@ -9,28 +9,25 @@ const info = require("../../package.json");
  * If launching from the terminal these options can be set as `--{option name}[ value]`
  */
 export interface IOptions {
-  version?: boolean;
-  verbose?: boolean;
+  game?: string[];
   port?: number;
-  host?: string;
+  version?: boolean;
   help?: number;
 }
 
 export const DEFAULT_OPTIONS: IOptions = {
+  game: ["http://localhost:5433"],
   port: parseInt(process.env.PORT, 10) || 3141,
 };
 
 const optionDefinitions = [
   {
-    description: "The input to process.",
-    name: "verbose",
-    type: Boolean,
-  },
-  {
-    alias: "v",
-    description: "Display the server version",
-    name: "version",
-    type: Boolean,
+    alias: "g",
+    name: "game",
+    description: "A game server to connect to (repeat to specify multiple)",
+    type: String,
+    multiple: true,
+    defaultValue: DEFAULT_OPTIONS.game,
   },
   {
     alias: "p",
@@ -39,6 +36,12 @@ const optionDefinitions = [
     name: "port",
     type: Number,
     typeLabel: "{underline 3141}",
+  },
+  {
+    alias: "v",
+    description: "Display the server version",
+    name: "version",
+    type: Boolean,
   },
   {
     alias: "h",
@@ -60,7 +63,7 @@ const sections = [
   {
     header: "Synopsis",
     content: [
-      `$ ${info.name} {bold --games} {underline 100}`,
+      `$ ${info.name} {bold --game} {underline http://localhost:5001} {bold --game} {underline http://localhost:5002}`,
       `$ ${info.name} {bold --port} {underline 5000}`,
       `$ ${info.name} {bold --help}`,
     ],
@@ -97,10 +100,6 @@ export default (): IOptions => {
   if (options.port) {
     options.port = parseInt(options.port, 10);
   }
-
-  // defaults
-  options.host = options.host || "localhost";
-  options.port = options.port || 3141;
 
   return options;
 };

@@ -1,25 +1,30 @@
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:tournament-server");
+
+import { banner } from "./banner";
 import { IOptions } from "./cli/options";
-import { banner } from "./lib/banner";
+import { GameServerInfoConnection } from "./game-server/GameServerInfoConnection";
 import { LobbyManager } from "./lobby/LobbyManager";
-import { SocketServer } from "./socket/socketServer";
+import { SocketServer } from "./socket/SocketServer";
 
 /**
  * Entrypoint for the SG Tournament Server
  * This will start the socket server and create some PubSub bindings
  */
-export class Server {
-    private socketServer: SocketServer;
-    private LobbyManager: LobbyManager;
+export default class TournamentServer {
+  private socketServer: SocketServer;
+  private LobbyManager: LobbyManager;
 
-    constructor(options: IOptions) {
-        this.socketServer = new SocketServer(options.port);
-        this.LobbyManager = new LobbyManager();
-        this.start();
-    }
+  constructor(options: IOptions) {
+    console.log(banner);
 
-    public start() {
-        console.log(banner);
+    debug("Initialising game server connections");
+    const gameServers = options.game.map(gameServerAddress => new GameServerInfoConnection(gameServerAddress));
 
-        this.socketServer.start();
-    }
+    debug("Initialising socket");
+    this.socketServer = new SocketServer(options.port, gameServers);
+    this.socketServer.start();
+
+    this.LobbyManager = new LobbyManager();
+  }
 }

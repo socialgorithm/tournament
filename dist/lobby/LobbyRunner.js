@@ -13,8 +13,8 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var randomWord = require("random-word");
 var debug = require("debug")("sg:lobbyRunner");
-var PubSub_1 = require("../lib/PubSub");
-var events_1 = require("../socket/events");
+var Events_1 = require("../Events");
+var PubSub_1 = require("../PubSub");
 var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var LobbyRunner = (function () {
     function LobbyRunner(admin) {
@@ -33,18 +33,18 @@ var LobbyRunner = (function () {
                 _this.lobby.players.push(player);
             }
             var lobby = _this.getLobby();
-            _this.pubSub.publish(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
+            _this.pubSub.publish(Events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
                 namespace: lobbyName,
                 player: player
             });
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "connected",
                 namespace: lobbyName,
                 payload: {
                     lobby: lobby
                 }
             });
-            _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+            _this.pubSub.publish(Events_1.EVENTS.SERVER_TO_PLAYER, {
                 event: "lobby joined",
                 payload: {
                     isAdmin: _this.lobby.admin === player,
@@ -53,7 +53,7 @@ var LobbyRunner = (function () {
                 player: player
             });
             if (isSpectating) {
-                _this.pubSub.publish(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
+                _this.pubSub.publish(Events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, {
                     namespace: lobbyName + "-info",
                     player: player
                 });
@@ -75,7 +75,7 @@ var LobbyRunner = (function () {
         this.continueTournament = this.ifAdmin(function (lobbyName) {
             _this.tournamentRunner["continue"]();
             debug("Continue tournament in lobby %s", lobbyName);
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby tournament continued",
                 namespace: lobbyName,
                 payload: _this.getLobby()
@@ -85,12 +85,12 @@ var LobbyRunner = (function () {
             var playerIndex = _this.lobby.players.indexOf(data.player);
             _this.lobby.players.splice(playerIndex, 1);
             debug("Kick player %s in lobby %s", data.player, lobbyName);
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby player kicked",
                 namespace: lobbyName,
                 payload: _this.getLobby()
             });
-            _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+            _this.pubSub.publish(Events_1.EVENTS.SERVER_TO_PLAYER, {
                 event: "kicked",
                 payload: null,
                 player: data.player
@@ -104,12 +104,12 @@ var LobbyRunner = (function () {
             }
             _this.lobby.bannedPlayers.push(data.player);
             debug("Ban player %s in lobby %s", data.player, lobbyName);
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
                 event: "lobby player banned",
                 namespace: lobbyName,
                 payload: _this.getLobby()
             });
-            _this.pubSub.publish(events_1.EVENTS.SERVER_TO_PLAYER, {
+            _this.pubSub.publish(Events_1.EVENTS.SERVER_TO_PLAYER, {
                 event: "banned",
                 payload: null,
                 player: data.player
@@ -122,11 +122,11 @@ var LobbyRunner = (function () {
             token: randomWord() + "-" + randomWord()
         };
         this.pubSub = new PubSub_1["default"]();
-        this.pubSub.subscribe(events_1.EVENTS.LOBBY_JOIN, this.addPlayerToLobby);
-        this.pubSub.subscribe(events_1.EVENTS.LOBBY_TOURNAMENT_START, this.startTournament);
-        this.pubSub.subscribe(events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
-        this.pubSub.subscribe(events_1.EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
-        this.pubSub.subscribe(events_1.EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+        this.pubSub.subscribe(Events_1.EVENTS.LOBBY_JOIN, this.addPlayerToLobby);
+        this.pubSub.subscribe(Events_1.EVENTS.LOBBY_TOURNAMENT_START, this.startTournament);
+        this.pubSub.subscribe(Events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
+        this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
+        this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
     }
     LobbyRunner.prototype.getLobby = function () {
         var tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;

@@ -1,4 +1,4 @@
 import { DEFAULT_OPTIONS } from "./cli/options";
-import { Server } from "./server";
+import Server from "./Server";
 
 const server = new Server(DEFAULT_OPTIONS);

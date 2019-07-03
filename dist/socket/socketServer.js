@@ -4,12 +4,13 @@ var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
 var debug = require("debug")("sg:socketServer");
-var PubSub_1 = require("../lib/PubSub");
-var events_1 = require("./events");
+var Events_1 = require("../Events");
+var PubSub_1 = require("../PubSub");
 var SocketServer = (function () {
-    function SocketServer(port) {
+    function SocketServer(port, gameServers) {
         var _this = this;
         this.port = port;
+        this.gameServers = gameServers;
         this.playerSockets = {};
         this.addPlayerToNamespace = function (data) {
             if (!_this.playerSockets[data.player]) {
@@ -17,6 +18,7 @@ var SocketServer = (function () {
                 return;
             }
             _this.playerSockets[data.player].join(data.namespace);
+            _this.playerSockets[data.player].emit(Events_1.EVENTS.GAME_LIST, _this.gameServers.map(function (server) { return server.status; }));
         };
         this.sendMessageToNamespace = function (data) {
             _this.io["in"](data.namespace).emit(data.event, data.payload);
@@ -58,7 +60,6 @@ var SocketServer = (function () {
             if (!token) {
                 return next(new Error("Missing token"));
             }
-            socket.request.testToken = token;
             next();
         });
         this.io.on("connection", function (socket) {
@@ -71,22 +72,22 @@ var SocketServer = (function () {
             debug("Connected %s", player);
             _this.playerSockets[token] = socket;
             var listenToEvents = [
-                events_1.EVENTS.LOBBY_CREATE,
-                events_1.EVENTS.LOBBY_TOURNAMENT_START,
-                events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
-                events_1.EVENTS.LOBBY_JOIN,
-                events_1.EVENTS.LOBBY_PLAYER_BAN,
-                events_1.EVENTS.LOBBY_PLAYER_KICK,
+                Events_1.EVENTS.LOBBY_CREATE,
+                Events_1.EVENTS.LOBBY_TOURNAMENT_START,
+                Events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
+                Events_1.EVENTS.LOBBY_JOIN,
+                Events_1.EVENTS.LOBBY_PLAYER_BAN,
+                Events_1.EVENTS.LOBBY_PLAYER_KICK,
             ];
             listenToEvents.forEach(function (event) {
                 socket.on(event, _this.onMessageFromSocket(player, event));
             });
-            socket.on("game", function (data) { return _this.pubSub.publish(events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
+            socket.on("game", function (data) { return _this.pubSub.publish(Events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
             socket.on("disconnect", _this.onPlayerDisconnect(player));
         });
-        this.pubSub.subscribe(events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
-        this.pubSub.subscribe(events_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
-        this.pubSub.subscribe(events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
+        this.pubSub.subscribe(Events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
+        this.pubSub.subscribe(Events_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
+        this.pubSub.subscribe(Events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
     };
     SocketServer.prototype.handler = function (req, res) {
         fs.readFile(__dirname + "/../../public/index.html", function (err, data) {
@@ -101,4 +102,4 @@ var SocketServer = (function () {
     return SocketServer;
 }());
 exports.SocketServer = SocketServer;
-//# sourceMappingURL=socketServer.js.map
+//# sourceMappingURL=SocketServer.js.map

@@ -13,8 +13,8 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var uuid = require("uuid/v4");
 var debug = require("debug")("sg:tournamentRunner");
-var PubSub_1 = require("../../lib/PubSub");
-var events_1 = require("../../socket/events");
+var Events_1 = require("../../Events");
+var PubSub_1 = require("../../PubSub");
 var MatchRunner_1 = require("./match/MatchRunner");
 var DoubleEliminationMatchmaker_1 = require("./matchmaker/DoubleEliminationMatchmaker");
 var FreeForAllMatchmaker_1 = require("./matchmaker/FreeForAllMatchmaker");
@@ -47,8 +47,8 @@ var TournamentRunner = (function () {
                     break;
             }
             _this.matches = _this.matchmaker.getRemainingMatches();
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
-                event: events_1.EVENTS.LOBBY_TOURNAMENT_STARTED,
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: Events_1.EVENTS.LOBBY_TOURNAMENT_STARTED,
                 namespace: _this.tournament.lobby,
                 payload: {
                     tournament: _this.getTournament()
@@ -94,11 +94,11 @@ var TournamentRunner = (function () {
                 return;
             }
             var nextMatch = upcomingMatches[0];
-            _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID);
+            _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID, _this.tournament.options.gameAddress);
         };
         this.sendStats = function () {
-            _this.pubSub.publish(events_1.EVENTS.BROADCAST_NAMESPACED, {
-                event: events_1.EVENTS.TOURNAMENT_STATS,
+            _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
+                event: Events_1.EVENTS.TOURNAMENT_STATS,
                 namespace: _this.tournament.lobby,
                 payload: __assign({}, _this.getTournament())
             });
@@ -114,8 +114,8 @@ var TournamentRunner = (function () {
             waiting: !options.autoPlay
         };
         this.pubSub = new PubSub_1["default"]();
-        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, events_1.EVENTS.MATCH_ENDED, this.onMatchEnd);
-        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, events_1.EVENTS.MATCH_UPDATE, this.sendStats);
+        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, Events_1.EVENTS.MATCH_ENDED, this.onMatchEnd);
+        this.pubSub.subscribeNamespaced(this.tournament.tournamentID, Events_1.EVENTS.MATCH_UPDATE, this.sendStats);
     }
     return TournamentRunner;
 }());

@@ -1,8 +1,7 @@
 export interface IOptions {
-    version?: boolean;
-    verbose?: boolean;
+    game?: string[];
     port?: number;
-    host?: string;
+    version?: boolean;
     help?: number;
 }
 export declare const DEFAULT_OPTIONS: IOptions;
