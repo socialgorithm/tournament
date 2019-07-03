@@ -23,12 +23,14 @@ class LobbyAdmin extends React.PureComponent {
 
         this.state = {
             admin: false,
+            availableGames: [],
             lobby: {
                 token: null,
                 players: [],
                 tournament: null,
             },
             tournamentOptions: {
+                gameAddress: null,
                 timeout: 100,
                 numberOfGames: 50,
                 type: 'DoubleElimination',
@@ -78,6 +80,10 @@ class LobbyAdmin extends React.PureComponent {
                 lobby,
                 showTournament: true,
             });
+        });
+        
+        this.props.socket.socket.on('game list', data => {
+            this.setState({availableGames: data});
         });
 
 	    this.props.socket.socket.on('lobby tournament started', data => {
@@ -272,13 +278,13 @@ class LobbyAdmin extends React.PureComponent {
         if (!this.state.admin) {
             return null;
         }
-        const availableGames = [
-            {
-                text: 'Test1',
-                value: 'Test1',
-                title: 'Tic-Tac-Toe'
+        const availableGames = this.state.availableGames.map(game => {
+            return {
+                text: `${game.info.name}`,
+                value: game.address,
+                title: game.address,
             }
-        ]
+        });
         const tournamentModes = [
             {
                 text: 'Free For All',
@@ -301,8 +307,8 @@ class LobbyAdmin extends React.PureComponent {
                             <Form.Select
                                 label='Game'
                                 options={ availableGames }
-                                value={ this.state.tournamentOptions.gameType }
-                                onChange={ this.updateOption('gameType') }
+                                value={ this.state.tournamentOptions.gameAddress }
+                                onChange={ this.updateOption('gameAddress') }
                             />
                             <Form.Group widths='equal'>
                                 <Form.Input
