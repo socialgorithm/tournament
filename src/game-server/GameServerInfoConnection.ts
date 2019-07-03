@@ -25,7 +25,7 @@ export class GameServerInfoConnection {
       address: gameServerAddress,
       healthy: false,
       info: {
-        name: "unknown",
+        name: "Unable to Connect",
       },
     };
     this.publishStatus();
