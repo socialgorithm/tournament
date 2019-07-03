@@ -13,7 +13,7 @@ import IMatchMaker from "./matchmaker/MatchMaker";
 import { Tournament } from "./Tournament";
 
 export type TournamentOptions = {
-  gameServerAddress: string,
+  gameAddress: string,
   autoPlay: boolean,
   numberOfGames: number,
   timeout: number,
@@ -137,7 +137,11 @@ export class TournamentRunner {
 
     const nextMatch = upcomingMatches[0];
     // Run the match
-    this.currentMatchRunner = new MatchRunner(nextMatch, this.tournament.tournamentID, this.tournament.options.gameServerAddress);
+    this.currentMatchRunner = new MatchRunner(
+      nextMatch,
+      this.tournament.tournamentID,
+      this.tournament.options.gameAddress,
+    );
   }
 
   private sendStats = (): void => {

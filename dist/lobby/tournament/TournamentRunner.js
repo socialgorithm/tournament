@@ -94,7 +94,7 @@ var TournamentRunner = (function () {
                 return;
             }
             var nextMatch = upcomingMatches[0];
-            _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID, _this.tournament.options.gameServerAddress);
+            _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID, _this.tournament.options.gameAddress);
         };
         this.sendStats = function () {
             _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
