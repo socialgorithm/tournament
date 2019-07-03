@@ -283,6 +283,8 @@ class LobbyAdmin extends React.PureComponent {
                 text: `${game.info.name}`,
                 value: game.address,
                 title: game.address,
+                icon: game.healthy ? 'green circle' : 'yellow warning sign',
+                disabled: !game.healthy,
             }
         });
         const tournamentModes = [
