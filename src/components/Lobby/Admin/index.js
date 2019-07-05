@@ -280,9 +280,9 @@ class LobbyAdmin extends React.PureComponent {
         }
         const availableGames = this.state.availableGames.map(game => {
             return {
-                text: `${game.info.name}`,
+                text: `${!game.healthy ? '[UNHEALTHY] ' : '' }${game.info.name}`,
                 value: game.address,
-                title: game.address,
+                title: `${game.address}`,
                 icon: game.healthy ? 'green circle' : 'yellow warning sign',
                 disabled: !game.healthy,
             }
@@ -299,7 +299,7 @@ class LobbyAdmin extends React.PureComponent {
                 title: 'League Mode, a player gets kicked out when losing two games',
             },
         ];
-        const title = (this.state.lobby.players.length < 2) ? 'At least two players need to be connected' : 'Start the match';
+        const title = (this.state.lobby.players.length < 2 || this.invalidGameServerSelected()) ? 'Atleast two players + healthy game server connection required' : 'Start the match';
 	    return (
             <Grid columns={ 1 }>
                 <Grid.Row>
@@ -309,6 +309,7 @@ class LobbyAdmin extends React.PureComponent {
                             <Form.Select
                                 label='Game'
                                 options={ availableGames }
+                                className={ this.invalidGameServerSelected() ? 'error' : '' }
                                 value={ this.state.tournamentOptions.gameAddress }
                                 onChange={ this.updateOption('gameAddress') }
                             />
@@ -377,9 +378,10 @@ class LobbyAdmin extends React.PureComponent {
     };
 
     invalidGameServerSelected = () => {
-        return this.state.tournamentOptions.gameAddress === undefined ||
-            this.state.tournamentOptions.gameAddress === null ||
-            this.state.tournamentOptions.gameAddress.length === 0;
+        const currentGameAddress = this.state.tournamentOptions.gameAddress
+        const currentGame = this.state.availableGames.find(game => game.address === currentGameAddress )
+        return currentGameAddress === undefined || currentGameAddress === null || currentGameAddress.length === 0 
+            || currentGame === undefined || currentGame.healthy === false;
     };
 
 	renderPlayers = ({titleText, type, dropText, infoText, displayAddAll}) => {
