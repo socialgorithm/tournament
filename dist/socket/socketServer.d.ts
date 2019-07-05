@@ -10,6 +10,7 @@ export declare class SocketServer {
     private addPlayerToNamespace;
     private sendMessageToNamespace;
     private sendMessageToPlayer;
+    private sendGameListToEveryone;
     private onMessageFromSocket;
     private onPlayerDisconnect;
     private handler;

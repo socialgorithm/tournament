@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
+var debug = require("debug")("sg:socketServer");
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
-var debug = require("debug")("sg:socketServer");
 var Events_1 = require("../Events");
 var PubSub_1 = require("../PubSub");
 var SocketServer = (function () {
@@ -30,6 +30,12 @@ var SocketServer = (function () {
                 return;
             }
             socket.emit(data.event, data.payload);
+        };
+        this.sendGameListToEveryone = function (data) {
+            debug("Game server list updated, publishing update: %O", data);
+            Object.values(_this.playerSockets).forEach(function (socket) {
+                socket.emit(Events_1.EVENTS.GAME_LIST, data);
+            });
         };
         this.onMessageFromSocket = function (player, type) { return function (payload) {
             var data = {
@@ -88,6 +94,7 @@ var SocketServer = (function () {
         this.pubSub.subscribe(Events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
         this.pubSub.subscribe(Events_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
         this.pubSub.subscribe(Events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
+        this.pubSub.subscribe(Events_1.EVENTS.GAME_LIST, this.sendGameListToEveryone);
     };
     SocketServer.prototype.handler = function (req, res) {
         fs.readFile(__dirname + "/../../public/index.html", function (err, data) {

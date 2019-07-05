@@ -57,6 +57,7 @@ export class GameServerInfoConnection {
 
     this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_INFO, (gameInfo: GameInfoMessage) => {
       this.status.info = gameInfo;
+      this.publishStatus();
     });
 
     this.gameSocket.on("disconnect", () => {

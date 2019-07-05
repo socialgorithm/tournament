@@ -40,6 +40,7 @@ var GameServerInfoConnection = (function () {
         });
         this.gameSocket.on(game_server_1.GAME_SOCKET_MESSAGE.GAME_INFO, function (gameInfo) {
             _this.status.info = gameInfo;
+            _this.publishStatus();
         });
         this.gameSocket.on("disconnect", function () {
             debug("Connection to " + gameServerAddress + " lost!");

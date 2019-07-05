@@ -1,11 +1,12 @@
+// tslint:disable-next-line:no-var-requires
+const debug = require("debug")("sg:socketServer");
+
 import { Player } from "@socialgorithm/game-server";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
-// tslint:disable-next-line:no-var-requires
-const debug = require("debug")("sg:socketServer");
 import { EVENTS } from "../Events";
-import { GameServerInfoConnection } from "../game-server/GameServerInfoConnection";
+import { GameServerInfoConnection, GameServerStatus } from "../game-server/GameServerInfoConnection";
 import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "../Messages";
 import PubSub from "../PubSub";
 
@@ -78,7 +79,7 @@ export class SocketServer {
     this.pubSub.subscribe(EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
     this.pubSub.subscribe(EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
     this.pubSub.subscribe(EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
-    // this.pubSub.subscribe(EVENTS.GAME_LIST, this.sendGameListToEveryone);
+    this.pubSub.subscribe(EVENTS.GAME_LIST, this.sendGameListToEveryone);
   }
 
   private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
@@ -104,6 +105,13 @@ export class SocketServer {
       return;
     }
     socket.emit(data.event, data.payload);
+  }
+
+  private sendGameListToEveryone = (data: GameServerStatus[]) => {
+    debug("Game server list updated, publishing update: %O", data);
+    Object.values(this.playerSockets).forEach(socket => {
+      socket.emit(EVENTS.GAME_LIST, data);
+    });
   }
 
   /**
