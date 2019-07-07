@@ -4,8 +4,8 @@ const debug = require("debug")("sg:gameServerInfoConnection");
 import * as io from "socket.io-client";
 
 import { GAME_SOCKET_MESSAGE, GameInfoMessage } from "@socialgorithm/game-server";
-import { EVENTS } from "../Events";
-import PubSub from "../PubSub";
+import { EVENTS } from "../events/Events";
+import PubSub from "../pub-sub/PubSub";
 
 export type GameServerStatus = {
   address: string,

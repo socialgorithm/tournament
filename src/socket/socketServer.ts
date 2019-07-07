@@ -5,10 +5,10 @@ import { Player } from "@socialgorithm/game-server";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
-import { EVENTS } from "../Events";
+import { EVENTS } from "../events/Events";
+import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "../events/Messages";
 import { GameServerInfoConnection, GameServerStatus } from "../game-server/GameServerInfoConnection";
-import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "../Messages";
-import PubSub from "../PubSub";
+import PubSub from "../pub-sub/PubSub";
 
 export class SocketServer {
   private io: SocketIO.Server;

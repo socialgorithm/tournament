@@ -11,10 +11,10 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
-var uuid = require("uuid/v4");
 var debug = require("debug")("sg:tournamentRunner");
-var Events_1 = require("../../Events");
-var PubSub_1 = require("../../PubSub");
+var uuid = require("uuid/v4");
+var Events_1 = require("../../events/Events");
+var PubSub_1 = require("../../pub-sub/PubSub");
 var MatchRunner_1 = require("./match/MatchRunner");
 var DoubleEliminationMatchmaker_1 = require("./matchmaker/DoubleEliminationMatchmaker");
 var FreeForAllMatchmaker_1 = require("./matchmaker/FreeForAllMatchmaker");

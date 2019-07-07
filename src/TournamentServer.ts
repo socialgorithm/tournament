@@ -1,7 +1,6 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:tournament-server");
 
-import { banner } from "./banner";
 import { IOptions } from "./cli/options";
 import { GameServerInfoConnection } from "./game-server/GameServerInfoConnection";
 import { GameServerListPublisher } from "./game-server/GameServerListPublisher";
@@ -30,3 +29,12 @@ export default class TournamentServer {
     this.LobbyManager = new LobbyManager();
   }
 }
+
+const banner = `
+                _       _                  _ _   _
+ ___  ___   ___(_) __ _| | __ _  ___  _ __(_) |_| |__  _ __ ___
+/ __|/ _ \\ / __| |/ _\` | |/ _\` |/ _ \\| '__| | __| '_ \\| '_ \` _ \\
+\\__ \\ (_) | (__| | (_| | | (_| | (_) | |  | | |_| | | | | | | | |
+|___/\\___/ \\___|_|\\__,_|_|\\__, |\\___/|_|  |_|\\__|_| |_|_| |_| |_|
+                           |___/
+`;

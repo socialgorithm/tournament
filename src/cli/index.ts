@@ -1,4 +1,4 @@
-import Server from "../Server";
+import TournamentServer from "../TournamentServer";
 import { IOptions } from "./options";
 
-export default (options: IOptions) => new Server(options);
+export default (options: IOptions) => new TournamentServer(options);

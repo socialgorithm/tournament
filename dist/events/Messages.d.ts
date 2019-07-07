@@ -1,5 +1,5 @@
 import { Player } from "@socialgorithm/game-server";
-import { TournamentOptions } from "./lobby/tournament/TournamentRunner";
+import { TournamentOptions } from "../lobby/tournament/TournamentRunner";
 export declare type SERVER_TO_PLAYER_MESSAGE = {
     player: Player;
     event: string;

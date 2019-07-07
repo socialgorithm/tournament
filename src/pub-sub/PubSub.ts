@@ -1,7 +1,7 @@
 import * as PubSubJS from "pubsub-js";
-import { EVENTS } from "./Events";
-import { GameServerStatus } from "./game-server/GameServerInfoConnection";
-import * as msg from "./Messages";
+import { EVENTS } from "../events/Events";
+import * as msg from "../events/Messages";
+import { GameServerStatus } from "../game-server/GameServerInfoConnection";
 
 /**
  * Any class that wants to use the PubSub bus needs to extend this class.

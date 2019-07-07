@@ -13,8 +13,8 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var randomWord = require("random-word");
 var debug = require("debug")("sg:lobbyRunner");
-var Events_1 = require("../Events");
-var PubSub_1 = require("../PubSub");
+var Events_1 = require("../events/Events");
+var PubSub_1 = require("../pub-sub/PubSub");
 var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var LobbyRunner = (function () {
     function LobbyRunner(admin) {

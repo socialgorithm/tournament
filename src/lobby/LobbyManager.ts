@@ -1,9 +1,9 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:lobbyManager");
 
-import { EVENTS } from "../Events";
-import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../Messages";
-import PubSub from "../PubSub";
+import { EVENTS } from "../events/Events";
+import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../events/Messages";
+import PubSub from "../pub-sub/PubSub";
 import { LobbyRunner } from "./LobbyRunner";
 
 export class LobbyManager {

@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var debug = require("debug")("sg:lobbyManager");
-var Events_1 = require("../Events");
-var PubSub_1 = require("../PubSub");
+var Events_1 = require("../events/Events");
+var PubSub_1 = require("../pub-sub/PubSub");
 var LobbyRunner_1 = require("./LobbyRunner");
 var LobbyManager = (function () {
     function LobbyManager() {

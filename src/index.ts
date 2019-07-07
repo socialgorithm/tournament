@@ -1,4 +1,4 @@
 import { DEFAULT_OPTIONS } from "./cli/options";
-import Server from "./Server";
+import TournamentServer from "./TournamentServer";
 
-const server = new Server(DEFAULT_OPTIONS);
+const server = new TournamentServer(DEFAULT_OPTIONS);

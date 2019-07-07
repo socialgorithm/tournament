@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
-var uuid = require("uuid/v4");
 var debug = require("debug")("sg:matchRunner");
-var Events_1 = require("../../../Events");
-var PubSub_1 = require("../../../PubSub");
+var uuid = require("uuid/v4");
+var Events_1 = require("../../../events/Events");
+var PubSub_1 = require("../../../pub-sub/PubSub");
 var GameRunner_1 = require("./game/GameRunner");
 var MatchRunner = (function () {
     function MatchRunner(match, tournamentID, gameServerAddress) {

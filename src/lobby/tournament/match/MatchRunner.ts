@@ -1,12 +1,13 @@
-import * as uuid from "uuid/v4";
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:matchRunner");
 
-import { EVENTS } from "../../../Events";
-import PubSub from "../../../PubSub";
+import * as uuid from "uuid/v4";
+
+import { EVENTS } from "../../../events/Events";
+import PubSub from "../../../pub-sub/PubSub";
 import { Game } from "./game/Game";
-import { GameRunner, GameRunnerOptions } from "./game/GameRunner";
-import { Match, MatchStats } from "./Match";
+import { GameRunner } from "./game/GameRunner";
+import { Match } from "./Match";
 
 export class MatchRunner {
     private pubSub: PubSub;

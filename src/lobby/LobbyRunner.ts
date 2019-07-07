@@ -3,9 +3,9 @@ import * as randomWord from "random-word";
 const debug = require("debug")("sg:lobbyRunner");
 
 import { Player } from "@socialgorithm/game-server";
-import { EVENTS } from "../Events";
-import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE } from "../Messages";
-import PubSub from "../PubSub";
+import { EVENTS } from "../events/Events";
+import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE } from "../events/Messages";
+import PubSub from "../pub-sub/PubSub";
 import { Lobby } from "./Lobby";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 

@@ -4,8 +4,8 @@ var debug = require("debug")("sg:socketServer");
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
-var Events_1 = require("../Events");
-var PubSub_1 = require("../PubSub");
+var Events_1 = require("../events/Events");
+var PubSub_1 = require("../pub-sub/PubSub");
 var SocketServer = (function () {
     function SocketServer(port, gameServers) {
         var _this = this;

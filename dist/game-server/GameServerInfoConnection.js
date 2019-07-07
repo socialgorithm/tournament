@@ -3,8 +3,8 @@ exports.__esModule = true;
 var debug = require("debug")("sg:gameServerInfoConnection");
 var io = require("socket.io-client");
 var game_server_1 = require("@socialgorithm/game-server");
-var Events_1 = require("../Events");
-var PubSub_1 = require("../PubSub");
+var Events_1 = require("../events/Events");
+var PubSub_1 = require("../pub-sub/PubSub");
 var GameServerInfoConnection = (function () {
     function GameServerInfoConnection(gameServerAddress) {
         var _this = this;

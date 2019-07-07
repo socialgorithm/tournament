@@ -1,8 +1,8 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:game-server-list-publisher");
 
-import { EVENTS } from "../Events";
-import PubSub from "../PubSub";
+import { EVENTS } from "../events/Events";
+import PubSub from "../pub-sub/PubSub";
 import { GameServerStatus } from "./GameServerInfoConnection";
 
 interface IGameList { [s: string]: GameServerStatus; }
