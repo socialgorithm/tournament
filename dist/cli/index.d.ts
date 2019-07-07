@@ -1,4 +1,4 @@
-import Server from "../TournamentServer";
+import TournamentServer from "../TournamentServer";
 import { IOptions } from "./options";
-declare const _default: (options: IOptions) => Server;
+declare const _default: (options: IOptions) => TournamentServer;
 export default _default;

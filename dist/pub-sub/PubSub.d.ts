@@ -1,6 +1,6 @@
 import { EVENTS } from "../events/Events";
-import { GameServerStatus } from "../game-server/GameServerInfoConnection";
 import * as msg from "../events/Messages";
+import { GameServerStatus } from "../game-server/GameServerInfoConnection";
 export default class PubSub {
     private subscriptionTokens;
     publish(event: EVENTS.BROADCAST_NAMESPACED, data: msg.BROADCAST_NAMESPACED_MESSAGE): void;

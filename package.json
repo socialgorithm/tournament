@@ -10,7 +10,7 @@
     "dev": "tsc && ts-node -r tsconfig-paths/register --files src/index.ts",
     "start:opts": "tsc && ts-node bin/index.js",
     "build": "tsc -w",
-    "test": "npm run lint && cross-env TS_NODE_FILES=true nyc mocha -r ts-node/register -r tsconfig-paths/register --recursive 'test/**/*.test.ts'",
+    "test": "npm run lint",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
     "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
     "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
@@ -58,6 +58,7 @@
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",
+    "pre-commit": "^1.2.2",
     "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.8.0",
     "tslint": "^5.13.1",
