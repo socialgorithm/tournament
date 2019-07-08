@@ -127,9 +127,9 @@ export class SocketServer {
   }
 
   private onPlayerDisconnect = (player: Player) => () => {
-    // Just remove the player from the list
     debug("Removing player (%s) from server", player);
     delete this.playerSockets[player];
+    this.pubSub.publish(EVENTS.PLAYER_DISCONNECTED, { player });
   }
 
   /**

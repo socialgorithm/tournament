@@ -19,6 +19,7 @@ var TournamentRunner_1 = require("./tournament/TournamentRunner");
 var LobbyRunner = (function () {
     function LobbyRunner(admin) {
         var _this = this;
+        this.adminConnected = false;
         this.addPlayerToLobby = function (data) {
             var player = data.player;
             var lobbyName = data.payload.token;
@@ -28,6 +29,10 @@ var LobbyRunner = (function () {
             }
             if (_this.lobby.bannedPlayers.indexOf(player) > -1) {
                 return;
+            }
+            if (_this.lobby.admin === player) {
+                debug("Setting admin connected in " + _this.lobby);
+                _this.adminConnected = true;
             }
             if (!isSpectating && _this.lobby.players.indexOf(player) < 0) {
                 _this.lobby.players.push(player);
@@ -60,6 +65,26 @@ var LobbyRunner = (function () {
             }
             debug("Added player %s to lobby %s", player, lobbyName);
         };
+        this.removeDisconnectedPlayer = function (data) {
+            var disconnectedPlayer = data.player;
+            var lobby = _this.getLobby();
+            var foundIndex = _this.lobby.players.indexOf(disconnectedPlayer);
+            if (foundIndex > -1) {
+                debug("Removing " + disconnectedPlayer + " from " + lobby.token);
+                _this.lobby.players.splice(foundIndex, 1);
+                _this.pubSub.publish(Events_1.EVENTS.BROADCAST_NAMESPACED, {
+                    event: "lobby player disconnected",
+                    namespace: lobby.token,
+                    payload: {
+                        lobby: lobby
+                    }
+                });
+            }
+            if (disconnectedPlayer === lobby.admin) {
+                debug("Setting admin disconnected in " + _this.lobby);
+                _this.adminConnected = false;
+            }
+        };
         this.ifAdmin = function (next) { return function (data) {
             var lobbyName = data.payload.token;
             if (data.player !== _this.lobby.admin || lobbyName !== _this.lobby.token) {
@@ -68,6 +93,9 @@ var LobbyRunner = (function () {
             next(lobbyName, data);
         }; };
         this.startTournament = this.ifAdmin(function (lobbyName, data) {
+            if (_this.tournamentRunner) {
+                _this.tournamentRunner.destroy();
+            }
             _this.tournamentRunner = new TournamentRunner_1.TournamentRunner(data.payload.options, _this.lobby.players, _this.lobby.token);
             debug("Starting tournament in lobby %s", lobbyName);
             _this.tournamentRunner.start();
@@ -127,6 +155,7 @@ var LobbyRunner = (function () {
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+        this.pubSub.subscribe(Events_1.EVENTS.PLAYER_DISCONNECTED, this.removeDisconnectedPlayer);
         var expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + 6);
         this.expiresAt = expiresAt;
@@ -134,6 +163,19 @@ var LobbyRunner = (function () {
     LobbyRunner.prototype.getLobby = function () {
         var tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;
         return __assign({ tournament: tournament }, this.lobby);
+    };
+    LobbyRunner.prototype.isExpired = function () {
+        var now = new Date();
+        return now > this.expiresAt;
+    };
+    LobbyRunner.prototype.isInactive = function () {
+        return this.lobby.players.length === 0 && !this.adminConnected;
+    };
+    LobbyRunner.prototype.destroy = function () {
+        if (this.tournamentRunner) {
+            this.tournamentRunner.destroy();
+        }
+        this.pubSub.unsubscribeAll();
     };
     return LobbyRunner;
 }());

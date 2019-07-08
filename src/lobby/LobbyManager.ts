@@ -16,7 +16,7 @@ export class LobbyManager {
         this.pubSub.subscribe(EVENTS.LOBBY_CREATE, this.createLobby);
         this.pubSub.subscribe(EVENTS.LOBBY_JOIN, this.checkLobby);
 
-        setInterval(() => this.deleteExpiredLobbies(), 1000 * 60 * 10);
+        setInterval(() => this.deleteExpiredLobbies(), 1000 * 60);
     }
 
     private createLobby = (data: LOBBY_CREATE_MESSAGE) => {
@@ -60,7 +60,13 @@ export class LobbyManager {
 
     private deleteExpiredLobbies = () => {
       debug("Deleting expired lobbies");
-      const now = new Date();
-      this.lobbyRunners = this.lobbyRunners.filter(lobbyRunner => lobbyRunner.expiresAt > now);
+      this.lobbyRunners = this.lobbyRunners.filter(lobbyRunner => {
+        const isExpired = lobbyRunner.isExpired() || lobbyRunner.isInactive();
+        if (isExpired) {
+          lobbyRunner.destroy();
+          debug(`Will delete ${lobbyRunner.getLobby().token}`);
+        }
+        return !isExpired;
+      });
     }
 }

@@ -27,6 +27,7 @@ export declare class TournamentRunner {
     };
     start: () => void;
     continue: () => void;
+    destroy: () => void;
     private onTournamentEnd;
     private onMatchEnd;
     private playNextMatch;

@@ -96,6 +96,10 @@ export class TournamentRunner {
     this.playNextMatch();
   }
 
+  public destroy = () => {
+    this.pubSub.unsubscribeAll();
+  }
+
   private onTournamentEnd = () => {
     debug("Tournament Ended in %s", this.tournament.lobby);
     this.tournament.finished = true;

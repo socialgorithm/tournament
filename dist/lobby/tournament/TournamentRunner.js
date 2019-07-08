@@ -61,6 +61,9 @@ var TournamentRunner = (function () {
         this["continue"] = function () {
             _this.playNextMatch();
         };
+        this.destroy = function () {
+            _this.pubSub.unsubscribeAll();
+        };
         this.onTournamentEnd = function () {
             debug("Tournament Ended in %s", _this.tournament.lobby);
             _this.tournament.finished = true;

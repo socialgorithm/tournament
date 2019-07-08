@@ -56,3 +56,7 @@ export type LOBBY_PLAYER_BAN_MESSAGE = {
 export type LOBBY_PLAYER_KICK_MESSAGE = {
   player: Player,
 };
+
+export type PLAYER_DISCONNECTED_MESSAGE = {
+  player: Player,
+};

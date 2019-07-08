@@ -4,16 +4,17 @@ const debug = require("debug")("sg:lobbyRunner");
 
 import { Player } from "@socialgorithm/game-server";
 import { EVENTS } from "../events/Events";
-import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE } from "../events/Messages";
+import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE, PLAYER_DISCONNECTED_MESSAGE } from "../events/Messages";
 import PubSub from "../pub-sub/PubSub";
 import { Lobby } from "./Lobby";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 
 export class LobbyRunner {
-  public expiresAt: Date;
   private lobby: Lobby;
   private tournamentRunner: TournamentRunner;
   private pubSub: PubSub;
+  private expiresAt: Date;
+  private adminConnected: boolean = false;
 
   constructor(admin: Player) {
     this.lobby = {
@@ -30,6 +31,7 @@ export class LobbyRunner {
     this.pubSub.subscribe(EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+    this.pubSub.subscribe(EVENTS.PLAYER_DISCONNECTED, this.removeDisconnectedPlayer);
 
     // Set expiry
     const expiresAt = new Date(); // now
@@ -46,6 +48,22 @@ export class LobbyRunner {
     };
   }
 
+  public isExpired() {
+    const now = new Date();
+    return now > this.expiresAt;
+  }
+
+  public isInactive() {
+    return this.lobby.players.length === 0 && !this.adminConnected;
+  }
+
+  public destroy() {
+    if (this.tournamentRunner) {
+      this.tournamentRunner.destroy();
+    }
+    this.pubSub.unsubscribeAll();
+  }
+
   private addPlayerToLobby = (data: LOBBY_JOIN_MESSAGE) => {
     // add data.player to data.payload.token
     const player = data.player;
@@ -58,6 +76,11 @@ export class LobbyRunner {
 
     if (this.lobby.bannedPlayers.indexOf(player) > -1) {
       return;
+    }
+
+    if (this.lobby.admin === player) {
+      debug(`Setting admin connected in ${this.lobby}`);
+      this.adminConnected = true;
     }
 
     if (!isSpectating && this.lobby.players.indexOf(player) < 0) {
@@ -102,6 +125,30 @@ export class LobbyRunner {
     debug("Added player %s to lobby %s", player, lobbyName);
   }
 
+  private removeDisconnectedPlayer = (data: PLAYER_DISCONNECTED_MESSAGE) => {
+    const disconnectedPlayer = data.player;
+    const lobby = this.getLobby();
+
+    const foundIndex = this.lobby.players.indexOf(disconnectedPlayer);
+    if (foundIndex > -1) {
+      debug(`Removing ${disconnectedPlayer} from ${lobby.token}`);
+      this.lobby.players.splice(foundIndex, 1);
+      // Publish a lobby update
+      this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+        event: "lobby player disconnected",
+        namespace: lobby.token,
+        payload: {
+          lobby,
+        },
+      });
+    }
+
+    if (disconnectedPlayer === lobby.admin) {
+      debug(`Setting admin disconnected in ${this.lobby}`);
+      this.adminConnected = false;
+    }
+  }
+
   /**
    * Wrap any method in a check for the admin user
    */
@@ -115,6 +162,10 @@ export class LobbyRunner {
 
   // tslint:disable-next-line:member-ordering
   private startTournament = this.ifAdmin((lobbyName: string, data: LOBBY_TOURNAMENT_START_MESSAGE) => {
+    if (this.tournamentRunner) {
+      this.tournamentRunner.destroy();
+    }
+
     this.tournamentRunner = new TournamentRunner(
       data.payload.options,
       this.lobby.players,

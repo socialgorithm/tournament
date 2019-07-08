@@ -21,6 +21,7 @@ export default class PubSub {
     public publish(event: EVENTS.SERVER_TO_PLAYER, data: msg.SERVER_TO_PLAYER_MESSAGE): void;
     public publish(event: EVENTS.GAME_SERVER_UPDATE, data: GameServerStatus): void;
     public publish(event: EVENTS.GAME_LIST, data: GameServerStatus[]): void;
+    public publish(event: EVENTS.PLAYER_DISCONNECTED, data: msg.PLAYER_DISCONNECTED_MESSAGE): void;
     public publish(event: string, data: any) {
         PubSubJS.publish(event, data);
     }
@@ -44,6 +45,7 @@ export default class PubSub {
     // Pure pubsub events
     public subscribe(event: EVENTS.BROADCAST_NAMESPACED, fn: (data: msg.BROADCAST_NAMESPACED_MESSAGE) => void): void;
     public subscribe(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, fn: (data: msg.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.PLAYER_DISCONNECTED, fn: (data: msg.PLAYER_DISCONNECTED_MESSAGE) => void): void;
     public subscribe(event: EVENTS.PLAYER_TO_GAME, fn: (data: msg.PLAYER_TO_GAME_MESSAGE) => void): void;
     public subscribe(event: EVENTS.SERVER_TO_PLAYER, fn: (data: msg.SERVER_TO_PLAYER_MESSAGE) => void): void;
     public subscribe(event: EVENTS.GAME_SERVER_UPDATE, fn: (data: GameServerStatus) => void): void;

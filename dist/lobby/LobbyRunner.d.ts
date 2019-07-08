@@ -1,9 +1,10 @@
 import { Player } from "@socialgorithm/game-server";
 export declare class LobbyRunner {
-    expiresAt: Date;
     private lobby;
     private tournamentRunner;
     private pubSub;
+    private expiresAt;
+    private adminConnected;
     constructor(admin: Player);
     getLobby(): {
         admin: string;
@@ -22,7 +23,11 @@ export declare class LobbyRunner {
             matches: import("./tournament/match/Match").Match[];
         };
     };
+    isExpired(): boolean;
+    isInactive(): boolean;
+    destroy(): void;
     private addPlayerToLobby;
+    private removeDisconnectedPlayer;
     private ifAdmin;
     private startTournament;
     private continueTournament;

@@ -42,3 +42,6 @@ export declare type LOBBY_PLAYER_BAN_MESSAGE = {
 export declare type LOBBY_PLAYER_KICK_MESSAGE = {
     player: Player;
 };
+export declare type PLAYER_DISCONNECTED_MESSAGE = {
+    player: Player;
+};
