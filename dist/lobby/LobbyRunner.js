@@ -127,6 +127,9 @@ var LobbyRunner = (function () {
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+        var expiresAt = new Date();
+        expiresAt.setHours(expiresAt.getHours() + 6);
+        this.expiresAt = expiresAt;
     }
     LobbyRunner.prototype.getLobby = function () {
         var tournament = this.tournamentRunner ? this.tournamentRunner.getTournament() : null;

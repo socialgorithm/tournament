@@ -10,6 +10,7 @@ import { Lobby } from "./Lobby";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 
 export class LobbyRunner {
+  public expiresAt: Date;
   private lobby: Lobby;
   private tournamentRunner: TournamentRunner;
   private pubSub: PubSub;
@@ -29,6 +30,11 @@ export class LobbyRunner {
     this.pubSub.subscribe(EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
     this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
+
+    // Set expiry
+    const expiresAt = new Date(); // now
+    expiresAt.setHours(expiresAt.getHours() + 6);
+    this.expiresAt = expiresAt;
   }
 
   public getLobby() {

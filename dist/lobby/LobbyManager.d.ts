@@ -4,4 +4,5 @@ export declare class LobbyManager {
     constructor();
     private createLobby;
     private checkLobby;
+    private deleteExpiredLobbies;
 }

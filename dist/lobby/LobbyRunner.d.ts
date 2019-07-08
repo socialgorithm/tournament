@@ -1,5 +1,6 @@
 import { Player } from "@socialgorithm/game-server";
 export declare class LobbyRunner {
+    expiresAt: Date;
     private lobby;
     private tournamentRunner;
     private pubSub;

@@ -37,9 +37,15 @@ var LobbyManager = (function () {
                 });
             }
         };
+        this.deleteExpiredLobbies = function () {
+            debug("Deleting expired lobbies");
+            var now = new Date();
+            _this.lobbyRunners = _this.lobbyRunners.filter(function (lobbyRunner) { return lobbyRunner.expiresAt > now; });
+        };
         this.pubSub = new PubSub_1["default"]();
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_CREATE, this.createLobby);
         this.pubSub.subscribe(Events_1.EVENTS.LOBBY_JOIN, this.checkLobby);
+        setInterval(function () { return _this.deleteExpiredLobbies(); }, 1000 * 60 * 10);
     }
     return LobbyManager;
 }());
