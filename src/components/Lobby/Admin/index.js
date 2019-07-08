@@ -108,6 +108,17 @@ class LobbyAdmin extends React.PureComponent {
             this.setState({lobby: newLobby});
         });
         
+        this.props.socket.socket.on('lobby player disconnected', data => {
+            if (!data.lobby) {
+                return;
+            }
+            console.log('lobby player disconnected', data.lobby);
+            this.setState({
+                lobby: data.lobby,
+            });
+            this.ensureActivePlayersConnected();
+        });
+
 	    this.props.socket.socket.on('lobby player kicked', data => {
 		    if (!data.lobby) {
 			    return;
@@ -115,7 +126,8 @@ class LobbyAdmin extends React.PureComponent {
             console.log('lobby player kicked', data.lobby);
 		    this.setState({
 			    lobby: data.lobby,
-		    });
+            });
+            this.ensureActivePlayersConnected();
 	    });
 	    this.props.socket.socket.on('lobby player banned', data => {
 		    if (!data.lobby) {
@@ -124,7 +136,8 @@ class LobbyAdmin extends React.PureComponent {
             console.log('lobby player banned', data.lobby);
 		    this.setState({
 			    lobby: data.lobby,
-		    });
+            });
+            this.ensureActivePlayersConnected();
 	    });
         this.props.socket.socket.on('tournament stats', data => {
             const lobby = this.state.lobby;
@@ -193,6 +206,14 @@ class LobbyAdmin extends React.PureComponent {
         });
         this.removeActivePlayer(token);
     };
+
+    ensureActivePlayersConnected = () => {
+        const activePlayers = [...this.state.activePlayers];
+        this.setState({
+            activePlayers: activePlayers.filter(activePlayer => this.state.lobby.players.indexOf(activePlayer) !== -1 ),
+        });
+
+    }
 
     addActivePlayer = (token) => {
         const activePlayers = [...this.state.activePlayers];
