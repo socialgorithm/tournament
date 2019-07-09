@@ -11,18 +11,19 @@ var optionDefinitions = [
     {
         alias: "g",
         name: "game",
-        description: "A game server to connect to (repeat to specify multiple)",
+        description: "A game server to connect to, defaults to {underline " + exports.DEFAULT_OPTIONS.game + "}",
         type: String,
+        typeLabel: "{underline " + exports.DEFAULT_OPTIONS.game + "}",
         multiple: true,
         defaultValue: exports.DEFAULT_OPTIONS.game
     },
     {
         alias: "p",
         defaultValue: exports.DEFAULT_OPTIONS.port,
-        description: "Port on which the server should be started (defaults to 3141)",
+        description: "Port on which the server should be started, defaults to {underline " + exports.DEFAULT_OPTIONS.port + "}",
         name: "port",
         type: Number,
-        typeLabel: "{underline 3141}"
+        typeLabel: "{underline " + exports.DEFAULT_OPTIONS.port + "}"
     },
     {
         alias: "v",
