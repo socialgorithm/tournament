@@ -1,10 +1,6 @@
 import { Player } from "./Player";
 import { TournamentOptions } from "./Tournament";
 
-/**
- * PubSub/Socket API: Message Definitions
- */
-
 export type SERVER_TO_PLAYER_MESSAGE = {
   player: Player,
   event: string,
