@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/model",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Data Model for Socialgorithm Tournaments",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
