@@ -3,6 +3,7 @@
   "version": "0.0.5",
   "description": "Data Model for Socialgorithm Tournaments",
   "main": "dist/index.js",
+  "types" : "dist/index.d.ts",
   "scripts": {
     "build": "tsc -w",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
