@@ -1,7 +1,7 @@
 import { EVENTS } from "./Events";
 import { Game } from "./Game";
 import { Lobby } from "./Lobby";
-import { Match } from "./Match";
+import { Match, MatchOptions } from "./Match";
 import * as MSG from "./Messages";
 import { Player } from "./Player";
 import { Tournament, TournamentOptions } from "./Tournament";
@@ -11,6 +11,7 @@ export {
   Game,
   Lobby,
   Match,
+  MatchOptions,
   MSG,
   Player,
   Tournament,
