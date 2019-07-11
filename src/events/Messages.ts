@@ -11,11 +11,6 @@ export type SERVER_TO_PLAYER_MESSAGE = {
   payload: any,
 };
 
-export type PLAYER_TO_GAME_MESSAGE = {
-  player: Player,
-  data: any,
-};
-
 export type BROADCAST_NAMESPACED_MESSAGE = {
   namespace: string,
   event: string,

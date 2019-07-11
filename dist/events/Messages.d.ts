@@ -5,10 +5,6 @@ export declare type SERVER_TO_PLAYER_MESSAGE = {
     event: string;
     payload: any;
 };
-export declare type PLAYER_TO_GAME_MESSAGE = {
-    player: Player;
-    data: any;
-};
 export declare type BROADCAST_NAMESPACED_MESSAGE = {
     namespace: string;
     event: string;

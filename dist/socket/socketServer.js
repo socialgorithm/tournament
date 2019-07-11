@@ -89,7 +89,6 @@ var SocketServer = (function () {
             listenToEvents.forEach(function (event) {
                 socket.on(event, _this.onMessageFromSocket(player, event));
             });
-            socket.on("game", function (data) { return _this.pubSub.publish(Events_1.EVENTS.PLAYER_TO_GAME, { player: player, data: data }); });
             socket.on("disconnect", _this.onPlayerDisconnect(player));
         });
         this.pubSub.subscribe(Events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);

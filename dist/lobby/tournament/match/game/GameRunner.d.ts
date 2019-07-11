@@ -5,13 +5,13 @@ export declare type GameRunnerOptions = {
 export declare class GameRunner {
     private matchID;
     private game;
+    private options;
     private gameSocket;
     private pubSub;
     constructor(matchID: string, game: Game, options: GameRunnerOptions);
     close(): void;
     private start;
+    private onStart;
     private onFinish;
     private onUpdate;
-    private onPlayerToGame;
-    private onGameToPlayer;
 }

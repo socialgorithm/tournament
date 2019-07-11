@@ -70,8 +70,6 @@ export class SocketServer {
         socket.on(event, this.onMessageFromSocket(player, event));
       });
 
-      // Special events
-      socket.on("game", (data: any) => this.pubSub.publish(EVENTS.PLAYER_TO_GAME, { player, data }));
       socket.on("disconnect", this.onPlayerDisconnect(player));
     });
 
