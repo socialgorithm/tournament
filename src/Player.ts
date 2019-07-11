@@ -1,1 +1,1 @@
-export type Player = string
+export type Player = string;
