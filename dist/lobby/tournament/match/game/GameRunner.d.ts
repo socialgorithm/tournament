@@ -1,4 +1,4 @@
-import { Game } from "./Game";
+import { Game } from "@socialgorithm/model";
 export declare type GameRunnerOptions = {
     gameServerAddress: string;
 };

@@ -1,4 +1,4 @@
-import { Match } from "../match/Match";
+import { Match } from "@socialgorithm/model";
 
 export type MatchParent = {
     playerIndex: number;

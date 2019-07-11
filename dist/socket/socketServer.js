@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
 var debug = require("debug")("sg:socketServer");
+var model_1 = require("@socialgorithm/model");
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
-var Events_1 = require("../events/Events");
 var PubSub_1 = require("../pub-sub/PubSub");
 var SocketServer = (function () {
     function SocketServer(port, gameServers) {
@@ -18,7 +18,7 @@ var SocketServer = (function () {
                 return;
             }
             _this.playerSockets[data.player].join(data.namespace);
-            _this.playerSockets[data.player].emit(Events_1.EVENTS.GAME_LIST, _this.gameServers.map(function (server) { return server.status; }));
+            _this.playerSockets[data.player].emit(model_1.EVENTS.GAME_LIST, _this.gameServers.map(function (server) { return server.status; }));
         };
         this.sendMessageToNamespace = function (data) {
             _this.io["in"](data.namespace).emit(data.event, data.payload);
@@ -34,7 +34,7 @@ var SocketServer = (function () {
         this.sendGameListToEveryone = function (data) {
             debug("Game server list updated, publishing update: %O", data);
             Object.values(_this.playerSockets).forEach(function (socket) {
-                socket.emit(Events_1.EVENTS.GAME_LIST, data);
+                socket.emit(model_1.EVENTS.GAME_LIST, data);
             });
         };
         this.onMessageFromSocket = function (player, type) { return function (payload) {
@@ -47,7 +47,7 @@ var SocketServer = (function () {
         this.onPlayerDisconnect = function (player) { return function () {
             debug("Removing player (%s) from server", player);
             delete _this.playerSockets[player];
-            _this.pubSub.publish(Events_1.EVENTS.PLAYER_DISCONNECTED, { player: player });
+            _this.pubSub.publish(model_1.EVENTS.PLAYER_DISCONNECTED, { player: player });
         }; };
         this.pubSub = new PubSub_1["default"]();
     }
@@ -79,22 +79,22 @@ var SocketServer = (function () {
             debug("Connected %s", player);
             _this.playerSockets[token] = socket;
             var listenToEvents = [
-                Events_1.EVENTS.LOBBY_CREATE,
-                Events_1.EVENTS.LOBBY_TOURNAMENT_START,
-                Events_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
-                Events_1.EVENTS.LOBBY_JOIN,
-                Events_1.EVENTS.LOBBY_PLAYER_BAN,
-                Events_1.EVENTS.LOBBY_PLAYER_KICK,
+                model_1.EVENTS.LOBBY_CREATE,
+                model_1.EVENTS.LOBBY_TOURNAMENT_START,
+                model_1.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
+                model_1.EVENTS.LOBBY_JOIN,
+                model_1.EVENTS.LOBBY_PLAYER_BAN,
+                model_1.EVENTS.LOBBY_PLAYER_KICK,
             ];
             listenToEvents.forEach(function (event) {
                 socket.on(event, _this.onMessageFromSocket(player, event));
             });
             socket.on("disconnect", _this.onPlayerDisconnect(player));
         });
-        this.pubSub.subscribe(Events_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
-        this.pubSub.subscribe(Events_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
-        this.pubSub.subscribe(Events_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
-        this.pubSub.subscribe(Events_1.EVENTS.GAME_LIST, this.sendGameListToEveryone);
+        this.pubSub.subscribe(model_1.EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
+        this.pubSub.subscribe(model_1.EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
+        this.pubSub.subscribe(model_1.EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
+        this.pubSub.subscribe(model_1.EVENTS.GAME_LIST, this.sendGameListToEveryone);
     };
     SocketServer.prototype.handler = function (req, res) {
         fs.readFile(__dirname + "/../../public/index.html", function (err, data) {

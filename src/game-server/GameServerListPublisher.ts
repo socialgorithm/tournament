@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:game-server-list-publisher");
 
-import { EVENTS } from "../events/Events";
+import { EVENTS } from "@socialgorithm/model";
 import PubSub from "../pub-sub/PubSub";
 import { GameServerStatus } from "./GameServerInfoConnection";
 

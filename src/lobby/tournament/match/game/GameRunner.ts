@@ -5,9 +5,8 @@ import * as io from "socket.io-client";
 
 import { GAME_SOCKET_MESSAGE } from "@socialgorithm/game-server";
 import { GameEndedMessage, GameUpdatedMessage } from "@socialgorithm/game-server/dist/GameMessage";
-import { EVENTS } from "../../../../events/Events";
+import { EVENTS, Game } from "@socialgorithm/model";
 import PubSub from "../../../../pub-sub/PubSub";
-import { Game } from "./Game";
 
 export type GameRunnerOptions = {
   gameServerAddress: string,

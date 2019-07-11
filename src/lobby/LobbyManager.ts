@@ -1,8 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:lobbyManager");
 
-import { EVENTS } from "../events/Events";
-import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../events/Messages";
+import { EVENTS, MSG } from "@socialgorithm/model";
 import PubSub from "../pub-sub/PubSub";
 import { LobbyRunner } from "./LobbyRunner";
 
@@ -19,7 +18,7 @@ export class LobbyManager {
         setInterval(() => this.deleteExpiredLobbies(), 1000 * 60);
     }
 
-    private createLobby = (data: LOBBY_CREATE_MESSAGE) => {
+    private createLobby = (data: MSG.LOBBY_CREATE_MESSAGE) => {
         const admin = data.player;
         const lobbyRunner = new LobbyRunner(admin);
         this.lobbyRunners.push(lobbyRunner);
@@ -42,7 +41,7 @@ export class LobbyManager {
         });
     }
 
-    private checkLobby = (data: LOBBY_JOIN_MESSAGE) => {
+    private checkLobby = (data: MSG.LOBBY_JOIN_MESSAGE) => {
         const lobbyRunner = this.lobbyRunners.find(
             each => each.getLobby().token === data.payload.token,
         );

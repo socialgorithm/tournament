@@ -1,12 +1,10 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:socketServer");
 
-import { Player } from "@socialgorithm/game-server";
+import { EVENTS, MSG, Player } from "@socialgorithm/model";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
-import { EVENTS } from "../events/Events";
-import { ADD_PLAYER_TO_NAMESPACE_MESSAGE, BROADCAST_NAMESPACED_MESSAGE, SERVER_TO_PLAYER_MESSAGE } from "../events/Messages";
 import { GameServerInfoConnection, GameServerStatus } from "../game-server/GameServerInfoConnection";
 import PubSub from "../pub-sub/PubSub";
 
@@ -80,7 +78,7 @@ export class SocketServer {
     this.pubSub.subscribe(EVENTS.GAME_LIST, this.sendGameListToEveryone);
   }
 
-  private addPlayerToNamespace = (data: ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
+  private addPlayerToNamespace = (data: MSG.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
     if (!this.playerSockets[data.player]) {
       debug("Error adding player (%s) to namespace, player socket does not exist", data.player);
       return;
@@ -91,11 +89,11 @@ export class SocketServer {
     this.playerSockets[data.player].emit(EVENTS.GAME_LIST, this.gameServers.map(server => server.status));
   }
 
-  private sendMessageToNamespace = (data: BROADCAST_NAMESPACED_MESSAGE) => {
+  private sendMessageToNamespace = (data: MSG.BROADCAST_NAMESPACED_MESSAGE) => {
     this.io.in(data.namespace).emit(data.event, data.payload);
   }
 
-  private sendMessageToPlayer = (data: SERVER_TO_PLAYER_MESSAGE) => {
+  private sendMessageToPlayer = (data: MSG.SERVER_TO_PLAYER_MESSAGE) => {
     const socket = this.playerSockets[data.player];
 
     if (!socket) {

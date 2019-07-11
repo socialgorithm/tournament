@@ -3,10 +3,8 @@ import * as randomWord from "random-word";
 const debug = require("debug")("sg:lobbyRunner");
 
 import { Player } from "@socialgorithm/game-server";
-import { EVENTS } from "../events/Events";
-import { LOBBY_JOIN_MESSAGE, LOBBY_PLAYER_BAN_MESSAGE, LOBBY_PLAYER_KICK_MESSAGE, LOBBY_TOURNAMENT_START_MESSAGE, PLAYER_DISCONNECTED_MESSAGE } from "../events/Messages";
+import { EVENTS, Lobby, MSG } from "@socialgorithm/model";
 import PubSub from "../pub-sub/PubSub";
-import { Lobby } from "./Lobby";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 
 export class LobbyRunner {
@@ -64,7 +62,7 @@ export class LobbyRunner {
     this.pubSub.unsubscribeAll();
   }
 
-  private addPlayerToLobby = (data: LOBBY_JOIN_MESSAGE) => {
+  private addPlayerToLobby = (data: MSG.LOBBY_JOIN_MESSAGE) => {
     // add data.player to data.payload.token
     const player = data.player;
     const lobbyName = data.payload.token;
@@ -125,7 +123,7 @@ export class LobbyRunner {
     debug("Added player %s to lobby %s", player, lobbyName);
   }
 
-  private removeDisconnectedPlayer = (data: PLAYER_DISCONNECTED_MESSAGE) => {
+  private removeDisconnectedPlayer = (data: MSG.PLAYER_DISCONNECTED_MESSAGE) => {
     const disconnectedPlayer = data.player;
     const lobby = this.getLobby();
 
@@ -161,7 +159,7 @@ export class LobbyRunner {
   }
 
   // tslint:disable-next-line:member-ordering
-  private startTournament = this.ifAdmin((lobbyName: string, data: LOBBY_TOURNAMENT_START_MESSAGE) => {
+  private startTournament = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_TOURNAMENT_START_MESSAGE) => {
     if (this.tournamentRunner) {
       this.tournamentRunner.destroy();
     }
@@ -192,7 +190,7 @@ export class LobbyRunner {
   });
 
   // tslint:disable-next-line:member-ordering
-  private kickPlayer = this.ifAdmin((lobbyName: string, data: LOBBY_PLAYER_KICK_MESSAGE) => {
+  private kickPlayer = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_PLAYER_KICK_MESSAGE) => {
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
 
@@ -213,7 +211,7 @@ export class LobbyRunner {
   });
 
   // tslint:disable-next-line:member-ordering
-  private banPlayer = this.ifAdmin((lobbyName: string, data: LOBBY_PLAYER_BAN_MESSAGE) => {
+  private banPlayer = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_PLAYER_BAN_MESSAGE) => {
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
 

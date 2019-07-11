@@ -3,23 +3,12 @@ const debug = require("debug")("sg:tournamentRunner");
 
 import * as uuid from "uuid/v4";
 
-import { Player } from "@socialgorithm/game-server";
-import { EVENTS } from "../../events/Events";
+import { EVENTS, Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
 import PubSub from "../../pub-sub/PubSub";
-import { Match, MatchOptions } from "./match/Match";
 import { MatchRunner } from "./match/MatchRunner";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
 import FreeForAllMatchmaker from "./matchmaker/FreeForAllMatchmaker";
 import IMatchMaker from "./matchmaker/MatchMaker";
-import { Tournament } from "./Tournament";
-
-export type TournamentOptions = {
-  gameAddress: string,
-  autoPlay: boolean,
-  numberOfGames: number,
-  timeout: number,
-  type: string,
-};
 
 export class TournamentRunner {
   private tournament: Tournament;

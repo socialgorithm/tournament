@@ -1,6 +1,6 @@
 import { Player } from "@socialgorithm/game-server";
+import { Match, MatchOptions } from "@socialgorithm/model";
 import * as uuid from "uuid/v4";
-import { Match, MatchOptions } from "../match/Match";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./Matchmaker";
 

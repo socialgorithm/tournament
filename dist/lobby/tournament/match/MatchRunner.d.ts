@@ -1,4 +1,4 @@
-import { Match } from "./Match";
+import { Match } from "@socialgorithm/model";
 export declare class MatchRunner {
     private match;
     private tournamentID;

@@ -1,6 +1,6 @@
+
+import { EVENTS, MSG } from "@socialgorithm/model";
 import * as PubSubJS from "pubsub-js";
-import { EVENTS } from "../events/Events";
-import * as msg from "../events/Messages";
 import { GameServerStatus } from "../game-server/GameServerInfoConnection";
 
 /**
@@ -15,12 +15,12 @@ export default class PubSub {
      * @param event Event name
      * @param data Paylad to be sent
      */
-    public publish(event: EVENTS.BROADCAST_NAMESPACED, data: msg.BROADCAST_NAMESPACED_MESSAGE): void;
-    public publish(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, data: msg.ADD_PLAYER_TO_NAMESPACE_MESSAGE): void;
-    public publish(event: EVENTS.SERVER_TO_PLAYER, data: msg.SERVER_TO_PLAYER_MESSAGE): void;
+    public publish(event: EVENTS.BROADCAST_NAMESPACED, data: MSG.BROADCAST_NAMESPACED_MESSAGE): void;
+    public publish(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, data: MSG.ADD_PLAYER_TO_NAMESPACE_MESSAGE): void;
+    public publish(event: EVENTS.SERVER_TO_PLAYER, data: MSG.SERVER_TO_PLAYER_MESSAGE): void;
     public publish(event: EVENTS.GAME_SERVER_UPDATE, data: GameServerStatus): void;
     public publish(event: EVENTS.GAME_LIST, data: GameServerStatus[]): void;
-    public publish(event: EVENTS.PLAYER_DISCONNECTED, data: msg.PLAYER_DISCONNECTED_MESSAGE): void;
+    public publish(event: EVENTS.PLAYER_DISCONNECTED, data: MSG.PLAYER_DISCONNECTED_MESSAGE): void;
     public publish(event: string, data: any) {
         PubSubJS.publish(event, data);
     }
@@ -42,18 +42,18 @@ export default class PubSub {
     }
 
     // Pure pubsub events
-    public subscribe(event: EVENTS.BROADCAST_NAMESPACED, fn: (data: msg.BROADCAST_NAMESPACED_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, fn: (data: msg.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.PLAYER_DISCONNECTED, fn: (data: msg.PLAYER_DISCONNECTED_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.SERVER_TO_PLAYER, fn: (data: msg.SERVER_TO_PLAYER_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.BROADCAST_NAMESPACED, fn: (data: MSG.BROADCAST_NAMESPACED_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.ADD_PLAYER_TO_NAMESPACE, fn: (data: MSG.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.PLAYER_DISCONNECTED, fn: (data: MSG.PLAYER_DISCONNECTED_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.SERVER_TO_PLAYER, fn: (data: MSG.SERVER_TO_PLAYER_MESSAGE) => void): void;
     public subscribe(event: EVENTS.GAME_SERVER_UPDATE, fn: (data: GameServerStatus) => void): void;
     // Socket relayed events
-    public subscribe(event: EVENTS.LOBBY_JOIN, fn: (data: msg.LOBBY_JOIN_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.LOBBY_CREATE, fn: (data: msg.LOBBY_CREATE_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.LOBBY_TOURNAMENT_START, fn: (data: msg.LOBBY_TOURNAMENT_START_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.LOBBY_TOURNAMENT_CONTINUE, fn: (data: msg.LOBBY_TOURNAMENT_CONTINUE_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.LOBBY_PLAYER_BAN, fn: (data: msg.LOBBY_PLAYER_BAN_MESSAGE) => void): void;
-    public subscribe(event: EVENTS.LOBBY_PLAYER_KICK, fn: (data: msg.LOBBY_PLAYER_KICK_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_JOIN, fn: (data: MSG.LOBBY_JOIN_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_CREATE, fn: (data: MSG.LOBBY_CREATE_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_TOURNAMENT_START, fn: (data: MSG.LOBBY_TOURNAMENT_START_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_TOURNAMENT_CONTINUE, fn: (data: MSG.LOBBY_TOURNAMENT_CONTINUE_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_PLAYER_BAN, fn: (data: MSG.LOBBY_PLAYER_BAN_MESSAGE) => void): void;
+    public subscribe(event: EVENTS.LOBBY_PLAYER_KICK, fn: (data: MSG.LOBBY_PLAYER_KICK_MESSAGE) => void): void;
     public subscribe(event: EVENTS.GAME_LIST, fn: (data: GameServerStatus[]) => void): void;
     public subscribe(event: EVENTS, fn: (data: any) => void): void {
         const token = PubSubJS.subscribe(event, (events: EVENTS, data: any) => fn(data));

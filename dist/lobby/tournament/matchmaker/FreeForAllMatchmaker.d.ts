@@ -1,5 +1,5 @@
 import { Player } from "@socialgorithm/game-server";
-import { Match, MatchOptions } from "../match/Match";
+import { Match, MatchOptions } from "@socialgorithm/model";
 import IMatchmaker from "./Matchmaker";
 export default class FreeForAllMatchmaker implements IMatchmaker {
     private players;

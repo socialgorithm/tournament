@@ -3,7 +3,7 @@ exports.__esModule = true;
 var debug = require("debug")("sg:gameRunner");
 var io = require("socket.io-client");
 var game_server_1 = require("@socialgorithm/game-server");
-var Events_1 = require("../../../../events/Events");
+var model_1 = require("@socialgorithm/model");
 var GameRunner = (function () {
     function GameRunner(matchID, game, options) {
         var _this = this;
@@ -17,7 +17,7 @@ var GameRunner = (function () {
             _this.game.duration = message.duration;
             _this.game.message = message.message;
             _this.pubSub.unsubscribeAll();
-            _this.pubSub.publishNamespaced(_this.matchID, Events_1.EVENTS.GAME_ENDED, _this.game);
+            _this.pubSub.publishNamespaced(_this.matchID, model_1.EVENTS.GAME_ENDED, _this.game);
         };
         this.onUpdate = function (message) {
             _this.game.stats = message.payload;
@@ -59,8 +59,8 @@ var GameRunner = (function () {
         for (var _i = 0, _a = message.playerGameTokens; _i < _a.length; _i++) {
             var player = _a[_i];
             var playerGameToken = message.playerGameTokens[player];
-            this.pubSub.publish(Events_1.EVENTS.SERVER_TO_PLAYER, { player: player,
-                event: Events_1.EVENTS.GAME_SERVER_HANDOFF,
+            this.pubSub.publish(model_1.EVENTS.SERVER_TO_PLAYER, { player: player,
+                event: model_1.EVENTS.GAME_SERVER_HANDOFF,
                 payload: {
                     gameServerAddress: this.options.gameServerAddress,
                     gameID: this.game.gameID,

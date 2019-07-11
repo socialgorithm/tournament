@@ -15,12 +15,12 @@ export declare class LobbyRunner {
             tournamentID: string;
             players: string[];
             lobby: string;
-            options: import("./tournament/TournamentRunner").TournamentOptions;
+            options: import("@socialgorithm/model").TournamentOptions;
             started: boolean;
             finished: boolean;
             ranking: string[];
             waiting: boolean;
-            matches: import("./tournament/match/Match").Match[];
+            matches: import("@socialgorithm/model").Match[];
         };
     };
     isExpired(): boolean;

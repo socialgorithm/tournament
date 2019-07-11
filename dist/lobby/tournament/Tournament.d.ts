@@ -1,5 +1,5 @@
 import { Player } from "@socialgorithm/game-server";
-import { TournamentOptions } from "./TournamentRunner";
+import { TournamentOptions } from "@socialgorithm/model";
 export declare type Tournament = {
     tournamentID: string;
     players: Player[];

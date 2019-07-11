@@ -36,6 +36,7 @@
   "homepage": "https://github.com/socialgorithm/tournament-server#readme",
   "dependencies": {
     "@socialgorithm/game-server": "^0.4.0",
+    "@socialgorithm/model": "0.0.9",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
     "debug": "^4.1.1",

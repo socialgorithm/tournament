@@ -1,7 +1,7 @@
 import * as uuid from "uuid/v4";
 
 import { Player } from "@socialgorithm/game-server";
-import { Match, MatchOptions } from "../match/Match";
+import { Match, MatchOptions } from "@socialgorithm/model";
 import IMatchmaker from "./Matchmaker";
 
 /**

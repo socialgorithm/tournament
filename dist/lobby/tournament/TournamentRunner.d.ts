@@ -1,12 +1,4 @@
-import { Player } from "@socialgorithm/game-server";
-import { Match } from "./match/Match";
-export declare type TournamentOptions = {
-    gameAddress: string;
-    autoPlay: boolean;
-    numberOfGames: number;
-    timeout: number;
-    type: string;
-};
+import { Match, Player, TournamentOptions } from "@socialgorithm/model";
 export declare class TournamentRunner {
     private tournament;
     private pubSub;

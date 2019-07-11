@@ -1,5 +1,5 @@
 import { Player } from "@socialgorithm/game-server";
-import { Match } from "../match/Match";
+import { Match } from "@socialgorithm/model";
 
 /**
  * MatchMaker defines a strategy for matching players.

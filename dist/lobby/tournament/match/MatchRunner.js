@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:matchRunner");
 var uuid = require("uuid/v4");
-var Events_1 = require("../../../events/Events");
+var model_1 = require("@socialgorithm/model");
 var PubSub_1 = require("../../../pub-sub/PubSub");
 var GameRunner_1 = require("./game/GameRunner");
 var MatchRunner = (function () {
@@ -40,7 +40,7 @@ var MatchRunner = (function () {
             _this.match.state = "finished";
             _this.updateMatchStats();
             debug("Finished match %o", _this.match.stats);
-            _this.pubSub.publishNamespaced(_this.tournamentID, Events_1.EVENTS.MATCH_ENDED, _this.match);
+            _this.pubSub.publishNamespaced(_this.tournamentID, model_1.EVENTS.MATCH_ENDED, _this.match);
         };
         this.updateMatchStats = function () {
             _this.match.stats.gamesCompleted = _this.match.games.length;
@@ -62,10 +62,10 @@ var MatchRunner = (function () {
             _this.match.winner = maxIndex;
         };
         this.sendStats = function () {
-            _this.pubSub.publishNamespaced(_this.tournamentID, Events_1.EVENTS.MATCH_UPDATE, null);
+            _this.pubSub.publishNamespaced(_this.tournamentID, model_1.EVENTS.MATCH_UPDATE, null);
         };
         this.pubSub = new PubSub_1["default"]();
-        this.pubSub.subscribeNamespaced(this.match.matchID, Events_1.EVENTS.GAME_ENDED, this.onGameEnd);
+        this.pubSub.subscribeNamespaced(this.match.matchID, model_1.EVENTS.GAME_ENDED, this.onGameEnd);
         debug("Starting match");
         this.match.state = "playing";
         this.playNextGame();
