@@ -3,9 +3,7 @@ const debug = require("debug")("sg:gameRunner");
 
 import * as io from "socket.io-client";
 
-import { GAME_SOCKET_MESSAGE } from "@socialgorithm/game-server";
-import { GameEndedMessage, GameUpdatedMessage } from "@socialgorithm/game-server/dist/GameMessage";
-import { EVENTS, Game } from "@socialgorithm/model";
+import { EVENTS, Game, GAME_SOCKET_MESSAGE, GameMessage } from "@socialgorithm/model";
 import PubSub from "../../../../pub-sub/PubSub";
 
 export type GameRunnerOptions = {
@@ -77,7 +75,7 @@ export class GameRunner {
     }
   }
 
-  private onFinish = (message: GameEndedMessage) => {
+  private onFinish = (message: GameMessage.GameEndedMessage) => {
     this.game.stats = message.payload;
     this.game.winner = message.winner;
     this.game.tie = message.tie;
@@ -93,7 +91,7 @@ export class GameRunner {
     );
   }
 
-  private onUpdate = (message: GameUpdatedMessage) => {
+  private onUpdate = (message: GameMessage.GameUpdatedMessage) => {
     this.game.stats = message.payload;
   }
 }

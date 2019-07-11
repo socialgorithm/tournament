@@ -3,14 +3,13 @@ const debug = require("debug")("sg:gameServerInfoConnection");
 
 import * as io from "socket.io-client";
 
-import { GAME_SOCKET_MESSAGE, GameInfoMessage } from "@socialgorithm/game-server";
-import { EVENTS } from "@socialgorithm/model";
+import { EVENTS, GAME_SOCKET_MESSAGE, GameMessage } from "@socialgorithm/model";
 import PubSub from "../pub-sub/PubSub";
 
 export type GameServerStatus = {
   address: string,
   healthy: boolean,
-  info: GameInfoMessage,
+  info: GameMessage.GameInfoMessage,
 };
 
 export class GameServerInfoConnection {
@@ -55,7 +54,7 @@ export class GameServerInfoConnection {
       this.publishStatus();
     });
 
-    this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_INFO, (gameInfo: GameInfoMessage) => {
+    this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_INFO, (gameInfo: GameMessage.GameInfoMessage) => {
       this.status.info = gameInfo;
       this.publishStatus();
     });

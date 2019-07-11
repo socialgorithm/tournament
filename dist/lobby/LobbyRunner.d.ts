@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server";
+import { Player } from "@socialgorithm/model";
 export declare class LobbyRunner {
     private lobby;
     private tournamentRunner;

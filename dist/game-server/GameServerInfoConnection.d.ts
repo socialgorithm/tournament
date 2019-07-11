@@ -1,9 +1,9 @@
 /// <reference types="socket.io-client" />
-import { GameInfoMessage } from "@socialgorithm/game-server";
+import { GameMessage } from "@socialgorithm/model";
 export declare type GameServerStatus = {
     address: string;
     healthy: boolean;
-    info: GameInfoMessage;
+    info: GameMessage.GameInfoMessage;
 };
 export declare class GameServerInfoConnection {
     status: GameServerStatus;

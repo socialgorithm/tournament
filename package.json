@@ -9,8 +9,9 @@
     "start:debug": "node --inspect dist/index.js",
     "dev": "tsc && ts-node -r tsconfig-paths/register --files src/index.ts",
     "start:opts": "tsc && ts-node bin/index.js",
-    "build": "tsc -w",
-    "test": "npm run lint",
+    "build": "tsc",
+    "build:watch": "tsc -w",
+    "test": "npm run lint && npm run build",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
     "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
     "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
@@ -35,8 +36,7 @@
   },
   "homepage": "https://github.com/socialgorithm/tournament-server#readme",
   "dependencies": {
-    "@socialgorithm/game-server": "^0.4.0",
-    "@socialgorithm/model": "0.0.9",
+    "@socialgorithm/model": "0.0.11",
     "command-line-args": "^5.0.2",
     "command-line-usage": "^5.0.5",
     "debug": "^4.1.1",

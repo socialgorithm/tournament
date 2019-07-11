@@ -2,8 +2,7 @@ import * as randomWord from "random-word";
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:lobbyRunner");
 
-import { Player } from "@socialgorithm/game-server";
-import { EVENTS, Lobby, MSG } from "@socialgorithm/model";
+import { EVENTS, Lobby, MSG, Player } from "@socialgorithm/model";
 import PubSub from "../pub-sub/PubSub";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 

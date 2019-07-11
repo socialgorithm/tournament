@@ -1,8 +1,8 @@
 "use strict";
 exports.__esModule = true;
 var debug = require("debug")("sg:game-server-list-publisher");
-var PubSub_1 = require("../pub-sub/PubSub");
 var model_1 = require("@socialgorithm/model");
+var PubSub_1 = require("../pub-sub/PubSub");
 var GameServerListPublisher = (function () {
     function GameServerListPublisher() {
         var _this = this;

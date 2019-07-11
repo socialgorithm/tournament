@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:gameRunner");
 var io = require("socket.io-client");
-var game_server_1 = require("@socialgorithm/game-server");
 var model_1 = require("@socialgorithm/model");
 var GameRunner = (function () {
     function GameRunner(matchID, game, options) {
@@ -34,8 +33,8 @@ var GameRunner = (function () {
                 _this.start();
             });
             this.gameSocket.on("GAME_STARTED", this.onStart);
-            this.gameSocket.on(game_server_1.GAME_SOCKET_MESSAGE.GAME_UPDATED, this.onUpdate);
-            this.gameSocket.on(game_server_1.GAME_SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
+            this.gameSocket.on(model_1.GAME_SOCKET_MESSAGE.GAME_UPDATED, this.onUpdate);
+            this.gameSocket.on(model_1.GAME_SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
             this.gameSocket.on("disconnect", function () {
                 debug("Connection to Game Server %s lost!", options.gameServerAddress);
             });
@@ -49,7 +48,7 @@ var GameRunner = (function () {
     };
     GameRunner.prototype.start = function () {
         debug("Start game");
-        this.gameSocket.emit(game_server_1.GAME_SOCKET_MESSAGE.START_GAME, {
+        this.gameSocket.emit(model_1.GAME_SOCKET_MESSAGE.START_GAME, {
             gameID: this.game.gameID,
             players: this.game.players
         });
