@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/model",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Data Model for Socialgorithm Tournaments",
   "scripts": {
     "build": "tsc -w",
