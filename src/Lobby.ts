@@ -1,4 +1,4 @@
-import { Player } from './Player';
+import { Player } from "./Player";
 
 export type Lobby = {
   admin: Player,
@@ -6,4 +6,3 @@ export type Lobby = {
   players: Player[],
   bannedPlayers: string[],
 };
-

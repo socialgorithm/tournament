@@ -1,5 +1,5 @@
-import { TournamentOptions } from "../tournament-server/src/lobby/tournament/TournamentRunner";
-import { Player } from './Player';
+import { Player } from "./Player";
+import { TournamentOptions } from "./Tournament";
 
 /**
  * PubSub/Socket API: Message Definitions

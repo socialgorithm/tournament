@@ -1,4 +1,4 @@
-import { Player } from "@socialgorithm/game-server";
+import { Player } from "./Player";
 
 export type Tournament = {
   tournamentID: string,

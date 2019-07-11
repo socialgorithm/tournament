@@ -1,5 +1,6 @@
-import { Player } from "@socialgorithm/game-server";
+
 import { Game } from "./Game";
+import { Player } from "./Player";
 
 export type Match = {
     matchID: string,
