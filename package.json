@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -w",
-    "test": "npm run lint",
+    "build": "tsc",
+    "test": "npm run build && npm run lint",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
     "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
     "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
