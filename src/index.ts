@@ -1,4 +1,4 @@
-import { EVENTS } from './Events';
+import { EVENTS } from "./Events";
 import { Game } from "./Game";
 import { Lobby } from "./Lobby";
 import { Match } from "./Match";

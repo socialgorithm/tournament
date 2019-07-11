@@ -2,6 +2,7 @@
   "name": "@socialgorithm/model",
   "version": "0.0.3",
   "description": "Data Model for Socialgorithm Tournaments",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -w",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
