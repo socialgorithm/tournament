@@ -5,5 +5,5 @@ export declare const GAME_SOCKET_MESSAGE: {
     GAME_STARTED: string;
     GAME_UPDATED: string;
     GAME__PLAYER: string;
-    START_GAME: string;
+    CREATE_GAME: string;
 };

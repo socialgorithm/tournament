@@ -7,6 +7,6 @@ exports.GAME_SOCKET_MESSAGE = {
     GAME_STARTED: "GAME_STARTED",
     GAME_UPDATED: "GAME_UPDATED",
     GAME__PLAYER: "GAME__PLAYER",
-    START_GAME: "START_GAME"
+    CREATE_GAME: "CREATE_GAME"
 };
 //# sourceMappingURL=GameSocketMessage.js.map
