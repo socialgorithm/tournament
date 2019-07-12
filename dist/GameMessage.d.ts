@@ -2,11 +2,11 @@ import { Player } from ".";
 export declare type GameInfoMessage = {
     name: string;
 };
-export declare type GameStartMessage = {
+export declare type CreateGameMessage = {
     gameID: string;
     players: Player[];
 };
-export declare type GameStartedMessage = {
+export declare type GameCreatedMessage = {
     playerGameTokens: {
         [name: string]: string;
     };

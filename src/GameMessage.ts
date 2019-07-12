@@ -4,12 +4,12 @@ export type GameInfoMessage = {
   name: string,
 };
 
-export type GameStartMessage = {
+export type CreateGameMessage = {
   gameID: string,
   players: Player[],
 };
 
-export type GameStartedMessage = {
+export type GameCreatedMessage = {
   playerGameTokens: {
     [name: string]: string,
   },
