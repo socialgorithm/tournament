@@ -11,10 +11,13 @@ class Server extends React.Component {
     };
   }
 
+  /** Update state host whenever the main one connects */
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      host: nextProps.host,
-    });
+    if (nextProps.status !== this.props.status && nextProps.status === 'connected') {
+      this.setState({
+        host: nextProps.host,
+      });
+    }
   }
 
   handleHostChange = (newHost) => {
@@ -51,11 +54,13 @@ class Server extends React.Component {
         ) : null;
       modalContent = (
         <Form onSubmit={ this.saveChanges } error={ !!errorMessage } loading={ this.props.status === 'connecting' }>
-          <Form.Group inline>
-            <label>Server</label>
-            <Form.Input value={ this.state.host } onChange={ (e, input) => { this.handleHostChange(input.value);  } } />
-            <Form.Button primary>Connect</Form.Button>
-          </Form.Group>
+          <Form.Input
+            label="Server"
+            fluid
+            action={{ primary: true, icon: 'plug', content: 'Connect' }}
+            value={ this.state.host }
+            onChange={ (e, input) => { this.handleHostChange(input.value);  } }
+          />
           <Message
             error
             icon='warning sign'
