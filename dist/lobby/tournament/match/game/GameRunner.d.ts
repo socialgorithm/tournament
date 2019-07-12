@@ -10,8 +10,8 @@ export declare class GameRunner {
     private pubSub;
     constructor(matchID: string, game: Game, options: GameRunnerOptions);
     close(): void;
-    private start;
-    private onStart;
+    private create;
+    private onCreate;
     private onFinish;
     private onUpdate;
 }

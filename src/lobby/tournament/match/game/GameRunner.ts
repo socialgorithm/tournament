@@ -27,10 +27,10 @@ export class GameRunner {
 
       this.gameSocket.on("connect", () => {
         debug(`Connected to Game Server, starting game`);
-        this.start();
+        this.create();
       });
 
-      this.gameSocket.on("GAME_STARTED", this.onStart); // GAME_SOCKET_MESSAGE.GAME_STARTED from game-server:8.0.0
+      this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_CREATED, this.onCreate);
       this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_UPDATED, this.onUpdate);
       this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_ENDED, this.onFinish);
 
@@ -40,6 +40,8 @@ export class GameRunner {
     } catch (e) {
       debug("sg: Unable to connect to Game Server. %O", e);
     }
+
+    this.pubSub = new PubSub();
   }
 
   public close() {
@@ -49,18 +51,17 @@ export class GameRunner {
   /**
    * Play an individual game between two players
    */
-  private start() {
-    debug("Start game");
-    this.gameSocket.emit(GAME_SOCKET_MESSAGE.START_GAME, {
+  private create = () => {
+    debug("Create game %O", this.game);
+    this.gameSocket.emit(GAME_SOCKET_MESSAGE.CREATE_GAME, {
       gameID: this.game.gameID,
       players: this.game.players,
     });
   }
 
-  private onStart(message: any) { // TODO: GameStartedMessage from game-server-js:8.0.0
-    debug(`${this.game.gameID} received game started message`);
-    for (const player of message.playerGameTokens) {
-      const playerGameToken = message.playerGameTokens[player];
+  private onCreate = (message: GameMessage.GameCreatedMessage) => {
+    debug("Game %s received game started message %O", this.game.gameID, message);
+    for (const [player, gameToken] of Object.entries(message.playerGameTokens)) {
       this.pubSub.publish(
         EVENTS.SERVER_TO_PLAYER,
         { player,
@@ -68,7 +69,7 @@ export class GameRunner {
           payload: {
             gameServerAddress: this.options.gameServerAddress,
             gameID: this.game.gameID,
-            token: playerGameToken,
+            token: gameToken,
           },
         },
       );
