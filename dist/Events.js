@@ -2,18 +2,18 @@
 exports.__esModule = true;
 var EventName;
 (function (EventName) {
-    EventName[EventName["CreateMatch"] = 0] = "CreateMatch";
-    EventName[EventName["MatchCreated"] = 1] = "MatchCreated";
-    EventName[EventName["MatchUpdated"] = 2] = "MatchUpdated";
-    EventName[EventName["MatchEnded"] = 3] = "MatchEnded";
-    EventName[EventName["GameUpdated"] = 4] = "GameUpdated";
-    EventName[EventName["GameEnded"] = 5] = "GameEnded";
-    EventName[EventName["GameInfo"] = 6] = "GameInfo";
-    EventName[EventName["GameList"] = 7] = "GameList";
-    EventName[EventName["GameServerHandoff"] = 8] = "GameServerHandoff";
-    EventName[EventName["Game__Player"] = 9] = "Game__Player";
-    EventName[EventName["PlayerDisconnected"] = 10] = "PlayerDisconnected";
-    EventName[EventName["ServerToPlayer"] = 11] = "ServerToPlayer";
+    EventName["CreateMatch"] = "CreateMatch";
+    EventName["MatchCreated"] = "MatchCreated";
+    EventName["MatchUpdated"] = "MatchUpdated";
+    EventName["MatchEnded"] = "MatchEnded";
+    EventName["GameUpdated"] = "GameUpdated";
+    EventName["GameEnded"] = "GameEnded";
+    EventName["GameInfo"] = "GameInfo";
+    EventName["GameList"] = "GameList";
+    EventName["GameServerHandoff"] = "GameServerHandoff";
+    EventName["Game__Player"] = "Game__Player";
+    EventName["PlayerDisconnected"] = "PlayerDisconnected";
+    EventName["ServerToPlayer"] = "ServerToPlayer";
 })(EventName = exports.EventName || (exports.EventName = {}));
 var CreateMatchEvent = (function () {
     function CreateMatchEvent(message) {

@@ -3,18 +3,18 @@
 import * as Messages from "./Messages";
 
 export enum EventName {
-  CreateMatch,
-  MatchCreated,
-  MatchUpdated,
-  MatchEnded,
-  GameUpdated,
-  GameEnded,
-  GameInfo,
-  GameList,
-  GameServerHandoff,
-  Game__Player,
-  PlayerDisconnected,
-  ServerToPlayer,
+  CreateMatch = "CreateMatch",
+  MatchCreated = "MatchCreated",
+  MatchUpdated = "MatchUpdated",
+  MatchEnded = "MatchEnded",
+  GameUpdated = "GameUpdated",
+  GameEnded = "GameEnded",
+  GameInfo = "GameInfo",
+  GameList = "GameList",
+  GameServerHandoff = "GameServerHandoff",
+  Game__Player = "Game__Player",
+  PlayerDisconnected = "PlayerDisconnected",
+  ServerToPlayer = "ServerToPlayer",
 }
 
 export interface IEvent {
