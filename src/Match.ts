@@ -3,7 +3,6 @@ import { Game } from "./Game";
 import { Player } from "./Player";
 
 export type Match = {
-    matchID: string,
     options: MatchOptions
     players: Player[],
     games: Game[],
