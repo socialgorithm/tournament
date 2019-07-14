@@ -7,5 +7,4 @@ export type Game = {
     winner: Player | null,
     tie: boolean,
     duration: number,
-    message: string, // optional message for the UI
 };

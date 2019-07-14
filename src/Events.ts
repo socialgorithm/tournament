@@ -1,25 +1,64 @@
-export enum EVENTS {
-  // PubSub Events
-  BROADCAST = "BROADCAST",
-  BROADCAST_NAMESPACED = "BROADCAST_NAMESPACED",
-  SERVER_TO_PLAYER = "SERVER_TO_PLAYER",
-  ADD_PLAYER_TO_NAMESPACE = "ADD_PLAYER_TO_NAMESPACE",
-  MATCH_STARTED = "MATCH_STARTED",
-  MATCH_ENDED = "MATCH_ENDED",
-  GAME_ENDED = "GAME_ENDED",
-  MATCH_UPDATE = "MATCH_UPDATE",
-  GAME_SERVER_HANDOFF = "GAME_SERVER_HANDOFF",
-  GAME_SERVER_UPDATE = "GAME_SERVER_UPDATE",
-  PLAYER_DISCONNECTED = "PLAYER_DISCONNECTED",
-  // Socket Events
-  GAME_LIST = "game list",
-  LOBBY_CREATE = "lobby create",
-  LOBBY_TOURNAMENT_START = "lobby tournament start",
-  LOBBY_TOURNAMENT_STARTED = "lobby tournament started",
-  LOBBY_TOURNAMENT_CONTINUE = "lobby tournament continue",
-  LOBBY_PLAYER_KICK = "lobby player kick",
-  LOBBY_PLAYER_BAN = "lobby player ban",
-  LOBBY_JOIN = "lobby join",
-  LOBBY_EXCEPTION = "lobby exception",
-  TOURNAMENT_STATS = "tournament stats",
+// tslint:disable: max-classes-per-file
+
+import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, MatchEndedMessage, PlayerToGameMessage } from "./Messages";
+
+export enum EventName {
+  CreateMatch,
+  MatchCreated,
+  MatchUpdated,
+  MatchEnded,
+  GameUpdated,
+  GameEnded,
+  GameInfo,
+  GameList,
+  GameServerHandoff,
+  GameServerStatusUpdate,
+  Game__Player,
+  PlayerDisconnected,
+  ServerToPlayer,
+}
+
+export interface IEvent {
+  name: EventName;
+  message: any;
+}
+
+export class CreateMatchEvent implements IEvent {
+  public name: EventName.CreateMatch;
+  public constructor(public message: CreateMatchMessage) {}
+}
+
+export class MatchCreatedEvent implements IEvent {
+  public name: EventName.MatchCreated;
+  public constructor(public message: MatchCreatedMessage) {}
+}
+
+export class MatchEndedEvent implements IEvent {
+  public name: EventName.MatchEnded;
+  public constructor(public message: MatchEndedMessage) {}
+}
+
+export class GameEndedEvent implements IEvent {
+  public name: EventName.GameEnded;
+  public constructor(public message: GameEndedMessage) {}
+}
+
+export class GameServerHandoffEvent implements IEvent {
+  public name: EventName.GameServerHandoff;
+  public constructor(public message: GameServerHandoffMessage) {}
+}
+
+export class GameInfoEvent implements IEvent {
+  public name: EventName.GameInfo;
+  public constructor(public message: GameInfoMessage) {}
+}
+
+export class PlayerToGameEvent implements IEvent {
+  public name: EventName.Game__Player;
+  public constructor(public message: PlayerToGameMessage) {}
+}
+
+export class GameToPlayerEvent implements IEvent {
+  public name: EventName.Game__Player;
+  public constructor(public message: GameToPlayerMessage) {}
 }

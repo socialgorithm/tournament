@@ -1,11 +1,40 @@
+import { Game } from "./Game";
+import { Match, MatchOptions } from "./Match";
 import { Player } from "./Player";
 import { TournamentOptions } from "./Tournament";
 
-export type SERVER_TO_PLAYER_MESSAGE = {
-  player: Player,
-  event: string,
+export type CreateMatchMessage = {
+  players: Player[],
+  options: MatchOptions,
+};
+
+export type MatchCreatedMessage = {
+  playerTokens: {
+    [name: string]: string,
+  },
+};
+
+export type MatchEndedMessage = {
+  matchID: string,
+};
+
+export type GameEndedMessage = Game;
+
+export type GameInfoMessage = {
+  name: string,
+};
+
+export type GameServerHandoffMessage = {
+  gameServerAddress: string,
+  matchID: string,
+  token: string,
+};
+
+export type PlayerToGameMessage = {
   payload: any,
 };
+
+export type GameToPlayerMessage = PlayerToGameMessage;
 
 export type BROADCAST_NAMESPACED_MESSAGE = {
   namespace: string,

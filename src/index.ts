@@ -1,23 +1,27 @@
-import { EVENTS } from "./Events";
+import * as Events from "./Events";
 import { Game } from "./Game";
-import * as GameMessage from "./GameMessage";
-import { GameSocketEvent } from "./GameSocket";
+import * as Handlers from "./Handlers";
+import * as LegacyEvents from "./LegacyEvents";
 import { Lobby } from "./Lobby";
 import { Match, MatchOptions } from "./Match";
-import * as MSG from "./Messages";
+import * as Messages from "./Messages";
 import { Player } from "./Player";
+import { Socket } from "./Socket";
+import { SocketClient } from "./SocketClient";
 import { Tournament, TournamentOptions } from "./Tournament";
 
 export {
-  EVENTS,
+  Events,
   Game,
-  GameMessage,
-  GameSocketEvent,
+  Handlers,
+  LegacyEvents,
   Lobby,
   Match,
   MatchOptions,
-  MSG,
+  Messages,
   Player,
+  Socket,
+  SocketClient,
   Tournament,
   TournamentOptions,
 };

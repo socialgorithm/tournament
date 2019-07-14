@@ -1,27 +1,75 @@
 "use strict";
 exports.__esModule = true;
-var EVENTS;
-(function (EVENTS) {
-    EVENTS["BROADCAST"] = "BROADCAST";
-    EVENTS["BROADCAST_NAMESPACED"] = "BROADCAST_NAMESPACED";
-    EVENTS["SERVER_TO_PLAYER"] = "SERVER_TO_PLAYER";
-    EVENTS["ADD_PLAYER_TO_NAMESPACE"] = "ADD_PLAYER_TO_NAMESPACE";
-    EVENTS["MATCH_STARTED"] = "MATCH_STARTED";
-    EVENTS["MATCH_ENDED"] = "MATCH_ENDED";
-    EVENTS["GAME_ENDED"] = "GAME_ENDED";
-    EVENTS["MATCH_UPDATE"] = "MATCH_UPDATE";
-    EVENTS["GAME_SERVER_HANDOFF"] = "GAME_SERVER_HANDOFF";
-    EVENTS["GAME_SERVER_UPDATE"] = "GAME_SERVER_UPDATE";
-    EVENTS["PLAYER_DISCONNECTED"] = "PLAYER_DISCONNECTED";
-    EVENTS["GAME_LIST"] = "game list";
-    EVENTS["LOBBY_CREATE"] = "lobby create";
-    EVENTS["LOBBY_TOURNAMENT_START"] = "lobby tournament start";
-    EVENTS["LOBBY_TOURNAMENT_STARTED"] = "lobby tournament started";
-    EVENTS["LOBBY_TOURNAMENT_CONTINUE"] = "lobby tournament continue";
-    EVENTS["LOBBY_PLAYER_KICK"] = "lobby player kick";
-    EVENTS["LOBBY_PLAYER_BAN"] = "lobby player ban";
-    EVENTS["LOBBY_JOIN"] = "lobby join";
-    EVENTS["LOBBY_EXCEPTION"] = "lobby exception";
-    EVENTS["TOURNAMENT_STATS"] = "tournament stats";
-})(EVENTS = exports.EVENTS || (exports.EVENTS = {}));
+var EventName;
+(function (EventName) {
+    EventName[EventName["CreateMatch"] = 0] = "CreateMatch";
+    EventName[EventName["MatchCreated"] = 1] = "MatchCreated";
+    EventName[EventName["MatchUpdated"] = 2] = "MatchUpdated";
+    EventName[EventName["MatchEnded"] = 3] = "MatchEnded";
+    EventName[EventName["GameUpdated"] = 4] = "GameUpdated";
+    EventName[EventName["GameEnded"] = 5] = "GameEnded";
+    EventName[EventName["GameInfo"] = 6] = "GameInfo";
+    EventName[EventName["GameList"] = 7] = "GameList";
+    EventName[EventName["GameServerHandoff"] = 8] = "GameServerHandoff";
+    EventName[EventName["GameServerStatusUpdate"] = 9] = "GameServerStatusUpdate";
+    EventName[EventName["Game__Player"] = 10] = "Game__Player";
+    EventName[EventName["PlayerDisconnected"] = 11] = "PlayerDisconnected";
+    EventName[EventName["ServerToPlayer"] = 12] = "ServerToPlayer";
+})(EventName = exports.EventName || (exports.EventName = {}));
+var CreateMatchEvent = (function () {
+    function CreateMatchEvent(message) {
+        this.message = message;
+    }
+    return CreateMatchEvent;
+}());
+exports.CreateMatchEvent = CreateMatchEvent;
+var MatchCreatedEvent = (function () {
+    function MatchCreatedEvent(message) {
+        this.message = message;
+    }
+    return MatchCreatedEvent;
+}());
+exports.MatchCreatedEvent = MatchCreatedEvent;
+var MatchEndedEvent = (function () {
+    function MatchEndedEvent(message) {
+        this.message = message;
+    }
+    return MatchEndedEvent;
+}());
+exports.MatchEndedEvent = MatchEndedEvent;
+var GameEndedEvent = (function () {
+    function GameEndedEvent(message) {
+        this.message = message;
+    }
+    return GameEndedEvent;
+}());
+exports.GameEndedEvent = GameEndedEvent;
+var GameServerHandoffEvent = (function () {
+    function GameServerHandoffEvent(message) {
+        this.message = message;
+    }
+    return GameServerHandoffEvent;
+}());
+exports.GameServerHandoffEvent = GameServerHandoffEvent;
+var GameInfoEvent = (function () {
+    function GameInfoEvent(message) {
+        this.message = message;
+    }
+    return GameInfoEvent;
+}());
+exports.GameInfoEvent = GameInfoEvent;
+var PlayerToGameEvent = (function () {
+    function PlayerToGameEvent(message) {
+        this.message = message;
+    }
+    return PlayerToGameEvent;
+}());
+exports.PlayerToGameEvent = PlayerToGameEvent;
+var GameToPlayerEvent = (function () {
+    function GameToPlayerEvent(message) {
+        this.message = message;
+    }
+    return GameToPlayerEvent;
+}());
+exports.GameToPlayerEvent = GameToPlayerEvent;
 //# sourceMappingURL=Events.js.map
