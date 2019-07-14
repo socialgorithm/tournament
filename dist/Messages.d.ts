@@ -11,16 +11,12 @@ export declare type MatchCreatedMessage = {
         [name: string]: string;
     };
 };
-export declare type MatchEndedMessage = {
-    matchID: string;
-};
 export declare type GameEndedMessage = Game;
 export declare type GameInfoMessage = {
     name: string;
 };
 export declare type GameServerHandoffMessage = {
     gameServerAddress: string;
-    matchID: string;
     token: string;
 };
 export declare type PlayerToGameMessage = {

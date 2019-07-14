@@ -1,4 +1,4 @@
-import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, MatchEndedMessage, PlayerToGameMessage } from "./Messages";
+import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
 export declare enum EventName {
     CreateMatch = 0,
     MatchCreated = 1,
@@ -16,7 +16,7 @@ export declare enum EventName {
 }
 export interface IEvent {
     name: EventName;
-    message: any;
+    message?: any;
 }
 export declare class CreateMatchEvent implements IEvent {
     message: CreateMatchMessage;
@@ -29,9 +29,8 @@ export declare class MatchCreatedEvent implements IEvent {
     constructor(message: MatchCreatedMessage);
 }
 export declare class MatchEndedEvent implements IEvent {
-    message: MatchEndedMessage;
     name: EventName.MatchEnded;
-    constructor(message: MatchEndedMessage);
+    message: null;
 }
 export declare class GameEndedEvent implements IEvent {
     message: GameEndedMessage;

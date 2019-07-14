@@ -14,10 +14,6 @@ export type MatchCreatedMessage = {
   },
 };
 
-export type MatchEndedMessage = {
-  matchID: string,
-};
-
 export type GameEndedMessage = Game;
 
 export type GameInfoMessage = {
@@ -26,7 +22,6 @@ export type GameInfoMessage = {
 
 export type GameServerHandoffMessage = {
   gameServerAddress: string,
-  matchID: string,
   token: string,
 };
 

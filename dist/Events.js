@@ -31,8 +31,7 @@ var MatchCreatedEvent = (function () {
 }());
 exports.MatchCreatedEvent = MatchCreatedEvent;
 var MatchEndedEvent = (function () {
-    function MatchEndedEvent(message) {
-        this.message = message;
+    function MatchEndedEvent() {
     }
     return MatchEndedEvent;
 }());

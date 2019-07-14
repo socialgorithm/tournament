@@ -1,6 +1,6 @@
 // tslint:disable: max-classes-per-file
 
-import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, MatchEndedMessage, PlayerToGameMessage } from "./Messages";
+import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
 
 export enum EventName {
   CreateMatch,
@@ -20,7 +20,7 @@ export enum EventName {
 
 export interface IEvent {
   name: EventName;
-  message: any;
+  message?: any;
 }
 
 export class CreateMatchEvent implements IEvent {
@@ -35,7 +35,7 @@ export class MatchCreatedEvent implements IEvent {
 
 export class MatchEndedEvent implements IEvent {
   public name: EventName.MatchEnded;
-  public constructor(public message: MatchEndedMessage) {}
+  public message: null;
 }
 
 export class GameEndedEvent implements IEvent {
