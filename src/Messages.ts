@@ -20,6 +20,12 @@ export type GameInfoMessage = {
   name: string,
 };
 
+export type GameServerStatus = {
+  address: string,
+  healthy: boolean,
+  info: GameInfoMessage,
+};
+
 export type GameServerHandoffMessage = {
   gameServerAddress: string,
   token: string,
@@ -30,6 +36,16 @@ export type PlayerToGameMessage = {
 };
 
 export type GameToPlayerMessage = PlayerToGameMessage;
+
+export type PlayerDisconnectedMessage = {
+  player: Player,
+};
+
+export type SERVER_TO_PLAYER_MESSAGE = {
+  player: Player,
+  event: string,
+  payload: any,
+};
 
 export type BROADCAST_NAMESPACED_MESSAGE = {
   namespace: string,
@@ -69,9 +85,5 @@ export type LOBBY_PLAYER_BAN_MESSAGE = {
 };
 
 export type LOBBY_PLAYER_KICK_MESSAGE = {
-  player: Player,
-};
-
-export type PLAYER_DISCONNECTED_MESSAGE = {
   player: Player,
 };

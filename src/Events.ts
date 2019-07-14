@@ -1,6 +1,6 @@
 // tslint:disable: max-classes-per-file
 
-import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameServerHandoffMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
+import * as Messages from "./Messages";
 
 export enum EventName {
   CreateMatch,
@@ -12,7 +12,6 @@ export enum EventName {
   GameInfo,
   GameList,
   GameServerHandoff,
-  GameServerStatusUpdate,
   Game__Player,
   PlayerDisconnected,
   ServerToPlayer,
@@ -25,12 +24,12 @@ export interface IEvent {
 
 export class CreateMatchEvent implements IEvent {
   public name: EventName.CreateMatch;
-  public constructor(public message: CreateMatchMessage) {}
+  public constructor(public message: Messages.CreateMatchMessage) {}
 }
 
 export class MatchCreatedEvent implements IEvent {
   public name: EventName.MatchCreated;
-  public constructor(public message: MatchCreatedMessage) {}
+  public constructor(public message: Messages.MatchCreatedMessage) {}
 }
 
 export class MatchEndedEvent implements IEvent {
@@ -40,25 +39,35 @@ export class MatchEndedEvent implements IEvent {
 
 export class GameEndedEvent implements IEvent {
   public name: EventName.GameEnded;
-  public constructor(public message: GameEndedMessage) {}
+  public constructor(public message: Messages.GameEndedMessage) {}
 }
 
 export class GameServerHandoffEvent implements IEvent {
   public name: EventName.GameServerHandoff;
-  public constructor(public message: GameServerHandoffMessage) {}
+  public constructor(public message: Messages.GameServerHandoffMessage) {}
 }
 
 export class GameInfoEvent implements IEvent {
   public name: EventName.GameInfo;
-  public constructor(public message: GameInfoMessage) {}
+  public constructor(public message: Messages.GameInfoMessage) {}
 }
 
 export class PlayerToGameEvent implements IEvent {
   public name: EventName.Game__Player;
-  public constructor(public message: PlayerToGameMessage) {}
+  public constructor(public message: Messages.PlayerToGameMessage) {}
 }
 
 export class GameToPlayerEvent implements IEvent {
   public name: EventName.Game__Player;
-  public constructor(public message: GameToPlayerMessage) {}
+  public constructor(public message: Messages.GameToPlayerMessage) {}
+}
+
+export class GameListEvent implements IEvent {
+  public name: EventName.GameList;
+  public constructor(public message: Messages.GameServerStatus[]) {}
+}
+
+export class PlayerDisconnectedEvent implements IEvent {
+  public name: EventName.PlayerDisconnected;
+  public constructor(public message: Messages.PlayerDisconnectedMessage) {}
 }

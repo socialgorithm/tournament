@@ -11,10 +11,9 @@ var EventName;
     EventName[EventName["GameInfo"] = 6] = "GameInfo";
     EventName[EventName["GameList"] = 7] = "GameList";
     EventName[EventName["GameServerHandoff"] = 8] = "GameServerHandoff";
-    EventName[EventName["GameServerStatusUpdate"] = 9] = "GameServerStatusUpdate";
-    EventName[EventName["Game__Player"] = 10] = "Game__Player";
-    EventName[EventName["PlayerDisconnected"] = 11] = "PlayerDisconnected";
-    EventName[EventName["ServerToPlayer"] = 12] = "ServerToPlayer";
+    EventName[EventName["Game__Player"] = 9] = "Game__Player";
+    EventName[EventName["PlayerDisconnected"] = 10] = "PlayerDisconnected";
+    EventName[EventName["ServerToPlayer"] = 11] = "ServerToPlayer";
 })(EventName = exports.EventName || (exports.EventName = {}));
 var CreateMatchEvent = (function () {
     function CreateMatchEvent(message) {
@@ -71,4 +70,18 @@ var GameToPlayerEvent = (function () {
     return GameToPlayerEvent;
 }());
 exports.GameToPlayerEvent = GameToPlayerEvent;
+var GameListEvent = (function () {
+    function GameListEvent(message) {
+        this.message = message;
+    }
+    return GameListEvent;
+}());
+exports.GameListEvent = GameListEvent;
+var PlayerDisconnectedEvent = (function () {
+    function PlayerDisconnectedEvent(message) {
+        this.message = message;
+    }
+    return PlayerDisconnectedEvent;
+}());
+exports.PlayerDisconnectedEvent = PlayerDisconnectedEvent;
 //# sourceMappingURL=Events.js.map

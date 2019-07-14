@@ -15,6 +15,11 @@ export declare type GameEndedMessage = Game;
 export declare type GameInfoMessage = {
     name: string;
 };
+export declare type GameServerStatus = {
+    address: string;
+    healthy: boolean;
+    info: GameInfoMessage;
+};
 export declare type GameServerHandoffMessage = {
     gameServerAddress: string;
     token: string;
@@ -23,6 +28,14 @@ export declare type PlayerToGameMessage = {
     payload: any;
 };
 export declare type GameToPlayerMessage = PlayerToGameMessage;
+export declare type PlayerDisconnectedMessage = {
+    player: Player;
+};
+export declare type SERVER_TO_PLAYER_MESSAGE = {
+    player: Player;
+    event: string;
+    payload: any;
+};
 export declare type BROADCAST_NAMESPACED_MESSAGE = {
     namespace: string;
     event: string;
@@ -54,8 +67,5 @@ export declare type LOBBY_PLAYER_BAN_MESSAGE = {
     player: Player;
 };
 export declare type LOBBY_PLAYER_KICK_MESSAGE = {
-    player: Player;
-};
-export declare type PLAYER_DISCONNECTED_MESSAGE = {
     player: Player;
 };

@@ -1,7 +1,7 @@
 // tslint:disable:max-classes-per-file
 
 import { EventName } from "./Events";
-import { CreateMatchMessage, GameEndedMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
+import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
 
 export interface IEventHandler {
   eventName: EventName;
@@ -36,4 +36,9 @@ export class GameToPlayerEventHandler implements IEventHandler {
 export class PlayerToGameEventHandler implements IEventHandler {
   public eventName: EventName.Game__Player;
   public constructor(public handler: (message: PlayerToGameMessage) => void) {}
+}
+
+export class GameInfoEventHandler implements IEventHandler {
+  public eventName: EventName.GameInfo;
+  public constructor(public handler: (message: GameInfoMessage) => void) {}
 }

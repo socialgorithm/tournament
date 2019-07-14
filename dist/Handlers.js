@@ -42,4 +42,11 @@ var PlayerToGameEventHandler = (function () {
     return PlayerToGameEventHandler;
 }());
 exports.PlayerToGameEventHandler = PlayerToGameEventHandler;
+var GameInfoEventHandler = (function () {
+    function GameInfoEventHandler(handler) {
+        this.handler = handler;
+    }
+    return GameInfoEventHandler;
+}());
+exports.GameInfoEventHandler = GameInfoEventHandler;
 //# sourceMappingURL=Handlers.js.map
