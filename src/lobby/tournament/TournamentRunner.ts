@@ -3,23 +3,14 @@ const debug = require("debug")("sg:tournamentRunner");
 
 import * as uuid from "uuid/v4";
 
-import { Player } from "@socialgorithm/game-server";
-import { EVENTS } from "../../events/Events";
+import { Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
+import { EVENTS } from "@socialgorithm/model/dist/LegacyEvents";
+import { Events } from "../../pub-sub";
 import PubSub from "../../pub-sub/PubSub";
-import { Match, MatchOptions } from "./match/Match";
-import { MatchRunner } from "./match/MatchRunner";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
 import FreeForAllMatchmaker from "./matchmaker/FreeForAllMatchmaker";
 import IMatchMaker from "./matchmaker/MatchMaker";
-import { Tournament } from "./Tournament";
-
-export type TournamentOptions = {
-  gameAddress: string,
-  autoPlay: boolean,
-  numberOfGames: number,
-  timeout: number,
-  type: string,
-};
+import { MatchRunner } from "./MatchRunner";
 
 export class TournamentRunner {
   private tournament: Tournament;
@@ -41,8 +32,8 @@ export class TournamentRunner {
     };
 
     this.pubSub = new PubSub();
-    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_ENDED, this.onMatchEnd);
-    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, EVENTS.MATCH_UPDATE, this.sendStats);
+    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, Events.MatchEnded, this.onMatchEnd);
+    this.pubSub.subscribeNamespaced(this.tournament.tournamentID, Events.MatchUpdated, this.sendStats);
   }
 
   public getTournament = () => {
@@ -79,7 +70,7 @@ export class TournamentRunner {
     this.matches = this.matchmaker.getRemainingMatches();
 
     // Notify
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: EVENTS.LOBBY_TOURNAMENT_STARTED,
       namespace: this.tournament.lobby,
       payload: {
@@ -122,10 +113,6 @@ export class TournamentRunner {
   }
 
   private playNextMatch = () => {
-    if (this.currentMatchRunner) {
-      this.currentMatchRunner.onEnd();
-    }
-
     this.tournament.ranking = this.matchmaker.getRanking();
     if (this.matchmaker.isFinished()) {
       this.onTournamentEnd();
@@ -150,7 +137,7 @@ export class TournamentRunner {
   }
 
   private sendStats = (): void => {
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: EVENTS.TOURNAMENT_STATS,
       namespace: this.tournament.lobby,
       payload: {

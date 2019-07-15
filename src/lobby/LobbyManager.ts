@@ -1,8 +1,8 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:lobbyManager");
 
-import { EVENTS } from "../events/Events";
-import { LOBBY_CREATE_MESSAGE, LOBBY_JOIN_MESSAGE } from "../events/Messages";
+import { LegacyEvents, Messages } from "@socialgorithm/model";
+import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 import { LobbyRunner } from "./LobbyRunner";
 
@@ -13,19 +13,19 @@ export class LobbyManager {
     constructor() {
         // Add PubSub listeners
         this.pubSub = new PubSub();
-        this.pubSub.subscribe(EVENTS.LOBBY_CREATE, this.createLobby);
-        this.pubSub.subscribe(EVENTS.LOBBY_JOIN, this.checkLobby);
+        this.pubSub.subscribe(Events.LobbyCreate, this.createLobby);
+        this.pubSub.subscribe(Events.LobbyJoin, this.checkLobby);
 
         setInterval(() => this.deleteExpiredLobbies(), 1000 * 60);
     }
 
-    private createLobby = (data: LOBBY_CREATE_MESSAGE) => {
+    private createLobby = (data: Messages.LOBBY_CREATE_MESSAGE) => {
         const admin = data.player;
         const lobbyRunner = new LobbyRunner(admin);
         this.lobbyRunners.push(lobbyRunner);
 
         // Join the lobby namespace
-        this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
+        this.pubSub.publish(Events.AddPlayerToNamespace, {
             namespace: lobbyRunner.getLobby().token,
             player: data.player,
         });
@@ -33,7 +33,7 @@ export class LobbyManager {
         debug("Created lobby %s", lobbyRunner.getLobby().token);
 
         // Send confirmation to player
-        this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+        this.pubSub.publish(Events.ServerToPlayer, {
             event: "lobby created",
             payload: {
                 lobby: lobbyRunner.getLobby(),
@@ -42,14 +42,14 @@ export class LobbyManager {
         });
     }
 
-    private checkLobby = (data: LOBBY_JOIN_MESSAGE) => {
+    private checkLobby = (data: Messages.LOBBY_JOIN_MESSAGE) => {
         const lobbyRunner = this.lobbyRunners.find(
             each => each.getLobby().token === data.payload.token,
         );
         if (!lobbyRunner) {
             // Joining a non-existing lobby
-            this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
-                event: EVENTS.LOBBY_EXCEPTION,
+            this.pubSub.publish(Events.ServerToPlayer, {
+                event: LegacyEvents.EVENTS.LOBBY_EXCEPTION,
                 payload: {
                     error: "Unable to join lobby, ensure token is correct",
                 },
