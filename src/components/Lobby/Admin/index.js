@@ -14,7 +14,6 @@ import {
 	Dropdown, Popup
 } from 'semantic-ui-react';
 import classNames from 'classnames';
-import EventName from '@socialgorithm/model/dist/Events'
 
 import Tournament from '../Tournament'
 
