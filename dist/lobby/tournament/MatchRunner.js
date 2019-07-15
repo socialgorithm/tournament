@@ -45,6 +45,7 @@ var MatchRunner = (function () {
             _this.match.state = "finished";
             _this.updateMatchStats();
             debug("Finished match %o", _this.match.stats);
+            _this.gameServerSocket.disconnect();
             _this.pubSub.publishNamespaced(_this.tournamentID, pub_sub_1.Events.MatchEnded, _this.match);
         };
         this.updateMatchStats = function () {

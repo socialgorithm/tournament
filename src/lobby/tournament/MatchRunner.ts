@@ -75,6 +75,7 @@ export class MatchRunner {
     this.match.state = "finished";
     this.updateMatchStats();
     debug("Finished match %o", this.match.stats);
+    this.gameServerSocket.disconnect();
     this.pubSub.publishNamespaced(
       this.tournamentID,
       PubSubEvents.MatchEnded,
