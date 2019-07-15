@@ -5,10 +5,13 @@ export declare class MatchRunner {
     private gameServerAddress;
     private pubSub;
     private gameServerSocket;
+    private playerTokens;
     constructor(match: Match, tournamentID: string, gameServerAddress: string);
     private sendMatchToGameServer;
     private onMatchCreated;
+    private sendGameServerHandoffToPlayers;
     private onGameEnded;
     private onMatchEnded;
     private updateMatchStats;
+    private convertPlayerTokenToPlayerName;
 }

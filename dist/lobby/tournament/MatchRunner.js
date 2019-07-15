@@ -17,7 +17,11 @@ var MatchRunner = (function () {
         };
         this.onMatchCreated = function (message) {
             debug("Received match created message %O", message);
-            for (var _i = 0, _a = Object.entries(message.playerTokens); _i < _a.length; _i++) {
+            _this.playerTokens = message.playerTokens;
+            _this.sendGameServerHandoffToPlayers();
+        };
+        this.sendGameServerHandoffToPlayers = function () {
+            for (var _i = 0, _a = Object.entries(_this.playerTokens); _i < _a.length; _i++) {
                 var _b = _a[_i], player = _b[0], token = _b[1];
                 _this.pubSub.publish(pub_sub_1.Events.ServerToPlayer, {
                     player: player,
@@ -31,6 +35,8 @@ var MatchRunner = (function () {
         };
         this.onGameEnded = function (game) {
             debug("Finished game, winner %s", game.winner);
+            game.players = game.players.map(function (token) { return _this.convertPlayerTokenToPlayerName(token); });
+            game.winner = _this.convertPlayerTokenToPlayerName(game.winner);
             _this.match.games.push(game);
             _this.updateMatchStats();
             _this.pubSub.publishNamespaced(_this.tournamentID, pub_sub_1.Events.MatchUpdated, _this.match);
@@ -59,6 +65,15 @@ var MatchRunner = (function () {
                 }
             }
             _this.match.winner = maxIndex;
+        };
+        this.convertPlayerTokenToPlayerName = function (tokenToConvert) {
+            for (var _i = 0, _a = Object.entries(_this.playerTokens); _i < _a.length; _i++) {
+                var _b = _a[_i], player = _b[0], playerToken = _b[1];
+                if (tokenToConvert === playerToken) {
+                    return player;
+                }
+            }
+            return tokenToConvert;
         };
         this.gameServerSocket = io(gameServerAddress, { reconnection: true, timeout: 2000 });
         this.gameServerSocket.on("connect", this.sendMatchToGameServer);

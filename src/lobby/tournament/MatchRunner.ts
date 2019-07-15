@@ -3,13 +3,14 @@ const debug = require("debug")("sg:matchRunner");
 
 import * as io from "socket.io-client";
 
-import { Events, Game, Match, Messages } from "@socialgorithm/model";
+import { Game, Match, Messages } from "@socialgorithm/model";
 import { EventName } from "@socialgorithm/model/dist/Events";
 import { Events as PubSubEvents, PubSub } from "../../pub-sub";
 
 export class MatchRunner {
   private pubSub: PubSub;
   private gameServerSocket: SocketIOClient.Socket;
+  private playerTokens: { [name: string]: string };
 
   constructor(private match: Match, private tournamentID: string, private gameServerAddress: string) {
     this.gameServerSocket = io(gameServerAddress, { reconnection: true, timeout: 2000 });
@@ -33,7 +34,13 @@ export class MatchRunner {
 
   private onMatchCreated = (message: Messages.MatchCreatedMessage) => {
     debug("Received match created message %O", message);
-    for (const [player, token] of Object.entries(message.playerTokens)) {
+    // These tokens are recognised on/sent by the game server (e.g. stats updates), save them for later mapping
+    this.playerTokens = message.playerTokens;
+    this.sendGameServerHandoffToPlayers();
+  }
+
+  private sendGameServerHandoffToPlayers = () => {
+    for (const [player, token] of Object.entries(this.playerTokens)) {
       this.pubSub.publish(
         PubSubEvents.ServerToPlayer,
         {
@@ -50,8 +57,13 @@ export class MatchRunner {
 
   private onGameEnded = (game: Game) => {
     debug("Finished game, winner %s", game.winner);
+    // Convert tokens to player names
+    game.players = game.players.map(token => this.convertPlayerTokenToPlayerName(token));
+    game.winner = this.convertPlayerTokenToPlayerName(game.winner);
+
     this.match.games.push(game);
     this.updateMatchStats();
+
     this.pubSub.publishNamespaced(
       this.tournamentID,
       PubSubEvents.MatchUpdated,
@@ -93,5 +105,14 @@ export class MatchRunner {
     }
 
     this.match.winner = maxIndex;
+  }
+
+  private convertPlayerTokenToPlayerName = (tokenToConvert: string) => {
+    for (const [player, playerToken] of Object.entries(this.playerTokens)) {
+      if (tokenToConvert === playerToken) {
+        return player;
+      }
+    }
+    return tokenToConvert;
   }
 }
