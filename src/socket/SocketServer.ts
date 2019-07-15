@@ -1,8 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:socketServer");
 
-import { Events, LegacyEvents, Messages, Player } from "@socialgorithm/model";
-import { EventName } from "@socialgorithm/model/dist/Events";
+import { EventName, LegacyEvents, Messages, Player } from "@socialgorithm/model";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";

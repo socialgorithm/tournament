@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:socketServer");
 var model_1 = require("@socialgorithm/model");
-var Events_1 = require("@socialgorithm/model/dist/Events");
 var fs = require("fs");
 var http = require("http");
 var io = require("socket.io");
@@ -20,7 +19,7 @@ var SocketServer = (function () {
                 return;
             }
             _this.playerSockets[data.player].join(data.namespace);
-            _this.playerSockets[data.player].emit(Events_1.EventName.GameList, _this.gameServers.map(function (server) { return server.status; }));
+            _this.playerSockets[data.player].emit(model_1.EventName.GameList, _this.gameServers.map(function (server) { return server.status; }));
         };
         this.sendMessageToNamespace = function (data) {
             _this.io["in"](data.namespace).emit(data.event, data.payload);
@@ -36,7 +35,7 @@ var SocketServer = (function () {
         this.sendGameListToEveryone = function (data) {
             debug("Game server list updated, publishing update: %O", data);
             Object.values(_this.playerSockets).forEach(function (socket) {
-                socket.emit(Events_1.EventName.GameList, data);
+                socket.emit(model_1.EventName.GameList, data);
             });
         };
         this.onMessageFromSocket = function (player, event) { return function (payload) {

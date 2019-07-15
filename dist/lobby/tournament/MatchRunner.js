@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:matchRunner");
 var io = require("socket.io-client");
-var Events_1 = require("@socialgorithm/model/dist/Events");
+var model_1 = require("@socialgorithm/model");
 var pub_sub_1 = require("../../pub-sub");
 var MatchRunner = (function () {
     function MatchRunner(match, tournamentID, gameServerAddress) {
@@ -12,7 +12,7 @@ var MatchRunner = (function () {
         this.gameServerAddress = gameServerAddress;
         this.sendMatchToGameServer = function () {
             debug("Sending match to game server: %O", _this.match);
-            _this.gameServerSocket.emit(Events_1.EventName.CreateMatch, { players: _this.match.players, options: _this.match.options });
+            _this.gameServerSocket.emit(model_1.EventName.CreateMatch, { players: _this.match.players, options: _this.match.options });
             _this.match.state = "playing";
         };
         this.onMatchCreated = function (message) {
@@ -25,7 +25,7 @@ var MatchRunner = (function () {
                 var _b = _a[_i], player = _b[0], token = _b[1];
                 _this.pubSub.publish(pub_sub_1.Events.ServerToPlayer, {
                     player: player,
-                    event: Events_1.EventName.GameServerHandoff,
+                    event: model_1.EventName.GameServerHandoff,
                     payload: {
                         gameServerAddress: _this.gameServerAddress,
                         token: token
@@ -78,9 +78,9 @@ var MatchRunner = (function () {
         };
         this.gameServerSocket = io(gameServerAddress, { reconnection: true, timeout: 2000 });
         this.gameServerSocket.on("connect", this.sendMatchToGameServer);
-        this.gameServerSocket.on(Events_1.EventName.MatchCreated, this.onMatchCreated);
-        this.gameServerSocket.on(Events_1.EventName.GameEnded, this.onGameEnded);
-        this.gameServerSocket.on(Events_1.EventName.MatchEnded, this.onMatchEnded);
+        this.gameServerSocket.on(model_1.EventName.MatchCreated, this.onMatchCreated);
+        this.gameServerSocket.on(model_1.EventName.GameEnded, this.onGameEnded);
+        this.gameServerSocket.on(model_1.EventName.MatchEnded, this.onMatchEnded);
         this.gameServerSocket.on("disconnect", function () {
             debug("Connection to Game Server %s lost!", gameServerAddress);
         });

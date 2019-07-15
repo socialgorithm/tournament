@@ -3,8 +3,7 @@ const debug = require("debug")("sg:gameServerInfoConnection");
 
 import * as io from "socket.io-client";
 
-import { Handlers, Messages } from "@socialgorithm/model";
-import { EventName } from "@socialgorithm/model/dist/Events";
+import { EventName, Messages } from "@socialgorithm/model";
 import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 

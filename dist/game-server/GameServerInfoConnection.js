@@ -2,7 +2,7 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:gameServerInfoConnection");
 var io = require("socket.io-client");
-var Events_1 = require("@socialgorithm/model/dist/Events");
+var model_1 = require("@socialgorithm/model");
 var pub_sub_1 = require("../pub-sub");
 var PubSub_1 = require("../pub-sub/PubSub");
 var GameServerInfoConnection = (function () {
@@ -38,7 +38,7 @@ var GameServerInfoConnection = (function () {
             _this.status.healthy = false;
             _this.publishStatus();
         });
-        this.gameSocket.on(Events_1.EventName.GameInfo, function (gameInfo) {
+        this.gameSocket.on(model_1.EventName.GameInfo, function (gameInfo) {
             _this.status.info = gameInfo;
             _this.publishStatus();
         });

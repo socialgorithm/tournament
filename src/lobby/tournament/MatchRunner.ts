@@ -3,8 +3,7 @@ const debug = require("debug")("sg:matchRunner");
 
 import * as io from "socket.io-client";
 
-import { Game, Match, Messages } from "@socialgorithm/model";
-import { EventName } from "@socialgorithm/model/dist/Events";
+import { EventName, Game, Match, Messages } from "@socialgorithm/model";
 import { Events as PubSubEvents, PubSub } from "../../pub-sub";
 
 export class MatchRunner {
