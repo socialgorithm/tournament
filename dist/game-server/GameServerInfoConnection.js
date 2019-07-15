@@ -2,7 +2,8 @@
 exports.__esModule = true;
 var debug = require("debug")("sg:gameServerInfoConnection");
 var io = require("socket.io-client");
-var model_1 = require("@socialgorithm/model");
+var Events_1 = require("@socialgorithm/model/dist/Events");
+var pub_sub_1 = require("../pub-sub");
 var PubSub_1 = require("../pub-sub/PubSub");
 var GameServerInfoConnection = (function () {
     function GameServerInfoConnection(gameServerAddress) {
@@ -37,7 +38,7 @@ var GameServerInfoConnection = (function () {
             _this.status.healthy = false;
             _this.publishStatus();
         });
-        this.gameSocket.on(model_1.GAME_SOCKET_MESSAGE.GAME_INFO, function (gameInfo) {
+        this.gameSocket.on(Events_1.EventName.GameInfo, function (gameInfo) {
             _this.status.info = gameInfo;
             _this.publishStatus();
         });
@@ -48,7 +49,7 @@ var GameServerInfoConnection = (function () {
         });
     }
     GameServerInfoConnection.prototype.publishStatus = function () {
-        this.pubSub.publish(model_1.EVENTS.GAME_SERVER_UPDATE, this.status);
+        this.pubSub.publish(pub_sub_1.Events.GameServerStatus, this.status);
     };
     return GameServerInfoConnection;
 }());

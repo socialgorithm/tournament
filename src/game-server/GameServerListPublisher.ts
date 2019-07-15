@@ -1,18 +1,18 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:game-server-list-publisher");
 
-import { EVENTS } from "@socialgorithm/model";
+import { Messages } from "@socialgorithm/model";
+import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
-import { GameServerStatus } from "./GameServerInfoConnection";
 
-interface IGameList { [s: string]: GameServerStatus; }
+interface IGameList { [s: string]: Messages.GameServerStatus; }
 
 export class GameServerListPublisher {
   private pubSub = new PubSub();
   private gameList: IGameList = { };
 
   constructor() {
-    this.pubSub.subscribe(EVENTS.GAME_SERVER_UPDATE, (status: GameServerStatus) => {
+    this.pubSub.subscribe(Events.GameServerStatus, (status: Messages.GameServerStatus) => {
       debug("Received game server update %O", status);
       this.gameList[status.address] = status;
       this.publishGameList();
@@ -20,6 +20,6 @@ export class GameServerListPublisher {
   }
 
   public publishGameList() {
-    this.pubSub.publish(EVENTS.GAME_LIST, Object.values(this.gameList));
+    this.pubSub.publish(Events.GameList, Object.values(this.gameList));
   }
 }

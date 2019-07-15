@@ -1,11 +1,13 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:socketServer");
 
-import { EVENTS, MSG, Player } from "@socialgorithm/model";
+import { Events, LegacyEvents, Messages, Player } from "@socialgorithm/model";
+import { EventName } from "@socialgorithm/model/dist/Events";
 import * as fs from "fs";
 import * as http from "http";
 import * as io from "socket.io";
-import { GameServerInfoConnection, GameServerStatus } from "../game-server/GameServerInfoConnection";
+import { GameServerInfoConnection } from "../game-server/GameServerInfoConnection";
+import { Events as PubSubEvents } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 
 export class SocketServer {
@@ -57,12 +59,12 @@ export class SocketServer {
 
       // Forward the socket events to the PubSub system
       const listenToEvents = [
-        EVENTS.LOBBY_CREATE,
-        EVENTS.LOBBY_TOURNAMENT_START,
-        EVENTS.LOBBY_TOURNAMENT_CONTINUE,
-        EVENTS.LOBBY_JOIN,
-        EVENTS.LOBBY_PLAYER_BAN,
-        EVENTS.LOBBY_PLAYER_KICK,
+        LegacyEvents.EVENTS.LOBBY_CREATE,
+        LegacyEvents.EVENTS.LOBBY_TOURNAMENT_START,
+        LegacyEvents.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
+        LegacyEvents.EVENTS.LOBBY_JOIN,
+        LegacyEvents.EVENTS.LOBBY_PLAYER_BAN,
+        LegacyEvents.EVENTS.LOBBY_PLAYER_KICK,
       ];
       listenToEvents.forEach(event => {
         socket.on(event, this.onMessageFromSocket(player, event));
@@ -72,13 +74,13 @@ export class SocketServer {
     });
 
     // Senders
-    this.pubSub.subscribe(EVENTS.SERVER_TO_PLAYER, this.sendMessageToPlayer);
-    this.pubSub.subscribe(EVENTS.BROADCAST_NAMESPACED, this.sendMessageToNamespace);
-    this.pubSub.subscribe(EVENTS.ADD_PLAYER_TO_NAMESPACE, this.addPlayerToNamespace);
-    this.pubSub.subscribe(EVENTS.GAME_LIST, this.sendGameListToEveryone);
+    this.pubSub.subscribe(PubSubEvents.ServerToPlayer, this.sendMessageToPlayer);
+    this.pubSub.subscribe(PubSubEvents.BroadcastNamespaced, this.sendMessageToNamespace);
+    this.pubSub.subscribe(PubSubEvents.AddPlayerToNamespace, this.addPlayerToNamespace);
+    this.pubSub.subscribe(PubSubEvents.GameList, this.sendGameListToEveryone);
   }
 
-  private addPlayerToNamespace = (data: MSG.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
+  private addPlayerToNamespace = (data: Messages.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
     if (!this.playerSockets[data.player]) {
       debug("Error adding player (%s) to namespace, player socket does not exist", data.player);
       return;
@@ -86,14 +88,14 @@ export class SocketServer {
     this.playerSockets[data.player].join(data.namespace);
 
     // Send Game List
-    this.playerSockets[data.player].emit(EVENTS.GAME_LIST, this.gameServers.map(server => server.status));
+    this.playerSockets[data.player].emit(EventName.GameList, this.gameServers.map(server => server.status));
   }
 
-  private sendMessageToNamespace = (data: MSG.BROADCAST_NAMESPACED_MESSAGE) => {
+  private sendMessageToNamespace = (data: Messages.BROADCAST_NAMESPACED_MESSAGE) => {
     this.io.in(data.namespace).emit(data.event, data.payload);
   }
 
-  private sendMessageToPlayer = (data: MSG.SERVER_TO_PLAYER_MESSAGE) => {
+  private sendMessageToPlayer = (data: Messages.SERVER_TO_PLAYER_MESSAGE) => {
     const socket = this.playerSockets[data.player];
 
     if (!socket) {
@@ -103,29 +105,46 @@ export class SocketServer {
     socket.emit(data.event, data.payload);
   }
 
-  private sendGameListToEveryone = (data: GameServerStatus[]) => {
+  private sendGameListToEveryone = (data: Messages.GameServerStatus[]) => {
     debug("Game server list updated, publishing update: %O", data);
     Object.values(this.playerSockets).forEach(socket => {
-      socket.emit(EVENTS.GAME_LIST, data);
+      socket.emit(EventName.GameList, data);
     });
   }
 
   /**
    * Generic event forwarder from the socket to the pubsub bus
    */
-  private onMessageFromSocket = (player: Player, type: any) => (payload: any) => {
+  private onMessageFromSocket = (player: Player, event: LegacyEvents.EVENTS) => (payload: any) => {
     // socket -> pubsub
     const data: any = {
       payload,
       player,
     };
-    this.pubSub.publish(type, data);
+    this.pubSub.publish(this.translateSocketMessageToPubSub(event), data);
+  }
+
+  private translateSocketMessageToPubSub(socketEvent: LegacyEvents.EVENTS): PubSubEvents {
+    switch (socketEvent) {
+      case LegacyEvents.EVENTS.LOBBY_CREATE:
+        return PubSubEvents.LobbyCreate;
+      case LegacyEvents.EVENTS.LOBBY_TOURNAMENT_START:
+        return PubSubEvents.LobbyTournamentStart;
+      case LegacyEvents.EVENTS.LOBBY_TOURNAMENT_CONTINUE:
+        return PubSubEvents.LobbyTournamentContinue;
+      case LegacyEvents.EVENTS.LOBBY_JOIN:
+        return PubSubEvents.LobbyJoin;
+      case LegacyEvents.EVENTS.LOBBY_PLAYER_BAN:
+        return PubSubEvents.LobbyPlayerBan;
+      case LegacyEvents.EVENTS.LOBBY_PLAYER_KICK:
+        return PubSubEvents.LobbyPlayerKick;
+    }
   }
 
   private onPlayerDisconnect = (player: Player) => () => {
     debug("Removing player (%s) from server", player);
     delete this.playerSockets[player];
-    this.pubSub.publish(EVENTS.PLAYER_DISCONNECTED, { player });
+    this.pubSub.publish(PubSubEvents.PlayerDisconnected, { player });
   }
 
   /**

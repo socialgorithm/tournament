@@ -3,17 +3,13 @@ const debug = require("debug")("sg:gameServerInfoConnection");
 
 import * as io from "socket.io-client";
 
-import { EVENTS, GAME_SOCKET_MESSAGE, GameMessage } from "@socialgorithm/model";
+import { Handlers, Messages } from "@socialgorithm/model";
+import { EventName } from "@socialgorithm/model/dist/Events";
+import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 
-export type GameServerStatus = {
-  address: string,
-  healthy: boolean,
-  info: GameMessage.GameInfoMessage,
-};
-
 export class GameServerInfoConnection {
-  public status: GameServerStatus;
+  public status: Messages.GameServerStatus;
   public gameSocket: SocketIOClient.Socket;
   private pubSub: PubSub;
 
@@ -54,7 +50,7 @@ export class GameServerInfoConnection {
       this.publishStatus();
     });
 
-    this.gameSocket.on(GAME_SOCKET_MESSAGE.GAME_INFO, (gameInfo: GameMessage.GameInfoMessage) => {
+    this.gameSocket.on(EventName.GameInfo, (gameInfo: Messages.GameInfoMessage) => {
       this.status.info = gameInfo;
       this.publishStatus();
     });
@@ -67,6 +63,6 @@ export class GameServerInfoConnection {
   }
 
   private publishStatus() {
-    this.pubSub.publish(EVENTS.GAME_SERVER_UPDATE, this.status);
+    this.pubSub.publish(Events.GameServerStatus, this.status);
   }
 }

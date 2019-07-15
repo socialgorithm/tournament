@@ -1,0 +1,16 @@
+export enum Events {
+  AddPlayerToNamespace,
+  BroadcastNamespaced,
+  ServerToPlayer,
+  MatchUpdated,
+  MatchEnded,
+  GameServerStatus,
+  GameList,
+  LobbyCreate,
+  LobbyJoin,
+  LobbyTournamentStart,
+  LobbyTournamentContinue,
+  LobbyPlayerBan,
+  LobbyPlayerKick,
+  PlayerDisconnected,
+}

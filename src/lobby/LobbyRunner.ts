@@ -2,7 +2,8 @@ import * as randomWord from "random-word";
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:lobbyRunner");
 
-import { EVENTS, Lobby, MSG, Player } from "@socialgorithm/model";
+import { Lobby, Messages, Player } from "@socialgorithm/model";
+import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 import { TournamentRunner } from "./tournament/TournamentRunner";
 
@@ -23,12 +24,12 @@ export class LobbyRunner {
 
     // Add PubSub listeners
     this.pubSub = new PubSub();
-    this.pubSub.subscribe(EVENTS.LOBBY_JOIN, this.addPlayerToLobby);
-    this.pubSub.subscribe(EVENTS.LOBBY_TOURNAMENT_START, this.startTournament);
-    this.pubSub.subscribe(EVENTS.LOBBY_TOURNAMENT_CONTINUE, this.continueTournament);
-    this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_BAN, this.banPlayer);
-    this.pubSub.subscribe(EVENTS.LOBBY_PLAYER_KICK, this.kickPlayer);
-    this.pubSub.subscribe(EVENTS.PLAYER_DISCONNECTED, this.removeDisconnectedPlayer);
+    this.pubSub.subscribe(Events.LobbyJoin, this.addPlayerToLobby);
+    this.pubSub.subscribe(Events.LobbyTournamentStart, this.startTournament);
+    this.pubSub.subscribe(Events.LobbyTournamentContinue, this.continueTournament);
+    this.pubSub.subscribe(Events.LobbyPlayerBan, this.banPlayer);
+    this.pubSub.subscribe(Events.LobbyPlayerKick, this.kickPlayer);
+    this.pubSub.subscribe(Events.PlayerDisconnected, this.removeDisconnectedPlayer);
 
     // Set expiry
     const expiresAt = new Date(); // now
@@ -61,7 +62,7 @@ export class LobbyRunner {
     this.pubSub.unsubscribeAll();
   }
 
-  private addPlayerToLobby = (data: MSG.LOBBY_JOIN_MESSAGE) => {
+  private addPlayerToLobby = (data: Messages.LOBBY_JOIN_MESSAGE) => {
     // add data.player to data.payload.token
     const player = data.player;
     const lobbyName = data.payload.token;
@@ -87,13 +88,13 @@ export class LobbyRunner {
     const lobby = this.getLobby();
 
     // Join the lobby namespace
-    this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
+    this.pubSub.publish(Events.AddPlayerToNamespace, {
       namespace: lobbyName,
       player,
     });
 
     // Publish a lobby update
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "connected",
       namespace: lobbyName,
       payload: {
@@ -102,7 +103,7 @@ export class LobbyRunner {
     });
 
     // Send join confirmation to player
-    this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+    this.pubSub.publish(Events.ServerToPlayer, {
       event: "lobby joined",
       payload: {
         isAdmin: this.lobby.admin === player,
@@ -113,7 +114,7 @@ export class LobbyRunner {
 
     if (isSpectating) {
       // Join the lobby info namespace
-      this.pubSub.publish(EVENTS.ADD_PLAYER_TO_NAMESPACE, {
+      this.pubSub.publish(Events.AddPlayerToNamespace, {
         namespace: `${lobbyName}-info`,
         player,
       });
@@ -122,7 +123,7 @@ export class LobbyRunner {
     debug("Added player %s to lobby %s", player, lobbyName);
   }
 
-  private removeDisconnectedPlayer = (data: MSG.PLAYER_DISCONNECTED_MESSAGE) => {
+  private removeDisconnectedPlayer = (data: Messages.PlayerDisconnectedMessage) => {
     const disconnectedPlayer = data.player;
     const lobby = this.getLobby();
 
@@ -131,7 +132,7 @@ export class LobbyRunner {
       debug(`Removing ${disconnectedPlayer} from ${lobby.token}`);
       this.lobby.players.splice(foundIndex, 1);
       // Publish a lobby update
-      this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+      this.pubSub.publish(Events.BroadcastNamespaced, {
         event: "lobby player disconnected",
         namespace: lobby.token,
         payload: {
@@ -158,7 +159,7 @@ export class LobbyRunner {
   }
 
   // tslint:disable-next-line:member-ordering
-  private startTournament = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_TOURNAMENT_START_MESSAGE) => {
+  private startTournament = this.ifAdmin((lobbyName: string, data: Messages.LOBBY_TOURNAMENT_START_MESSAGE) => {
     if (this.tournamentRunner) {
       this.tournamentRunner.destroy();
     }
@@ -181,7 +182,7 @@ export class LobbyRunner {
     debug("Continue tournament in lobby %s", lobbyName);
 
     // Notify
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "lobby tournament continued",
       namespace: lobbyName,
       payload: this.getLobby(),
@@ -189,20 +190,20 @@ export class LobbyRunner {
   });
 
   // tslint:disable-next-line:member-ordering
-  private kickPlayer = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_PLAYER_KICK_MESSAGE) => {
+  private kickPlayer = this.ifAdmin((lobbyName: string, data: Messages.LOBBY_PLAYER_KICK_MESSAGE) => {
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
 
     debug("Kick player %s in lobby %s", data.player, lobbyName);
 
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "lobby player kicked",
       namespace: lobbyName,
       payload: this.getLobby(),
     });
 
     // Send confirmation to player
-    this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+    this.pubSub.publish(Events.ServerToPlayer, {
       event: "kicked",
       payload: null,
       player: data.player,
@@ -210,7 +211,7 @@ export class LobbyRunner {
   });
 
   // tslint:disable-next-line:member-ordering
-  private banPlayer = this.ifAdmin((lobbyName: string, data: MSG.LOBBY_PLAYER_BAN_MESSAGE) => {
+  private banPlayer = this.ifAdmin((lobbyName: string, data: Messages.LOBBY_PLAYER_BAN_MESSAGE) => {
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
 
@@ -222,14 +223,14 @@ export class LobbyRunner {
 
     debug("Ban player %s in lobby %s", data.player, lobbyName);
 
-    this.pubSub.publish(EVENTS.BROADCAST_NAMESPACED, {
+    this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "lobby player banned",
       namespace: lobbyName,
       payload: this.getLobby(),
     });
 
     // Send confirmation to player
-    this.pubSub.publish(EVENTS.SERVER_TO_PLAYER, {
+    this.pubSub.publish(Events.ServerToPlayer, {
       event: "banned",
       payload: null,
       player: data.player,
