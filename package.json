@@ -36,9 +36,5 @@
     "tslint": "^5.13.1",
     "typedoc": "^0.14.2",
     "typescript": "^3.3.3333"
-  },
-  "dependencies": {
-    "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
   }
 }
