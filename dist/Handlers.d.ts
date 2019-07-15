@@ -1,4 +1,4 @@
-import { EventName } from "./Events";
+import { EventName } from "./EventName";
 import { CreateMatchMessage, GameEndedMessage, GameInfoMessage, GameToPlayerMessage, MatchCreatedMessage, PlayerToGameMessage } from "./Messages";
 export interface IEventHandler {
     eventName: EventName;

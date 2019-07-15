@@ -1,6 +1,5 @@
-import * as Events from "./Events";
+import { EventName } from "./EventName";
 import { Game } from "./Game";
-import * as Handlers from "./Handlers";
 import * as LegacyEvents from "./LegacyEvents";
 import { Lobby } from "./Lobby";
 import { Match, MatchOptions } from "./Match";
@@ -9,9 +8,8 @@ import { Player } from "./Player";
 import { Tournament, TournamentOptions } from "./Tournament";
 
 export {
-  Events,
+  EventName,
   Game,
-  Handlers,
   LegacyEvents,
   Lobby,
   Match,

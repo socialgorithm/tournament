@@ -1,9 +1,7 @@
 "use strict";
 exports.__esModule = true;
-var Events = require("./Events");
-exports.Events = Events;
-var Handlers = require("./Handlers");
-exports.Handlers = Handlers;
+var EventName_1 = require("./EventName");
+exports.EventName = EventName_1.EventName;
 var LegacyEvents = require("./LegacyEvents");
 exports.LegacyEvents = LegacyEvents;
 var Messages = require("./Messages");

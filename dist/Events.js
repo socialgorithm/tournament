@@ -1,20 +1,5 @@
 "use strict";
 exports.__esModule = true;
-var EventName;
-(function (EventName) {
-    EventName["CreateMatch"] = "CreateMatch";
-    EventName["MatchCreated"] = "MatchCreated";
-    EventName["MatchUpdated"] = "MatchUpdated";
-    EventName["MatchEnded"] = "MatchEnded";
-    EventName["GameUpdated"] = "GameUpdated";
-    EventName["GameEnded"] = "GameEnded";
-    EventName["GameInfo"] = "GameInfo";
-    EventName["GameList"] = "GameList";
-    EventName["GameServerHandoff"] = "GameServerHandoff";
-    EventName["Game__Player"] = "Game__Player";
-    EventName["PlayerDisconnected"] = "PlayerDisconnected";
-    EventName["ServerToPlayer"] = "ServerToPlayer";
-})(EventName = exports.EventName || (exports.EventName = {}));
 var CreateMatchEvent = (function () {
     function CreateMatchEvent(message) {
         this.message = message;

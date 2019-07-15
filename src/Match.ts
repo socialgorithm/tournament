@@ -15,7 +15,7 @@ export type Match = {
 export type MatchStats = {
   gamesCompleted: number; // Number of games won
   gamesTied: number; // Number of ties
-  wins: number[]; // Array with only two elements, 0 is wins by player 0, 1 is wins by player 1
+  wins: number[]; // Array with as many elements as players, index 0 is wins by player 0 and so on
   // times: number[]; // Array with the times for all the games
   // timeouts: number[]; // Array for all timeouts
 };
