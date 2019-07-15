@@ -29,6 +29,7 @@
   },
   "homepage": "https://play.socialgorithm.org",
   "dependencies": {
+    "@socialgorithm/model": "^0.0.20",
     "@socialgorithm/ultimate-ttt": "^4.19.0",
     "classnames": "^2.2.6",
     "history": "^4.9.0",

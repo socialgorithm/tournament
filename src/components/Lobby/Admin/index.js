@@ -14,6 +14,7 @@ import {
 	Dropdown, Popup
 } from 'semantic-ui-react';
 import classNames from 'classnames';
+import EventName from '@socialgorithm/model/dist/Events'
 
 import Tournament from '../Tournament'
 
@@ -82,7 +83,7 @@ class LobbyAdmin extends React.PureComponent {
             });
         });
         
-        this.props.socket.socket.on('game list', data => {
+        this.props.socket.socket.on("GameList", data => {
             this.setState({availableGames: data});
         });
 
