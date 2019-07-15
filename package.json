@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/model",
-  "version": "0.0.20",
+  "version": "8.0.0",
   "description": "Data Model for Socialgorithm Tournaments",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,6 @@
     "build": "tsc",
     "test": "npm run build && npm run lint",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
-    "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
     "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
   },
   "repository": {
