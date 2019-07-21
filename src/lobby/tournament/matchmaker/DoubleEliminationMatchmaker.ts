@@ -227,6 +227,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     const match: DoubleEliminationMatch = {
       games: [],
       matchID: uuid(),
+      messages: [],
       options: finalOptions,
       parentMatches,
       players: [playerA, playerB],

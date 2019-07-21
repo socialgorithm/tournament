@@ -70,10 +70,19 @@ export class MatchRunner {
     );
   }
 
-  private onMatchEnded = () => {
+  private onMatchEnded = (matchFromGameServer: Match) => {
+    debug(`Finished match ${this.match.matchID}`);
     this.match.state = "finished";
-    this.updateMatchStats();
-    debug("Finished match %o", this.match.stats);
+    if (matchFromGameServer != null) {
+      debug("Received ended match from game server, overriding some vars %O", matchFromGameServer);
+      this.match.games = matchFromGameServer.games;
+      this.match.winner = matchFromGameServer.winner;
+      this.match.stats = matchFromGameServer.stats;
+      this.match.messages = matchFromGameServer.messages;
+    } else {
+      this.updateMatchStats();
+    }
+    debug("Match stats %O", this.match);
     this.gameServerSocket.disconnect();
     this.pubSub.publishNamespaced(
       this.tournamentID,

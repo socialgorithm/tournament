@@ -13,6 +13,7 @@ var FreeForAllMatchmaker = (function () {
                     _this.matches.push({
                         games: [],
                         matchID: uuid(),
+                        messages: [],
                         options: _this.options,
                         players: [playerA, playerB],
                         state: "upcoming",

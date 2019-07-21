@@ -41,10 +41,20 @@ var MatchRunner = (function () {
             _this.updateMatchStats();
             _this.pubSub.publishNamespaced(_this.tournamentID, pub_sub_1.Events.MatchUpdated, _this.match);
         };
-        this.onMatchEnded = function () {
+        this.onMatchEnded = function (matchFromGameServer) {
+            debug("Finished match " + _this.match.matchID);
             _this.match.state = "finished";
-            _this.updateMatchStats();
-            debug("Finished match %o", _this.match.stats);
+            if (matchFromGameServer != null) {
+                debug("Received ended match from game server, overriding some vars %O", matchFromGameServer);
+                _this.match.games = matchFromGameServer.games;
+                _this.match.winner = matchFromGameServer.winner;
+                _this.match.stats = matchFromGameServer.stats;
+                _this.match.messages = matchFromGameServer.messages;
+            }
+            else {
+                _this.updateMatchStats();
+            }
+            debug("Match stats %O", _this.match);
             _this.gameServerSocket.disconnect();
             _this.pubSub.publishNamespaced(_this.tournamentID, pub_sub_1.Events.MatchEnded, _this.match);
         };

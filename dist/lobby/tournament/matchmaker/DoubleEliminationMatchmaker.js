@@ -171,6 +171,7 @@ var DoubleEliminationMatchmaker = (function () {
         var match = {
             games: [],
             matchID: uuid(),
+            messages: [],
             options: finalOptions,
             parentMatches: parentMatches,
             players: [playerA, playerB],

@@ -23,6 +23,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
           this.matches.push({
             games: [],
             matchID: uuid(),
+            messages: [],
             options: this.options,
             players: [playerA, playerB],
             state: "upcoming",
