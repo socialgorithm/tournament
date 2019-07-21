@@ -7,6 +7,7 @@ export type Match = {
   options: MatchOptions
   players: Player[],
   games: Game[],
+  messages: string[],
   state: "playing" | "finished" | "upcoming",
   winner: number,
   stats: MatchStats,

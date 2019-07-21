@@ -14,6 +14,8 @@ export type MatchCreatedMessage = {
   },
 };
 
+export type MatchEndedMessage = Match;
+
 export type GameEndedMessage = Game;
 
 export type GameInfoMessage = {

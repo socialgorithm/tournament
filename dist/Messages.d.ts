@@ -1,5 +1,5 @@
 import { Game } from "./Game";
-import { MatchOptions } from "./Match";
+import { Match, MatchOptions } from "./Match";
 import { Player } from "./Player";
 import { TournamentOptions } from "./Tournament";
 export declare type CreateMatchMessage = {
@@ -11,6 +11,7 @@ export declare type MatchCreatedMessage = {
         [name: string]: string;
     };
 };
+export declare type MatchEndedMessage = Match;
 export declare type GameEndedMessage = Game;
 export declare type GameInfoMessage = {
     name: string;
