@@ -122,9 +122,15 @@ export class TournamentRunner {
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
     if (upcomingMatches.length < 1) {
-      this.matches.push(...this.matchmaker.getRemainingMatches());
-      this.playNextMatch();
-      return;
+      const remainingMatches = this.matchmaker.getRemainingMatches();
+      if (remainingMatches.length < 1) {
+        this.onTournamentEnd();
+        return;
+      } else {
+        this.matches.push(...remainingMatches);
+        this.playNextMatch();
+        return;
+      }
     }
 
     const nextMatch = upcomingMatches[0];

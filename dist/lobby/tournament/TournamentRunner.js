@@ -90,9 +90,16 @@ var TournamentRunner = (function () {
             }
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
-                (_a = _this.matches).push.apply(_a, _this.matchmaker.getRemainingMatches());
-                _this.playNextMatch();
-                return;
+                var remainingMatches = _this.matchmaker.getRemainingMatches();
+                if (remainingMatches.length < 1) {
+                    _this.onTournamentEnd();
+                    return;
+                }
+                else {
+                    (_a = _this.matches).push.apply(_a, remainingMatches);
+                    _this.playNextMatch();
+                    return;
+                }
             }
             var nextMatch = upcomingMatches[0];
             _this.currentMatchRunner = new MatchRunner_1.MatchRunner(nextMatch, _this.tournament.tournamentID, _this.tournament.options.gameAddress);
