@@ -102,7 +102,6 @@ export class TournamentRunner {
   private onMatchEnd = () => {
     this.tournament.waiting = !this.tournament.options.autoPlay;
 
-    this.matchmaker.updateStats(this.matches);
     this.sendStats();
 
     if (this.tournament.waiting) {
@@ -122,6 +121,7 @@ export class TournamentRunner {
     const upcomingMatches = this.matches.filter(match => match.state === "upcoming");
 
     if (upcomingMatches.length < 1) {
+      this.matchmaker.updateStats(this.matches);
       const remainingMatches = this.matchmaker.getRemainingMatches();
       if (remainingMatches.length < 1) {
         this.onTournamentEnd();

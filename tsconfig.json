@@ -1,28 +1,29 @@
 {
     "compilerOptions": {
+      "baseUrl": "./",
+      "declaration": true,
       "lib": ["es7"],
       "module": "commonjs",
+      "moduleResolution": "node",
       "noImplicitAny": true,
       "noEmitOnError": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "declaration": true,
-      "sourceMap": true,
       "outDir": "dist",
-      "moduleResolution": "node",
-      "baseUrl": "./",
       "paths": {
         "../*": [
           "src/*"
         ]
       },
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "types": [ "mocha" ],
+      "removeComments": true,
     },
     "include": [
         "src/**/*"
     ],
     "exclude": [
         "node_modules",
-        "test"
+        "src/**/*.spec.ts"
     ],
     "typeRoots": [
       "node_modules/@types",

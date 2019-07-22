@@ -74,7 +74,6 @@ var TournamentRunner = (function () {
         };
         this.onMatchEnd = function () {
             _this.tournament.waiting = !_this.tournament.options.autoPlay;
-            _this.matchmaker.updateStats(_this.matches);
             _this.sendStats();
             if (_this.tournament.waiting) {
                 return;
@@ -90,6 +89,7 @@ var TournamentRunner = (function () {
             }
             var upcomingMatches = _this.matches.filter(function (match) { return match.state === "upcoming"; });
             if (upcomingMatches.length < 1) {
+                _this.matchmaker.updateStats(_this.matches);
                 var remainingMatches = _this.matchmaker.getRemainingMatches();
                 if (remainingMatches.length < 1) {
                     _this.onTournamentEnd();
