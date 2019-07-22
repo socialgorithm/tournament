@@ -115,7 +115,6 @@ export class SocketServer {
    * Generic event forwarder from the socket to the pubsub bus
    */
   private onMessageFromSocket = (player: Player, event: LegacyEvents.EVENTS) => (payload: any) => {
-    // socket -> pubsub
     const data: any = {
       payload,
       player,

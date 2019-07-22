@@ -123,7 +123,7 @@ export class TournamentRunner {
     if (upcomingMatches.length < 1) {
       this.matchmaker.updateStats(this.matches);
       const remainingMatches = this.matchmaker.getRemainingMatches();
-      if (remainingMatches.length < 1) {
+      if (!remainingMatches || remainingMatches.length < 1) {
         this.onTournamentEnd();
         return;
       } else {

@@ -91,7 +91,7 @@ var TournamentRunner = (function () {
             if (upcomingMatches.length < 1) {
                 _this.matchmaker.updateStats(_this.matches);
                 var remainingMatches = _this.matchmaker.getRemainingMatches();
-                if (remainingMatches.length < 1) {
+                if (!remainingMatches || remainingMatches.length < 1) {
                     _this.onTournamentEnd();
                     return;
                 }

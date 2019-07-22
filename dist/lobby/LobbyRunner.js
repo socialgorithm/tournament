@@ -28,6 +28,7 @@ var LobbyRunner = (function () {
                 return;
             }
             if (_this.lobby.bannedPlayers.indexOf(player) > -1) {
+                debug("Refusing to add player " + player + " to lobby " + lobbyName + " due to ban");
                 return;
             }
             if (_this.lobby.admin === player) {
@@ -35,6 +36,7 @@ var LobbyRunner = (function () {
                 _this.adminConnected = true;
             }
             if (!isSpectating && _this.lobby.players.indexOf(player) < 0) {
+                debug("Pushing player " + player + " into lobby players");
                 _this.lobby.players.push(player);
             }
             var lobby = _this.getLobby();
@@ -87,7 +89,15 @@ var LobbyRunner = (function () {
         };
         this.ifAdmin = function (next) { return function (data) {
             var lobbyName = data.payload.token;
-            if (data.player !== _this.lobby.admin || lobbyName !== _this.lobby.token) {
+            if (!lobbyName) {
+                lobbyName = data.payload.lobbyToken;
+            }
+            if (data.player !== _this.lobby.admin) {
+                debug("Refusing to perform action - " + data.player + " is not admin for " + _this.lobby.token);
+                return;
+            }
+            if (lobbyName !== _this.lobby.token) {
+                debug("Refusing to perform action - Request lobby name " + lobbyName + " does not match lobby token " + _this.lobby.token);
                 return;
             }
             next(lobbyName, data);
@@ -110,9 +120,9 @@ var LobbyRunner = (function () {
             });
         });
         this.kickPlayer = this.ifAdmin(function (lobbyName, data) {
+            debug("Kicking player %s in lobby %s", data.player, lobbyName);
             var playerIndex = _this.lobby.players.indexOf(data.player);
             _this.lobby.players.splice(playerIndex, 1);
-            debug("Kick player %s in lobby %s", data.player, lobbyName);
             _this.pubSub.publish(pub_sub_1.Events.BroadcastNamespaced, {
                 event: "lobby player kicked",
                 namespace: lobbyName,
@@ -125,13 +135,13 @@ var LobbyRunner = (function () {
             });
         });
         this.banPlayer = this.ifAdmin(function (lobbyName, data) {
+            debug("Banning player %s in lobby %s", data.player, lobbyName);
             var playerIndex = _this.lobby.players.indexOf(data.player);
             _this.lobby.players.splice(playerIndex, 1);
             if (_this.lobby.bannedPlayers.indexOf(data.player) > -1) {
                 return;
             }
             _this.lobby.bannedPlayers.push(data.player);
-            debug("Ban player %s in lobby %s", data.player, lobbyName);
             _this.pubSub.publish(pub_sub_1.Events.BroadcastNamespaced, {
                 event: "lobby player banned",
                 namespace: lobbyName,

@@ -82,7 +82,6 @@ export class MatchRunner {
     } else {
       this.updateMatchStats();
     }
-    debug("Match stats %O", this.match);
     this.gameServerSocket.disconnect();
     this.pubSub.publishNamespaced(
       this.tournamentID,

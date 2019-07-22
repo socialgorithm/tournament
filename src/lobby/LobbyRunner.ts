@@ -73,6 +73,7 @@ export class LobbyRunner {
     }
 
     if (this.lobby.bannedPlayers.indexOf(player) > -1) {
+      debug(`Refusing to add player ${player} to lobby ${lobbyName} due to ban`);
       return;
     }
 
@@ -82,6 +83,7 @@ export class LobbyRunner {
     }
 
     if (!isSpectating && this.lobby.players.indexOf(player) < 0) {
+      debug(`Pushing player ${player} into lobby players`);
       this.lobby.players.push(player);
     }
 
@@ -151,8 +153,16 @@ export class LobbyRunner {
    * Wrap any method in a check for the admin user
    */
   private ifAdmin = (next: any) => (data: any) => {
-    const lobbyName = data.payload.token;
-    if (data.player !== this.lobby.admin || lobbyName !== this.lobby.token) {
+    let lobbyName = data.payload.token;
+    if (!lobbyName) {
+      lobbyName = data.payload.lobbyToken;
+    }
+    if (data.player !== this.lobby.admin) {
+      debug(`Refusing to perform action - ${data.player} is not admin for ${this.lobby.token}`);
+      return;
+    }
+    if (lobbyName !== this.lobby.token) {
+      debug(`Refusing to perform action - Request lobby name ${lobbyName} does not match lobby token ${this.lobby.token}`);
       return;
     }
     next(lobbyName, data);
@@ -191,10 +201,10 @@ export class LobbyRunner {
 
   // tslint:disable-next-line:member-ordering
   private kickPlayer = this.ifAdmin((lobbyName: string, data: Messages.LOBBY_PLAYER_KICK_MESSAGE) => {
+    debug("Kicking player %s in lobby %s", data.player, lobbyName);
+
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
-
-    debug("Kick player %s in lobby %s", data.player, lobbyName);
 
     this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "lobby player kicked",
@@ -212,6 +222,8 @@ export class LobbyRunner {
 
   // tslint:disable-next-line:member-ordering
   private banPlayer = this.ifAdmin((lobbyName: string, data: Messages.LOBBY_PLAYER_BAN_MESSAGE) => {
+    debug("Banning player %s in lobby %s", data.player, lobbyName);
+
     const playerIndex = this.lobby.players.indexOf(data.player);
     this.lobby.players.splice(playerIndex, 1);
 
@@ -220,8 +232,6 @@ export class LobbyRunner {
     }
 
     this.lobby.bannedPlayers.push(data.player);
-
-    debug("Ban player %s in lobby %s", data.player, lobbyName);
 
     this.pubSub.publish(Events.BroadcastNamespaced, {
       event: "lobby player banned",
