@@ -1,7 +1,7 @@
 import { Match, MatchOptions, Player } from "@socialgorithm/model";
 import * as uuid from "uuid/v4";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
-import IMatchmaker from "./Matchmaker";
+import IMatchmaker from "./MatchMaker";
 
 type PlayerStats = {
   player: Player;
