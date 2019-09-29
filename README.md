@@ -41,7 +41,7 @@ This will run the typescript compiler and start the server, restarting the serve
 
 ## Debugging
 
-The server uses the `debug` library to aid debugging. Simply run:
+The server uses the [`debug`](https://github.com/visionmedia/debug) library to aid debugging. Simply run:
 
 ```
 DEBUG=sg:* npm run start:dev

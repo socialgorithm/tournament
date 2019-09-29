@@ -1,6 +1,6 @@
 import { Match, MatchOptions, Player } from "@socialgorithm/model";
 import { DoubleEliminationMatch } from "./DoubleEliminationMatch";
-import IMatchmaker from "./Matchmaker";
+import IMatchmaker from "./MatchMaker";
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private players;
     private options;
