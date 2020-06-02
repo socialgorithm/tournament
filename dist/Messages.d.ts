@@ -1,4 +1,5 @@
 import { Game } from "./Game";
+import { GameServerAddress } from "./GameServerAddress";
 import { Match, MatchOptions } from "./Match";
 import { Player } from "./Player";
 import { TournamentOptions } from "./Tournament";
@@ -17,7 +18,7 @@ export declare type GameInfoMessage = {
     name: string;
 };
 export declare type GameServerStatus = {
-    address: string;
+    address: GameServerAddress;
     healthy: boolean;
     info: GameInfoMessage;
 };
