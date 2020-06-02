@@ -1,3 +1,4 @@
+import { GameServerAddress } from "./GameServerAddress";
 import { Player } from "./Player";
 export declare type Tournament = {
     tournamentID: string;
@@ -10,7 +11,7 @@ export declare type Tournament = {
     waiting: boolean;
 };
 export declare type TournamentOptions = {
-    gameAddress: string;
+    gameAddress: GameServerAddress;
     autoPlay: boolean;
     numberOfGames: number;
     timeout: number;

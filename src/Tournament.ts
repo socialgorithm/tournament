@@ -1,3 +1,4 @@
+import { GameServerAddress } from "./GameServerAddress";
 import { Player } from "./Player";
 
 export type Tournament = {
@@ -12,7 +13,7 @@ export type Tournament = {
 };
 
 export type TournamentOptions = {
-  gameAddress: string,
+  gameAddress: GameServerAddress,
   autoPlay: boolean,
   numberOfGames: number,
   timeout: number,
