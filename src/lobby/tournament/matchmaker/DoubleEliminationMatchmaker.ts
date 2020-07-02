@@ -22,6 +22,7 @@ const RESULT_TIE = -1;
  *
  */
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
+  private players: Player[];
   private finished: boolean;
   private playedMatches: Match[];
   private ranking: string[];
@@ -32,7 +33,8 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
   private waitingForFinal: Player[];
   private unlinkedMatches: DoubleEliminationMatch[] = [];
 
-  constructor(private players: Player[], private options: MatchOptions) {
+  constructor(players: Player[], private options: MatchOptions) {
+    this.players = this.shufflePlayers(players);
     this.playedMatches = [];
     this.processedMatches = [];
     this.ranking = this.players.map(player => player);
@@ -41,6 +43,15 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
       this.playerStats[player] = { player, wins: 0, losses: 0 };
     });
     this.waitingForFinal = [];
+  }
+
+  private shufflePlayers([...players]: Player[]): Player[] {
+    let m = players.length;
+    while (m) {
+      const i = Math.floor(Math.random() * m--);
+      [players[m], players[i]] = [players[i], players[m]];
+    }
+    return players;
   }
 
   public isFinished(): boolean {
@@ -284,4 +295,9 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
 
     match.parentMatches = parentMatches;
   }
+
+  public getPlayers() : Player[] {
+    return [...this.players];
+  }
+
 }
