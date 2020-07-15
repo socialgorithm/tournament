@@ -46,15 +46,17 @@ export class SocketServer {
       const player = token;
 
       if (this.playerSockets[player]) {
-        // Token already in use
+        // Token already in use - disallow the new socket
         debug("Player already connected %s", player);
+        socket.emit("exception", { error: "Token/name already in use, please pick another" });
+        socket.disconnect(true);
         return false;
       }
 
       debug("Connected %s", player);
 
       // Store the socket
-      this.playerSockets[token] = socket;
+      this.playerSockets[player] = socket;
 
       // Forward the socket events to the PubSub system
       const listenToEvents = [

@@ -75,10 +75,12 @@ var SocketServer = (function () {
             var player = token;
             if (_this.playerSockets[player]) {
                 debug("Player already connected %s", player);
+                socket.emit("exception", { error: "Token/name already in use, please pick another" });
+                socket.disconnect(true);
                 return false;
             }
             debug("Connected %s", player);
-            _this.playerSockets[token] = socket;
+            _this.playerSockets[player] = socket;
             var listenToEvents = [
                 model_1.LegacyEvents.EVENTS.LOBBY_CREATE,
                 model_1.LegacyEvents.EVENTS.LOBBY_TOURNAMENT_START,
