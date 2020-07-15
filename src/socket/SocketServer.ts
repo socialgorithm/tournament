@@ -16,18 +16,12 @@ export class SocketServer {
     [key: string]: SocketIO.Socket,
   } = {};
 
-  constructor(private port: number, private gameServers: GameServerInfoConnection[]) {
+  constructor(private server: http.Server, private gameServers: GameServerInfoConnection[]) {
     this.pubSub = new PubSub();
   }
 
   public start() {
-    const app = http.createServer(this.handler);
-    this.io = io(app);
-    app.listen(this.port);
-
-    // tslint:disable-next-line:no-console
-    console.log(`Socket Listening on port: ${this.port}`);
-    debug("Socket Listening on port: %d", this.port);
+    this.io = io(this.server);
 
     this.io.use((socket: SocketIO.Socket, next: any) => {
       const isClient = socket.request._query.client || false;

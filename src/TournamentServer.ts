@@ -1,9 +1,12 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:tournament-server");
 
+import * as http from "http";
+import { AddressInfo } from "net";
 import { IOptions } from "./cli/options";
 import { GameServerInfoConnection } from "./game-server/GameServerInfoConnection";
 import { GameServerListPublisher } from "./game-server/GameServerListPublisher";
+import HttpHandler from "./http/HttpHandler";
 import { LobbyManager } from "./lobby/LobbyManager";
 import { SocketServer } from "./socket/SocketServer";
 
@@ -22,9 +25,16 @@ export default class TournamentServer {
     const gameServers = options.game.map(gameServerAddress => new GameServerInfoConnection(gameServerAddress));
     const gameServerListPublisher = new GameServerListPublisher();
 
-    debug("Initialising socket");
-    this.socketServer = new SocketServer(options.port, gameServers);
+    debug("Initialising server");
+    const server = http.createServer(HttpHandler);
+    this.socketServer = new SocketServer(server, gameServers);
     this.socketServer.start();
+    const listener = server.listen(options.port, () => {
+      const address = (listener.address() as AddressInfo);
+      // tslint:disable-next-line:no-console
+      console.log(`Listening on port ${address.port}`);
+      debug("Listening on port %d", address.port);
+    });
 
     this.LobbyManager = new LobbyManager();
   }
@@ -37,4 +47,5 @@ const banner = `
 \\__ \\ (_) | (__| | (_| | | (_| | (_) | |  | | |_| | | | | | | | |
 |___/\\___/ \\___|_|\\__,_|_|\\__, |\\___/|_|  |_|\\__|_| |_|_| |_| |_|
                            |___/
+TOURNAMENT SERVER
 `;
