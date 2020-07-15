@@ -2,8 +2,8 @@ import { Match, MatchOptions, Player } from "@socialgorithm/model";
 import { DoubleEliminationMatch } from "./DoubleEliminationMatch";
 import IMatchmaker from "./MatchMaker";
 export default class DoubleEliminationMatchmaker implements IMatchmaker {
-    private players;
     private options;
+    private players;
     private finished;
     private playedMatches;
     private ranking;
@@ -14,6 +14,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private waitingForFinal;
     private unlinkedMatches;
     constructor(players: Player[], options: MatchOptions);
+    private shufflePlayers;
     isFinished(): boolean;
     updateStats(playedMatches: Match[], tournamentFinished?: boolean): void;
     getRemainingMatches(): DoubleEliminationMatch[];
@@ -26,4 +27,5 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private playerIsWaitingForMatch;
     private anyPlayersWaiting;
     private setParentMatches;
+    getPlayers(): Player[];
 }

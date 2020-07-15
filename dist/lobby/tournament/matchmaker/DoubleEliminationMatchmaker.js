@@ -5,9 +5,9 @@ var RESULT_TIE = -1;
 var DoubleEliminationMatchmaker = (function () {
     function DoubleEliminationMatchmaker(players, options) {
         var _this = this;
-        this.players = players;
         this.options = options;
         this.unlinkedMatches = [];
+        this.players = this.shufflePlayers(players);
         this.playedMatches = [];
         this.processedMatches = [];
         this.ranking = this.players.map(function (player) { return player; });
@@ -17,6 +17,16 @@ var DoubleEliminationMatchmaker = (function () {
         });
         this.waitingForFinal = [];
     }
+    DoubleEliminationMatchmaker.prototype.shufflePlayers = function (_a) {
+        var players = _a.slice(0);
+        var _b;
+        var m = players.length;
+        while (m) {
+            var i = Math.floor(Math.random() * m--);
+            _b = [players[i], players[m]], players[m] = _b[0], players[i] = _b[1];
+        }
+        return players;
+    };
     DoubleEliminationMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
@@ -219,6 +229,9 @@ var DoubleEliminationMatchmaker = (function () {
             _this.unlinkedMatches.splice(unlinkedIndex, 1);
         });
         match.parentMatches = parentMatches;
+    };
+    DoubleEliminationMatchmaker.prototype.getPlayers = function () {
+        return this.players.slice();
     };
     return DoubleEliminationMatchmaker;
 }());
