@@ -14,7 +14,17 @@ class GameExplorer extends React.Component {
   constructor(props) {
     super(props);
 
-    const {error, games, won, lost, tied} = this.parseGameData(props.gameData);
+    const {
+      error,
+      games,
+      won,
+      lost,
+      tied,
+      matchWon,
+      matchLost,
+      matchTied,
+      timeouts
+    } = this.parseGameData(props.gameData);
 
     console.log('parsed', games);
 
@@ -26,12 +36,25 @@ class GameExplorer extends React.Component {
       won,
       lost,
       tied,
+      matchWon,
+      matchLost,
+      matchTied,
+      timeouts,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.gameData !== nextProps.gameData) {
-      const {games, won, lost, tied} = this.parseGameData(nextProps.gameData);
+      const {
+        games,
+        won,
+        lost,
+        tied,
+        matchWon,
+        matchLost,
+        matchTied,
+        timeouts
+      } = this.parseGameData(nextProps.gameData);
 
       this.setState({
         games,
@@ -40,6 +63,10 @@ class GameExplorer extends React.Component {
         won,
         lost,
         tied,
+        matchWon,
+        matchLost,
+        matchTied,
+        timeouts,
       });
     }
   }
@@ -51,6 +78,10 @@ class GameExplorer extends React.Component {
       won: 0,
       lost: 0,
       tied: 0,
+      matchWon: 0,
+      matchLost: 0,
+      matchTied: 0,
+      timeouts: 0,
     };
     const newline = /\r\n|\r|\n/g;
     const lines = gameData.split(newline)
@@ -60,6 +91,7 @@ class GameExplorer extends React.Component {
     let curGame;
     try {
       lines.forEach((line) => {
+        console.log(line);
         if (line === 'init') {
           if (ret.games[curGame]) {
             console.log('Was it finished? ', ret.games[curGame].uttt.isFinished());
@@ -68,6 +100,55 @@ class GameExplorer extends React.Component {
             uttt: new UTTT(3),
             moves: [],
           }) - 1;
+          return;
+        }
+        if (line === 'timeout') {
+          ret.timeouts = ret.timeouts + 1;
+          return;
+        }
+        if (line.startsWith('match')) {
+          if (line === 'match win') {
+            ret.matchWon = ret.matchWon + 1;
+          }
+          if (line === 'match lose') {
+            ret.matchLost = ret.matchLost + 1;
+          }
+          if (line === 'match tie') {
+            ret.matchTie = ret.matchTie + 1;
+          }
+          return;
+        }
+        if (line.startsWith('game')) {
+          const parts = line.split(' ');
+          const gameOrMatch = parts[0];
+          const winLostTie = parts[1];
+          if (parts.length > 2) {
+            const a = parts[2];
+            const turn = a.split(';');
+            const board = turn[0].split(',').map((coord) => parseInt(coord, 10));
+            const move = turn[1].split(',').map((coord) => parseInt(coord, 10));
+            const game = ret.games[curGame];
+            game.moves.push({
+              board,
+              move,
+              player: PLAYER_OPPONENT,
+            });
+            game.uttt = game.uttt.addOpponentMove(board, move);
+            if (game.uttt.isFinished()) {
+              switch (game.uttt.getResult()) {
+                case PLAYER_YOU:
+                  ret.won = ret.won + 1;
+                  break;
+                case PLAYER_OPPONENT:
+                  ret.lost = ret.lost + 1;
+                  break;
+                default:
+                case -1:
+                  ret.tied = ret.tied + 1;
+                  break;
+              }
+            }
+          }
           return;
         }
         if (line.indexOf(';') < 0) {
@@ -169,6 +250,21 @@ class GameExplorer extends React.Component {
     return (
       <Grid>
         <Grid.Column width={ 4 }>
+        <h2>
+            <div style={ { float: 'right' } }>
+              <Label color='green'>
+                <b>Won:</b> { this.state.matchWon }
+              </Label>
+              <Label color='red'>
+                <b>Lost:</b> { this.state.matchLost }
+              </Label>
+              <Label color='grey'>
+                <b>Tied:</b> { this.state.matchTied }
+              </Label>
+            </div>
+            Matches
+          </h2>
+          <Divider />
           <h2>
             <div style={ { float: 'right' } }>
               <Label color='green'>
@@ -183,6 +279,16 @@ class GameExplorer extends React.Component {
             </div>
             Games
           </h2>
+          <Divider />
+          <h2>
+            <div style={ { float: 'right' } }>
+              <Label color='default'>
+              <b>Timeouts:</b> { this.state.timeouts }
+              </Label>
+            </div>
+            Detail
+          </h2>
+          <Divider />
           <List selection divided relaxed>
             { this.state.games.map((game, $index) => (
               <List.Item key={ $index } active={ $index === this.state.activeGame } onClick={ () => { this.setState({ activeGame: $index, activeMove: -1, }); } }>
