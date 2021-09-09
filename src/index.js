@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter as Router } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
+import { ConnectedRouter } from 'connected-react-router/immutable';
+import Immutable from 'immutable';
+import history from './utils/history';
 
 import 'semantic-ui-css/semantic.css';
 
@@ -10,20 +11,15 @@ import App from './sections/App';
 import configureStore from './store';
 import './index.scss';
 
-const initialState = {};
-const history = createHistory();
+const initialState = Immutable.Map();
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('root');
 
-const app = (
-  <Provider store={ store }>
-    <Router history={ history }>
-      <App />
-    </Router>
-  </Provider>
-);
-
 ReactDOM.render(
-  app,
+  <Provider store={ store }>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </Provider>,
   MOUNT_NODE
 );

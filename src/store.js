@@ -4,7 +4,7 @@
 
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router/immutable';
 import handleTransitions from 'redux-history-transitions';
 
 import createReducer from './reducers';

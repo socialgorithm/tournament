@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { Map } from 'immutable';
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import * as constants from './constants';
 
@@ -61,7 +61,7 @@ function connectionError(state, action) {
  * Load the web id from localStorage if available
  */
 function getUuid() {
-  const newUuid = `web-${uuid.v4()}`;
+  const newUuid = `web-${uuid()}`;
   const STORAGE_KEY = 'uuid';
   if (!storageAvailable('localStorage')) {
     return newUuid;
