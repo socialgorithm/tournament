@@ -1,9 +1,10 @@
 "use strict";
 exports.__esModule = true;
+exports.SocketServer = void 0;
 var debug = require("debug")("sg:socketServer");
 var model_1 = require("@socialgorithm/model");
 var fs = require("fs");
-var io = require("socket.io");
+var socket_io_1 = require("socket.io");
 var pub_sub_1 = require("../pub-sub");
 var PubSub_1 = require("../pub-sub/PubSub");
 var SocketServer = (function () {
@@ -53,13 +54,13 @@ var SocketServer = (function () {
     }
     SocketServer.prototype.start = function () {
         var _this = this;
-        this.io = io(this.server);
+        this.io = new socket_io_1.Server(this.server, { cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] } });
         this.io.use(function (socket, next) {
-            var isClient = socket.request._query.client || false;
+            var isClient = socket.handshake.query.client || false;
             if (isClient) {
                 return next();
             }
-            var token = socket.request._query.token;
+            var token = socket.handshake.query.token;
             if (!token) {
                 return next(new Error("Missing token"));
             }

@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
+exports.LobbyRunner = void 0;
 var randomWord = require("random-word");
 var debug = require("debug")("sg:lobbyRunner");
 var pub_sub_1 = require("../pub-sub");

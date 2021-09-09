@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.LobbyManager = void 0;
 var debug = require("debug")("sg:lobbyManager");
 var model_1 = require("@socialgorithm/model");
 var pub_sub_1 = require("../pub-sub");

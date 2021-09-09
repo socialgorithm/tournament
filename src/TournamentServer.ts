@@ -3,12 +3,12 @@ const debug = require("debug")("sg:tournament-server");
 
 import * as http from "http";
 import { AddressInfo } from "net";
-import { IOptions } from "./cli/options";
 import { GameServerInfoConnection } from "./game-server/GameServerInfoConnection";
 import { GameServerListPublisher } from "./game-server/GameServerListPublisher";
 import HttpHandler from "./http/HttpHandler";
 import { LobbyManager } from "./lobby/LobbyManager";
 import { SocketServer } from "./socket/SocketServer";
+import { ITournamentServerOptions } from "./TournamentServerOptions";
 
 /**
  * Entrypoint for the SG Tournament Server
@@ -18,11 +18,14 @@ export default class TournamentServer {
   private socketServer: SocketServer;
   private LobbyManager: LobbyManager;
 
-  constructor(options: IOptions) {
+  constructor(options: ITournamentServerOptions) {
     console.log(banner);
 
     debug("Initialising game server connections");
-    const gameServers = options.game.map(gameServerAddress => new GameServerInfoConnection(gameServerAddress));
+    const gameServers = options.games.map(gameServerAddress => {
+      debug("Connecting to " + gameServerAddress.tournamentServerAccessibleAddress);
+      return new GameServerInfoConnection(gameServerAddress);
+    });
     const gameServerListPublisher = new GameServerListPublisher();
 
     debug("Initialising server");

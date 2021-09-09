@@ -1,5 +1,5 @@
 import { Match, MatchOptions, Player } from "@socialgorithm/model";
-import * as uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./MatchMaker";
 
@@ -43,15 +43,6 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
       this.playerStats[player] = { player, wins: 0, losses: 0 };
     });
     this.waitingForFinal = [];
-  }
-
-  private shufflePlayers([...players]: Player[]): Player[] {
-    let m = players.length;
-    while (m) {
-      const i = Math.floor(Math.random() * m--);
-      [players[m], players[i]] = [players[i], players[m]];
-    }
-    return players;
   }
 
   public isFinished(): boolean {
@@ -176,6 +167,10 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     return this.ranking;
   }
 
+  public getPlayers(): Player[] {
+    return [...this.players];
+  }
+
   private finishedRanking(): string[] {
     const ranking: string[] = [];
     const matches = this.playedMatches.map(match => match); // mapping to copy
@@ -209,6 +204,15 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
       return 0;
     }
     return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
+  }
+
+  private shufflePlayers([...players]: Player[]): Player[] {
+    let m = players.length;
+    while (m) {
+      const i = Math.floor(Math.random() * m--);
+      [players[m], players[i]] = [players[i], players[m]];
+    }
+    return players;
   }
 
   private matchPlayers(players: Player[]): MatchingResult {
@@ -294,10 +298,6 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     });
 
     match.parentMatches = parentMatches;
-  }
-
-  public getPlayers() : Player[] {
-    return [...this.players];
   }
 
 }

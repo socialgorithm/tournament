@@ -16,7 +16,7 @@ export interface IOptions {
 }
 
 export const DEFAULT_OPTIONS: IOptions = {
-  game: ["http://localhost:5433"],
+  game: ["http://localhost:5433,http://localhost:5433"],
   port: parseInt(process.env.PORT, 10) || 3141,
 };
 
@@ -24,7 +24,7 @@ const optionDefinitions = [
   {
     alias: "g",
     name: "game",
-    description: `A game server to connect to, defaults to {underline ${DEFAULT_OPTIONS.game}}`,
+    description: `A game server to connect to, defaults to {underline ${DEFAULT_OPTIONS.game}}. In this comma-separated list, the first value is the address to be used by the tournament server, while the second one is sent to players (as they are rarely running on the same machine)`,
     type: String,
     typeLabel: `{underline ${DEFAULT_OPTIONS.game}}`,
     multiple: true,
@@ -64,7 +64,7 @@ const sections = [
   {
     header: "Synopsis",
     content: [
-      `$ ${info.name} {bold --game} {underline http://localhost:5001} {bold --game} {underline http://localhost:5002}`,
+      `$ ${info.name} {bold --game} {underline http://localhost:5001,http://uttt.socialgorithm.org} {bold --game} {underline http://localhost:5002,http://battleships.socialgorithm.org}`,
       `$ ${info.name} {bold --port} {underline 5000}`,
       `$ ${info.name} {bold --help}`,
     ],

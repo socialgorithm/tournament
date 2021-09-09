@@ -11,7 +11,10 @@ var TournamentServer = (function () {
     function TournamentServer(options) {
         console.log(banner);
         debug("Initialising game server connections");
-        var gameServers = options.game.map(function (gameServerAddress) { return new GameServerInfoConnection_1.GameServerInfoConnection(gameServerAddress); });
+        var gameServers = options.games.map(function (gameServerAddress) {
+            debug("Connecting to " + gameServerAddress.tournamentServerAccessibleAddress);
+            return new GameServerInfoConnection_1.GameServerInfoConnection(gameServerAddress);
+        });
         var gameServerListPublisher = new GameServerListPublisher_1.GameServerListPublisher();
         debug("Initialising server");
         var server = http.createServer(HttpHandler_1["default"]);

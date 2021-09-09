@@ -11,8 +11,9 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
+exports.TournamentRunner = void 0;
 var debug = require("debug")("sg:tournamentRunner");
-var uuid = require("uuid/v4");
+var uuid_1 = require("uuid");
 var LegacyEvents_1 = require("@socialgorithm/model/dist/LegacyEvents");
 var pub_sub_1 = require("../../pub-sub");
 var PubSub_1 = require("../../pub-sub/PubSub");
@@ -118,7 +119,7 @@ var TournamentRunner = (function () {
             players: players,
             ranking: [],
             started: false,
-            tournamentID: uuid(),
+            tournamentID: (0, uuid_1.v4)(),
             waiting: !options.autoPlay
         };
         this.pubSub = new PubSub_1["default"]();
