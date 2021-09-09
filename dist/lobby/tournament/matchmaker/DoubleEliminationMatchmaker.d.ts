@@ -14,18 +14,18 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     private waitingForFinal;
     private unlinkedMatches;
     constructor(players: Player[], options: MatchOptions);
-    private shufflePlayers;
     isFinished(): boolean;
     updateStats(playedMatches: Match[], tournamentFinished?: boolean): void;
     getRemainingMatches(): DoubleEliminationMatch[];
     getRanking(): string[];
+    getPlayers(): Player[];
     private finishedRanking;
     private unfinishedRanking;
     private getPlayerScore;
+    private shufflePlayers;
     private matchPlayers;
     private createMatch;
     private playerIsWaitingForMatch;
     private anyPlayersWaiting;
     private setParentMatches;
-    getPlayers(): Player[];
 }

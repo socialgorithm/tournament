@@ -1,7 +1,8 @@
 "use strict";
 exports.__esModule = true;
+exports.MatchRunner = void 0;
 var debug = require("debug")("sg:matchRunner");
-var io = require("socket.io-client");
+var socket_io_client_1 = require("socket.io-client");
 var model_1 = require("@socialgorithm/model");
 var pub_sub_1 = require("../../pub-sub");
 var MatchRunner = (function () {
@@ -27,7 +28,7 @@ var MatchRunner = (function () {
                     player: player,
                     event: model_1.EventName.GameServerHandoff,
                     payload: {
-                        gameServerAddress: _this.gameServerAddress,
+                        gameServerAddress: _this.gameServerAddress.playerAccessibleAddress,
                         token: token
                     }
                 });
@@ -85,7 +86,7 @@ var MatchRunner = (function () {
             }
             return tokenToConvert;
         };
-        this.gameServerSocket = io(gameServerAddress, { reconnection: true, timeout: 2000 });
+        this.gameServerSocket = (0, socket_io_client_1.io)(gameServerAddress.tournamentServerAccessibleAddress, { reconnection: true, timeout: 2000 });
         this.gameServerSocket.on("connect", this.sendMatchToGameServer);
         this.gameServerSocket.on(model_1.EventName.MatchCreated, this.onMatchCreated);
         this.gameServerSocket.on(model_1.EventName.GameEnded, this.onGameEnded);

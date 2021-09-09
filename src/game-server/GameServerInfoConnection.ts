@@ -3,7 +3,7 @@ const debug = require("debug")("sg:gameServerInfoConnection");
 
 import { io, Socket } from "socket.io-client";
 
-import { EventName, Messages } from "@socialgorithm/model";
+import { EventName, GameServerAddress, Messages } from "@socialgorithm/model";
 import { Events } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 
@@ -12,7 +12,7 @@ export class GameServerInfoConnection {
   public gameSocket: Socket;
   private pubSub: PubSub;
 
-  constructor(gameServerAddress: string) {
+  constructor(gameServerAddress: GameServerAddress) {
     debug(`Publishing preliminary status for ${gameServerAddress}`);
     this.pubSub = new PubSub();
     this.status = {
@@ -24,27 +24,30 @@ export class GameServerInfoConnection {
     };
     this.publishStatus();
 
-    debug(`Initialising game server info connection to ${gameServerAddress}`);
+    // We use the tournament server accessible address (and not the one sent to players)
+    const gameServerConnectAddress = gameServerAddress.tournamentServerAccessibleAddress;
 
-    this.gameSocket = io(gameServerAddress, {
+    debug(`Initialising game server info connection to ${gameServerConnectAddress}`);
+
+    this.gameSocket = io(gameServerConnectAddress, {
       reconnection: true,
       timeout: 2000,
     });
 
     this.gameSocket.on("connect", () => {
-      debug(`Connected to ${gameServerAddress}`);
+      debug(`Connected to ${gameServerConnectAddress}`);
       this.status.healthy = true;
       this.publishStatus();
     });
 
     this.gameSocket.on("connect_failed", () => {
-      debug(`Connection to ${gameServerAddress} failed`);
+      debug(`Connection to ${gameServerConnectAddress} failed`);
       this.status.healthy = false;
       this.publishStatus();
     });
 
     this.gameSocket.on("error", () => {
-      debug(`Connection to ${gameServerAddress} errored`);
+      debug(`Connection to ${gameServerConnectAddress} errored`);
       this.status.healthy = false;
       this.publishStatus();
     });
@@ -55,7 +58,7 @@ export class GameServerInfoConnection {
     });
 
     this.gameSocket.on("disconnect", () => {
-      debug(`Connection to ${gameServerAddress} lost!`);
+      debug(`Connection to ${gameServerConnectAddress} lost!`);
       this.status.healthy = false;
       this.publishStatus();
     });

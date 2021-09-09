@@ -4,45 +4,39 @@ const debug = require("debug")("sg:socketServer");
 import { EventName, LegacyEvents, Messages, Player } from "@socialgorithm/model";
 import * as fs from "fs";
 import * as http from "http";
-import * as io from "socket.io";
+import { Server, Socket } from "socket.io";
 import { GameServerInfoConnection } from "../game-server/GameServerInfoConnection";
 import { Events as PubSubEvents } from "../pub-sub";
 import PubSub from "../pub-sub/PubSub";
 
 export class SocketServer {
-  private io: SocketIO.Server;
+  private io: Server;
   private pubSub: PubSub;
   private playerSockets: {
-    [key: string]: SocketIO.Socket,
+    [key: string]: Socket,
   } = {};
 
-  constructor(private port: number, private gameServers: GameServerInfoConnection[]) {
+  constructor(private server: http.Server, private gameServers: GameServerInfoConnection[]) {
     this.pubSub = new PubSub();
   }
 
   public start() {
-    const app = http.createServer(this.handler);
-    this.io = io(app);
-    app.listen(this.port);
+    this.io = new Server(this.server, { cors: { origin: "*", methods: ["GET", "POST"] }});
 
-    // tslint:disable-next-line:no-console
-    console.log(`Socket Listening on port: ${this.port}`);
-    debug("Socket Listening on port: %d", this.port);
-
-    this.io.use((socket: SocketIO.Socket, next: any) => {
-      const isClient = socket.request._query.client || false;
+    this.io.use((socket: Socket, next: any) => {
+      const isClient = socket.handshake.query.client || false;
       if (isClient) {
         return next();
       }
-      const { token } = socket.request._query;
+      const { token } = socket.handshake.query;
       if (!token) {
         return next(new Error("Missing token"));
       }
       next();
     });
 
-    this.io.on("connection", (socket: SocketIO.Socket) => {
-      const token = socket.handshake.query.token;
+    this.io.on("connection", (socket: Socket) => {
+      const token = socket.handshake.query.token as string;
       const player = token;
 
       if (this.playerSockets[player]) {

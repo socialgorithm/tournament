@@ -1,16 +1,16 @@
 "use strict";
 exports.__esModule = true;
+exports.SocketServer = void 0;
 var debug = require("debug")("sg:socketServer");
 var model_1 = require("@socialgorithm/model");
 var fs = require("fs");
-var http = require("http");
-var io = require("socket.io");
+var socket_io_1 = require("socket.io");
 var pub_sub_1 = require("../pub-sub");
 var PubSub_1 = require("../pub-sub/PubSub");
 var SocketServer = (function () {
-    function SocketServer(port, gameServers) {
+    function SocketServer(server, gameServers) {
         var _this = this;
-        this.port = port;
+        this.server = server;
         this.gameServers = gameServers;
         this.playerSockets = {};
         this.addPlayerToNamespace = function (data) {
@@ -54,17 +54,13 @@ var SocketServer = (function () {
     }
     SocketServer.prototype.start = function () {
         var _this = this;
-        var app = http.createServer(this.handler);
-        this.io = io(app);
-        app.listen(this.port);
-        console.log("Socket Listening on port: " + this.port);
-        debug("Socket Listening on port: %d", this.port);
+        this.io = new socket_io_1.Server(this.server, { cors: { origin: "*", methods: ["GET", "POST"] } });
         this.io.use(function (socket, next) {
-            var isClient = socket.request._query.client || false;
+            var isClient = socket.handshake.query.client || false;
             if (isClient) {
                 return next();
             }
-            var token = socket.request._query.token;
+            var token = socket.handshake.query.token;
             if (!token) {
                 return next(new Error("Missing token"));
             }

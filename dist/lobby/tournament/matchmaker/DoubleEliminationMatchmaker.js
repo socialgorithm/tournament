@@ -1,6 +1,15 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
-var uuid = require("uuid/v4");
+var uuid_1 = require("uuid");
 var RESULT_TIE = -1;
 var DoubleEliminationMatchmaker = (function () {
     function DoubleEliminationMatchmaker(players, options) {
@@ -17,16 +26,6 @@ var DoubleEliminationMatchmaker = (function () {
         });
         this.waitingForFinal = [];
     }
-    DoubleEliminationMatchmaker.prototype.shufflePlayers = function (_a) {
-        var players = _a.slice(0);
-        var _b;
-        var m = players.length;
-        while (m) {
-            var i = Math.floor(Math.random() * m--);
-            _b = [players[i], players[m]], players[m] = _b[0], players[i] = _b[1];
-        }
-        return players;
-    };
     DoubleEliminationMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
@@ -128,6 +127,9 @@ var DoubleEliminationMatchmaker = (function () {
     DoubleEliminationMatchmaker.prototype.getRanking = function () {
         return this.ranking;
     };
+    DoubleEliminationMatchmaker.prototype.getPlayers = function () {
+        return __spreadArray([], this.players, true);
+    };
     DoubleEliminationMatchmaker.prototype.finishedRanking = function () {
         var ranking = [];
         var matches = this.playedMatches.map(function (match) { return match; });
@@ -159,6 +161,16 @@ var DoubleEliminationMatchmaker = (function () {
         }
         return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
     };
+    DoubleEliminationMatchmaker.prototype.shufflePlayers = function (_a) {
+        var _b;
+        var players = _a.slice(0);
+        var m = players.length;
+        while (m) {
+            var i = Math.floor(Math.random() * m--);
+            _b = [players[i], players[m]], players[m] = _b[0], players[i] = _b[1];
+        }
+        return players;
+    };
     DoubleEliminationMatchmaker.prototype.matchPlayers = function (players) {
         var matches = [];
         var oddPlayer;
@@ -180,7 +192,7 @@ var DoubleEliminationMatchmaker = (function () {
         var finalOptions = Object.assign(this.options, optionOverrides || {});
         var match = {
             games: [],
-            matchID: uuid(),
+            matchID: (0, uuid_1.v4)(),
             messages: [],
             options: finalOptions,
             parentMatches: parentMatches,
@@ -229,9 +241,6 @@ var DoubleEliminationMatchmaker = (function () {
             _this.unlinkedMatches.splice(unlinkedIndex, 1);
         });
         match.parentMatches = parentMatches;
-    };
-    DoubleEliminationMatchmaker.prototype.getPlayers = function () {
-        return this.players.slice();
     };
     return DoubleEliminationMatchmaker;
 }());

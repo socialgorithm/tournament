@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var uuid = require("uuid/v4");
+var uuid_1 = require("uuid");
 var FreeForAllMatchmaker = (function () {
     function FreeForAllMatchmaker(players, options) {
         var _this = this;
@@ -12,7 +12,7 @@ var FreeForAllMatchmaker = (function () {
                 if (playerA !== playerB && !_this.playersAlreadyMatched(playerA, playerB)) {
                     _this.matches.push({
                         games: [],
-                        matchID: uuid(),
+                        matchID: (0, uuid_1.v4)(),
                         messages: [],
                         options: _this.options,
                         players: [playerA, playerB],

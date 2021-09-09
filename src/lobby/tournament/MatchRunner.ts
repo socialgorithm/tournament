@@ -3,7 +3,7 @@ const debug = require("debug")("sg:matchRunner");
 
 import { io, Socket } from "socket.io-client";
 
-import { EventName, Game, Match, Messages } from "@socialgorithm/model";
+import { EventName, Game, GameServerAddress, Match, Messages } from "@socialgorithm/model";
 import { Events as PubSubEvents, PubSub } from "../../pub-sub";
 
 export class MatchRunner {
@@ -11,8 +11,8 @@ export class MatchRunner {
   private gameServerSocket: Socket;
   private playerTokens: { [name: string]: string };
 
-  constructor(private match: Match, private tournamentID: string, private gameServerAddress: string) {
-    this.gameServerSocket = io(gameServerAddress, { reconnection: true, timeout: 2000 });
+  constructor(private match: Match, private tournamentID: string, private gameServerAddress: GameServerAddress) {
+    this.gameServerSocket = io(gameServerAddress.tournamentServerAccessibleAddress, { reconnection: true, timeout: 2000 });
     this.gameServerSocket.on("connect", this.sendMatchToGameServer);
     this.gameServerSocket.on(EventName.MatchCreated, this.onMatchCreated);
     this.gameServerSocket.on(EventName.GameEnded, this.onGameEnded);
@@ -46,7 +46,7 @@ export class MatchRunner {
           player,
           event: EventName.GameServerHandoff,
           payload: {
-            gameServerAddress: this.gameServerAddress,
+            gameServerAddress: this.gameServerAddress.playerAccessibleAddress,
             token,
           },
         },

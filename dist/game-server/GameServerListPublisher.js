@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
+exports.GameServerListPublisher = void 0;
 var debug = require("debug")("sg:game-server-list-publisher");
 var pub_sub_1 = require("../pub-sub");
 var PubSub_1 = require("../pub-sub/PubSub");
@@ -10,7 +11,7 @@ var GameServerListPublisher = (function () {
         this.gameList = {};
         this.pubSub.subscribe(pub_sub_1.Events.GameServerStatus, function (status) {
             debug("Received game server update %O", status);
-            _this.gameList[status.address] = status;
+            _this.gameList[status.address.playerAccessibleAddress] = status;
             _this.publishGameList();
         });
     }

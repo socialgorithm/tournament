@@ -14,7 +14,7 @@ export class GameServerListPublisher {
   constructor() {
     this.pubSub.subscribe(Events.GameServerStatus, (status: Messages.GameServerStatus) => {
       debug("Received game server update %O", status);
-      this.gameList[status.address] = status;
+      this.gameList[status.address.playerAccessibleAddress] = status;
       this.publishGameList();
     });
   }

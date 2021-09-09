@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:tournamentRunner");
 
-import * as uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 
 import { Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
 import { EVENTS } from "@socialgorithm/model/dist/LegacyEvents";

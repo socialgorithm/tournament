@@ -1,4 +1,4 @@
-import { Match } from "@socialgorithm/model";
+import { GameServerAddress, Match } from "@socialgorithm/model";
 export declare class MatchRunner {
     private match;
     private tournamentID;
@@ -6,7 +6,7 @@ export declare class MatchRunner {
     private pubSub;
     private gameServerSocket;
     private playerTokens;
-    constructor(match: Match, tournamentID: string, gameServerAddress: string);
+    constructor(match: Match, tournamentID: string, gameServerAddress: GameServerAddress);
     private sendMatchToGameServer;
     private onMatchCreated;
     private sendGameServerHandoffToPlayers;
