@@ -3,6 +3,7 @@
       "baseUrl": "./",
       "declaration": true,
       "lib": ["es7"],
+      "skipLibCheck": true,
       "module": "commonjs",
       "moduleResolution": "node",
       "noImplicitAny": true,

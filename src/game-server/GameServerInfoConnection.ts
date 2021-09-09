@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:gameServerInfoConnection");
 
-import * as io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 import { EventName, Messages } from "@socialgorithm/model";
 import { Events } from "../pub-sub";
@@ -9,7 +9,7 @@ import PubSub from "../pub-sub/PubSub";
 
 export class GameServerInfoConnection {
   public status: Messages.GameServerStatus;
-  public gameSocket: SocketIOClient.Socket;
+  public gameSocket: Socket;
   private pubSub: PubSub;
 
   constructor(gameServerAddress: string) {

@@ -43,7 +43,7 @@
     "pubsub-js": "^1.7.0",
     "random-word": "^2.0.0",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
+    "socket.io-client": "^4.2.0",
     "socket.io-proxy": "^1.0.3",
     "uuid": "^3.3.2"
   },
@@ -55,7 +55,6 @@
     "@types/node": "^11.11.0",
     "@types/pubsub-js": "^1.5.18",
     "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",

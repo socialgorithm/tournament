@@ -1,14 +1,14 @@
 // tslint:disable-next-line:no-var-requires
 const debug = require("debug")("sg:matchRunner");
 
-import * as io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 import { EventName, Game, Match, Messages } from "@socialgorithm/model";
 import { Events as PubSubEvents, PubSub } from "../../pub-sub";
 
 export class MatchRunner {
   private pubSub: PubSub;
-  private gameServerSocket: SocketIOClient.Socket;
+  private gameServerSocket: Socket;
   private playerTokens: { [name: string]: string };
 
   constructor(private match: Match, private tournamentID: string, private gameServerAddress: string) {
