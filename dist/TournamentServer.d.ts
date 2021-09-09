@@ -1,6 +1,6 @@
-import { TournamentServerOptions } from "./TournamentServerOptions";
+import { ITournamentServerOptions } from "./TournamentServerOptions";
 export default class TournamentServer {
     private socketServer;
     private LobbyManager;
-    constructor(options: TournamentServerOptions);
+    constructor(options: ITournamentServerOptions);
 }

@@ -1,5 +1,5 @@
 import { GameServerAddress } from "@socialgorithm/model";
-export interface TournamentServerOptions {
+export interface ITournamentServerOptions {
     games: GameServerAddress[];
     port: number;
 }

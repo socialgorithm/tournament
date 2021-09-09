@@ -26,16 +26,6 @@ var DoubleEliminationMatchmaker = (function () {
         });
         this.waitingForFinal = [];
     }
-    DoubleEliminationMatchmaker.prototype.shufflePlayers = function (_a) {
-        var _b;
-        var players = _a.slice(0);
-        var m = players.length;
-        while (m) {
-            var i = Math.floor(Math.random() * m--);
-            _b = [players[i], players[m]], players[m] = _b[0], players[i] = _b[1];
-        }
-        return players;
-    };
     DoubleEliminationMatchmaker.prototype.isFinished = function () {
         return this.finished;
     };
@@ -137,6 +127,9 @@ var DoubleEliminationMatchmaker = (function () {
     DoubleEliminationMatchmaker.prototype.getRanking = function () {
         return this.ranking;
     };
+    DoubleEliminationMatchmaker.prototype.getPlayers = function () {
+        return __spreadArray([], this.players, true);
+    };
     DoubleEliminationMatchmaker.prototype.finishedRanking = function () {
         var ranking = [];
         var matches = this.playedMatches.map(function (match) { return match; });
@@ -167,6 +160,16 @@ var DoubleEliminationMatchmaker = (function () {
             return 0;
         }
         return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
+    };
+    DoubleEliminationMatchmaker.prototype.shufflePlayers = function (_a) {
+        var _b;
+        var players = _a.slice(0);
+        var m = players.length;
+        while (m) {
+            var i = Math.floor(Math.random() * m--);
+            _b = [players[i], players[m]], players[m] = _b[0], players[i] = _b[1];
+        }
+        return players;
     };
     DoubleEliminationMatchmaker.prototype.matchPlayers = function (players) {
         var matches = [];
@@ -238,9 +241,6 @@ var DoubleEliminationMatchmaker = (function () {
             _this.unlinkedMatches.splice(unlinkedIndex, 1);
         });
         match.parentMatches = parentMatches;
-    };
-    DoubleEliminationMatchmaker.prototype.getPlayers = function () {
-        return __spreadArray([], this.players, true);
     };
     return DoubleEliminationMatchmaker;
 }());
