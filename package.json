@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/tournament-server",
-  "version": "8.1.2",
+  "version": "10.2.0",
   "description": "Socialgorithm Tournament Server",
   "main": "index.js",
   "scripts": {
