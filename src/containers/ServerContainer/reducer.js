@@ -6,7 +6,7 @@ import * as constants from './constants';
 
 const hosts = {
   local: 'http://localhost:3141',
-  online: 'https://ultimate-ttt-server.herokuapp.com',
+  online: 'https://sg-tournament.herokuapp.com',
 };
 
 export const initialState = Map({
