@@ -1,0 +1,1 @@
+web: npm run start -- --game http://sg-ultimate-ttt.herokuapp.com,http://sg-ultimate-ttt.herokuapp.com

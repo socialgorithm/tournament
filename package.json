@@ -14,7 +14,8 @@
     "test": "mocha -r ts-node/register src/**/*.spec.ts && npm run lint && npm run build",
     "lint": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
     "lint:fix": "tslint -p tsconfig.json -t stylish --fix 'src/**/*.ts'",
-    "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
+    "docs": "typedoc --out docs/ --mode modules ./src --theme minimal",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
