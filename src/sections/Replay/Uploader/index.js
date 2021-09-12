@@ -16,7 +16,7 @@ class Uploader extends React.Component {
     };
   }
 
-  onDrop = (acceptedFiles, rejectedFiles) => {
+  onDrop = (acceptedFiles) => {
     if (!acceptedFiles || acceptedFiles.length < 1) {
       return this.setState({
         errors: null,
@@ -79,11 +79,18 @@ class Uploader extends React.Component {
           multiple={ false }
           onDrop={this.onDrop}
         >
-          <Segment loading={ this.state.loading } className='upload-box' attached={ !!errorMessage }>
-            <p><Icon name='cloud upload' size='big' /></p>
-            <p>Click here, or drop a log file to upload a game log.</p>
-          </Segment>
-          { errorMessage }
+          {({getRootProps, getInputProps}) => (
+            <section>
+              <div {...getRootProps()}>
+                <Segment loading={ this.state.loading } className='upload-box' attached={ !!errorMessage }>
+                  <p><Icon name='cloud upload' size='big' /></p>
+                  <input {...getInputProps()} />
+                  <p>Click here, or drop a log file to upload a game log.</p>
+                </Segment>
+                { errorMessage }
+              </div>
+            </section>
+          )}
         </Dropzone>
       </div>
     );
