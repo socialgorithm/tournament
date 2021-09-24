@@ -436,8 +436,8 @@ class LobbyAdmin extends React.PureComponent {
     };
 
     invalidGameServerSelected = () => {
-        const currentGameAddress = this.state.tournamentOptions.gameAddress
-        const currentGame = this.state.availableGames.find(game => game.address === currentGameAddress )
+        const currentGameAddress = this.state.tournamentOptions.gameAddress.tournamentServerAccessibleAddress
+        const currentGame = this.state.availableGames.find(game => game.address.tournamentServerAccessibleAddress === currentGameAddress )
         return currentGameAddress === undefined || currentGameAddress === null || currentGameAddress.length === 0 
             || currentGame === undefined || currentGame.healthy === false;
     };
