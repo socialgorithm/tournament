@@ -64,7 +64,7 @@ export default class BracketMatch extends React.PureComponent {
               <Icon name='trophy' />
               { content }
             </span>
-            <div className="bottom"><span>Chicken Dinner!</span></div>
+            <div className="bottom"><span>Veggie Dinner!</span></div>
           </Fragment>
         );
       } else if (bracket.currentMatch && bracket.currentMatch.state === 'finished') {

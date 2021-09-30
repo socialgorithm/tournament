@@ -316,7 +316,7 @@ class LobbyAdmin extends React.PureComponent {
                 text: `${!game.healthy ? '[UNHEALTHY] ' : '' }${game.info.name}`,
                 value: game.address,
                 title: `${game.address}`,
-                icon: game.healthy ? 'green circle' : 'yellow warning sign',
+                icon: game.healthy ? {color: 'green', name: 'circle'} : {color:'yellow', name:'warning sign'},
                 disabled: !game.healthy,
             }
         });
@@ -332,8 +332,8 @@ class LobbyAdmin extends React.PureComponent {
                 title: 'League Mode, a player gets kicked out when losing two games',
             },
         ];
-        const title = (this.state.lobby.players.length < 2 || this.invalidGameServerSelected()) ? 'Atleast two players + healthy game server connection required' : 'Start the match';
-	    return (
+        const title = (this.state.lobby.players.length < 2 || this.invalidGameServerSelected()) ? 'At least two players + healthy game server connection required' : 'Start the match';
+        return (
             <Grid columns={ 1 }>
                 <Grid.Row>
                     <Grid.Column>
@@ -474,7 +474,7 @@ class LobbyAdmin extends React.PureComponent {
 
 		return (
 			<div style={ { paddingBottom: '2em', height: 'calc(100% - 2em)' } }>
-				<Popup trigger={<p>{titleText} <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></p>} content={infoText} />
+				<Popup trigger={<span>{titleText} <Label size='mini' style={ { float: 'right' } }>{ players.length }</Label></span>} content={infoText} />
 
 				<div onDrop={(e) => this.onDragPlayerDrop(e, type)} onDragOver={this.onDragPlayerOver} onDragEnter={(e) => this.onDragPlayerMouseMove(e, type, true)} onDragLeave={(e) => this.onDragPlayerMouseMove(e, type, false)}
 				     style={{height: '100%', position: 'relative', background: this.state[playerDropKey] && '#efefef', borderRadius: this.state[playerDropKey] && '0.28571429rem'}}>

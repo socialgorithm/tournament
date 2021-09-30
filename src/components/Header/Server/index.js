@@ -12,12 +12,13 @@ class Server extends React.Component {
   }
 
   /** Update state host whenever the main one connects */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.status !== this.props.status && nextProps.status === 'connected') {
-      this.setState({
-        host: nextProps.host,
-      });
+  static getDerivedStateFromProps(props, state) {
+    if (props.status === 'connected') {
+      return{
+        host: props.host,
+      };
     }
+    return null;
   }
 
   handleHostChange = (newHost) => {

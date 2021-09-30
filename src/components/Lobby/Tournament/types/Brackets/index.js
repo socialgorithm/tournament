@@ -14,12 +14,13 @@ export default class Brackets extends React.PureComponent {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.stats !== this.props.stats) {
-      this.setState({
-        data: this.updateStats(nextProps),
-      });
+  static getDerivedStateFromProps(props, state) {
+    if (props.stats !== state.stats) {
+      return {
+        data: parseStats(props.stats),
+      };
     }
+    return null;
   }
 
   updateStats = (props) => {

@@ -24,7 +24,7 @@ class GameExplorer extends React.Component {
       matchLost,
       matchTied,
       timeouts
-    } = this.parseGameData(props.gameData);
+    } = GameExplorer.parseGameData(props.gameData);
 
     console.log('parsed', games);
 
@@ -43,8 +43,8 @@ class GameExplorer extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.gameData !== nextProps.gameData) {
+  static getDerivedStateFromProps(props, state) {
+    if (props.gameData !== state.gameData) {
       const {
         games,
         won,
@@ -54,12 +54,10 @@ class GameExplorer extends React.Component {
         matchLost,
         matchTied,
         timeouts
-      } = this.parseGameData(nextProps.gameData);
+      } = GameExplorer.parseGameData(props.gameData);
 
-      this.setState({
+      return {
         games,
-        activeGame: 0,
-        activeMove: -1,
         won,
         lost,
         tied,
@@ -67,11 +65,12 @@ class GameExplorer extends React.Component {
         matchLost,
         matchTied,
         timeouts,
-      });
+      };
     }
+    return null;
   }
 
-  parseGameData = (gameData) => {
+  static parseGameData = (gameData) => {
     const ret = {
       error: null,
       games: [],
@@ -91,7 +90,6 @@ class GameExplorer extends React.Component {
     let curGame;
     try {
       lines.forEach((line) => {
-        console.log(line);
         if (line === 'init') {
           if (ret.games[curGame]) {
             console.log('Was it finished? ', ret.games[curGame].uttt.isFinished());
@@ -99,11 +97,15 @@ class GameExplorer extends React.Component {
           curGame = ret.games.push({
             uttt: new UTTT(3),
             moves: [],
+            timeout: false,
           }) - 1;
           return;
         }
         if (line === 'timeout') {
           ret.timeouts = ret.timeouts + 1;
+          if (ret.games[curGame]) {
+            ret.games[curGame].timeout = true;
+          }
           return;
         }
         if (line.startsWith('match')) {
@@ -201,10 +203,12 @@ class GameExplorer extends React.Component {
     return ret;
   };
 
-  printWinner = (winner) => {
+  printWinner = (winner, timeout) => {
     let color = 'grey';
-    let text = 'Tied';
-    if (winner === PLAYER_YOU) {
+    let text = 'tied';
+    if (timeout) {
+        text = 'time';
+    } else if (winner === PLAYER_YOU) {
       color = 'green';
       text = 'won';
     } else if (winner === PLAYER_OPPONENT) {
@@ -276,24 +280,18 @@ class GameExplorer extends React.Component {
               <Label color='grey'>
                 <b>Tied:</b> { this.state.tied }
               </Label>
-            </div>
-            Games
-          </h2>
-          <Divider />
-          <h2>
-            <div style={ { float: 'right' } }>
-              <Label color='default'>
-              <b>Timeouts:</b> { this.state.timeouts }
+              <Label>
+                <b>Timeouts:</b> { this.state.timeouts }
               </Label>
             </div>
-            Detail
+            Games
           </h2>
           <Divider />
           <List selection divided relaxed>
             { this.state.games.map((game, $index) => (
               <List.Item key={ $index } active={ $index === this.state.activeGame } onClick={ () => { this.setState({ activeGame: $index, activeMove: -1, }); } }>
                 <List.Content>
-                  { this.printWinner(game.uttt.winner) } { game.uttt.moves } moves
+                  { this.printWinner(game.uttt.winner, game.timeout) } { game.uttt.moves } moves
                 </List.Content>
               </List.Item>
             )) }
@@ -310,8 +308,9 @@ class GameExplorer extends React.Component {
                 highlightMove={ activeMove.move }
               />
               <Divider />
-              <p><Label empty circular color='blue' horizontal /> Player A (You)</p>
-              <p><Label empty circular color='red' horizontal /> Player B (Opponent)</p>
+              <Label empty circular color='blue' horizontal /> Player A (You)
+              <br/>
+              <Label empty circular color='red' horizontal /> Player B (Opponent)
             </Grid.Column>
             <Grid.Column>
               <Header>Moves</Header>
