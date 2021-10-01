@@ -314,7 +314,7 @@ class LobbyAdmin extends React.PureComponent {
         const availableGames = this.state.availableGames.map(game => {
             return {
                 text: `${!game.healthy ? '[UNHEALTHY] ' : '' }${game.info.name}`,
-                value: game.address,
+                value: game.address.tournamentServerAccessibleAddress,
                 title: `${game.address}`,
                 icon: game.healthy ? {color: 'green', name: 'circle'} : {color:'yellow', name:'warning sign'},
                 disabled: !game.healthy,
@@ -343,7 +343,7 @@ class LobbyAdmin extends React.PureComponent {
                                 label='Game'
                                 options={ availableGames }
                                 className={ this.invalidGameServerSelected() ? 'error' : '' }
-                                value={ this.state.tournamentOptions.gameAddress }
+                                value={ this.state.tournamentOptions.gameAddress.tournamentServerAccessibleAddress }
                                 onChange={ this.updateOption('gameAddress') }
                             />
                             <Form.Group widths='equal'>
