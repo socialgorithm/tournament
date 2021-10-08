@@ -31,9 +31,10 @@ export default class MatchPage extends React.PureComponent {
 
   renderRanking() {
     let ranking = this.props.tournament.ranking.map((player, $index) => (
-        <div key={ player } className='player'>
+        <div key={ player.player } className='player'>
             <div className='rank'>{ $index + 1}</div>
-            <div className='name'>{ player }</div>
+            <div className='name'>{ player.player }</div>
+            <div className='why'>{ player.why }</div>
         </div>
     ));
     // Setup the animations - separately in case we need to disable them at some point

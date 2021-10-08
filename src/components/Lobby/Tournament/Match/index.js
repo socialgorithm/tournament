@@ -31,11 +31,11 @@ export default (props) => {
         <div className={ classNames('match', { 'small': props.small }) }>
             <Grid columns={ 2 } textAlign='center' verticalAlign='middle' style={ gridStyle }>
                 <Grid.Column color={ colorA }>
-                    <h2>{ match.players[0].token }</h2>
+                    <h2>{ match.players[0] }</h2>
                     <h3>{ stats.wins[0] }</h3>
                 </Grid.Column>
                 <Grid.Column color={ colorB }>
-                    <h2>{ match.players[1].token }</h2>
+                    <h2>{ match.players[1] }</h2>
                     <h3>{ stats.wins[1] }</h3>
                 </Grid.Column>
             </Grid>
