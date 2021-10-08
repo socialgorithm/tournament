@@ -6,6 +6,7 @@ import { Lobby } from "./Lobby";
 import { Match, MatchOptions } from "./Match";
 import * as Messages from "./Messages";
 import { Player } from "./Player";
+import { PlayerRank } from "./PlayerRank";
 import { Tournament, TournamentOptions } from "./Tournament";
 
 export {
@@ -18,6 +19,7 @@ export {
   MatchOptions,
   Messages,
   Player,
+  PlayerRank,
   Tournament,
   TournamentOptions,
 };

@@ -1,5 +1,6 @@
 import { GameServerAddress } from "./GameServerAddress";
 import { Player } from "./Player";
+import { PlayerRank } from "./PlayerRank";
 
 export type Tournament = {
   tournamentID: string,
@@ -8,7 +9,7 @@ export type Tournament = {
   options: TournamentOptions,
   started: boolean,
   finished: boolean,
-  ranking: Player[],
+  ranking: PlayerRank[],
   waiting: boolean, // whether we're waiting for the user (for non automatic tournament mode)
 };
 
