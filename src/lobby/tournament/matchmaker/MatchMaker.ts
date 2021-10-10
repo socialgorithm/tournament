@@ -1,4 +1,4 @@
-import { Match, Player } from "@socialgorithm/model";
+import { Match, Player, PlayerRank } from "@socialgorithm/model";
 
 /**
  * MatchMaker defines a strategy for matching players.
@@ -8,7 +8,8 @@ import { Match, Player } from "@socialgorithm/model";
  */
 export default interface IMatchMaker {
     isFinished(): boolean;
+    updateUIStats(match: Match): void;
     updateStats(allMatches: Match[], tournamentFinished?: boolean): Match[] | void;
     getRemainingMatches(): Match[];
-    getRanking(): Player[];
+    getRanking(): PlayerRank[];
 }

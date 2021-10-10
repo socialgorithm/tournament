@@ -1,4 +1,4 @@
-import { Match, MatchOptions, Player } from "@socialgorithm/model";
+import { Match, MatchOptions, Player, PlayerRank } from "@socialgorithm/model";
 import { v4 as uuid } from "uuid";
 import { DoubleEliminationMatch, MatchParent } from "./DoubleEliminationMatch";
 import IMatchmaker from "./MatchMaker";
@@ -7,6 +7,8 @@ type PlayerStats = {
   player: Player;
   wins: number;
   losses: number;
+  uiWins: number;
+  uiLosses: number;
 };
 
 type MatchingResult = {
@@ -25,7 +27,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
   private players: Player[];
   private finished: boolean;
   private playedMatches: Match[];
-  private ranking: string[];
+  private ranking: PlayerRank[];
   private processedMatches: string[];
   private playerStats: { [key: string]: PlayerStats };
   private zeroLossOddPlayer: Player;
@@ -37,16 +39,26 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     this.players = this.shufflePlayers(players);
     this.playedMatches = [];
     this.processedMatches = [];
-    this.ranking = this.players.map(player => player);
+    this.ranking = this.players.map(player => new PlayerRank(player,""));
     this.playerStats = {};
     this.players.forEach(player => {
-      this.playerStats[player] = { player, wins: 0, losses: 0 };
+      this.playerStats[player] = { player, wins: 0, losses: 0, uiWins: 0, uiLosses: 0 };
     });
     this.waitingForFinal = [];
   }
 
   public isFinished(): boolean {
     return this.finished;
+  }
+
+  public updateUIStats(match: Match) {
+    if (match.winner !== RESULT_TIE) {
+      const winner = match.players[match.winner];
+      const loser = match.players[match.winner === 1 ? 0 : 1];
+      this.playerStats[winner].uiWins++;
+      this.playerStats[loser].uiLosses++;
+    }
+    this.ranking = this.getUpdatedRanking();
   }
 
   public updateStats(playedMatches: Match[], tournamentFinished: boolean = false) {
@@ -69,13 +81,10 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
       }
     });
 
-    if (!tournamentFinished) {
-      this.ranking = this.unfinishedRanking();
-    }
+    this.ranking = this.getUpdatedRanking();
 
     if (tiedMatches < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
       this.finished = true;
-      this.ranking = this.finishedRanking();
     }
   }
 
@@ -112,7 +121,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
 
     if (matches.length < 1 && justPlayedMatches.length === 1 && !this.anyPlayersWaiting()) {
       this.finished = true;
-      this.ranking = this.finishedRanking();
+      this.ranking = this.getUpdatedRanking();
       return [];
     }
 
@@ -163,7 +172,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     return matches;
   }
 
-  public getRanking(): string[] {
+  public getRanking(): PlayerRank[] {
     return this.ranking;
   }
 
@@ -171,39 +180,24 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     return [...this.players];
   }
 
-  private finishedRanking(): string[] {
-    const ranking: string[] = [];
-    const matches = this.playedMatches.map(match => match); // mapping to copy
-    matches.reverse().forEach(match => {
-      if (match.winner !== RESULT_TIE) {
-        const winner = match.players[match.winner];
-        const loser = match.players[match.winner === 1 ? 0 : 1];
-        if (ranking.indexOf(winner) === -1) {
-          ranking.push(winner);
-        }
-        if (ranking.indexOf(loser) === -1) {
-          ranking.push(loser);
-        }
-      }
-    });
-    const playersAwaitingMatch = this.players.map(player => player).filter(token => ranking.indexOf(token) === -1);
-    ranking.push(...playersAwaitingMatch);
-    return ranking;
+  private rankExplanation(player: Player): string {
+    const stats = this.playerStats[player];
+    return "W "+stats.uiWins+" - L "+stats.uiLosses;
   }
 
-  private unfinishedRanking(): string[] {
+  private getUpdatedRanking(): PlayerRank[] {
     return this.players
-      .map(player => player) // mapping to copy
+      .map(player => ({pl: player, score: this.getPlayerScore(player)})) // mapping to copy
       .sort(
-        (a: Player, b: Player) => this.getPlayerScore(b) - this.getPlayerScore(a),
-      ).map(player => player);
+        (a, b) => b.score - a.score,
+      ).map(player => new PlayerRank(player.pl, this.rankExplanation(player.pl)));
   }
 
   private getPlayerScore(player: Player): number {
-    if (this.playerStats[player].wins + this.playerStats[player].losses < 1) {
+    if (this.playerStats[player].uiWins + this.playerStats[player].uiLosses < 1) {
       return 0;
     }
-    return this.playerStats[player].wins / (this.playerStats[player].wins + this.playerStats[player].losses);
+    return this.playerStats[player].uiWins / (this.playerStats[player].uiWins + this.playerStats[player].uiLosses);
   }
 
   private shufflePlayers([...players]: Player[]): Player[] {

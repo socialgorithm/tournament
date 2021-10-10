@@ -1,7 +1,15 @@
 import { v4 as uuid } from "uuid";
 
-import { Match, MatchOptions, Player } from "@socialgorithm/model";
+import { Match, MatchOptions, Player, PlayerRank } from "@socialgorithm/model";
 import IMatchmaker from "./MatchMaker";
+
+type PlayerStats = {
+  player: Player;
+  uiWins: number;
+  uiLosses: number;
+};
+
+const RESULT_TIE = -1;
 
 /**
  * FreeForAll is a strategy where only one round is played, in which every player
@@ -13,9 +21,15 @@ import IMatchmaker from "./MatchMaker";
 export default class FreeForAllMatchmaker implements IMatchmaker {
 
   private matches: Match[];
+  private playerStats: { [key: string]: PlayerStats };
 
   constructor(private players: Player[], private options: MatchOptions) {
     this.matches = [];
+
+    this.playerStats = {};
+    this.players.forEach(player => {
+      this.playerStats[player] = { player, uiWins: 0, uiLosses: 0 };
+    });
 
     this.players.forEach(playerA => {
       this.players.forEach(playerB => {
@@ -43,6 +57,15 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
     return this.getRemainingMatches().length === 0;
   }
 
+  public updateUIStats(match: Match) {
+    if (match.winner !== RESULT_TIE) {
+      const winner = match.players[match.winner];
+      const loser = match.players[match.winner === 1 ? 0 : 1];
+      this.playerStats[winner].uiWins++;
+      this.playerStats[loser].uiLosses++;
+    }
+  }
+
   public updateStats(allMatches: Match[], tournamentFinished: boolean = false) {
     this.matches = allMatches;
   }
@@ -51,35 +74,24 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
     return this.matches.filter(match => match.state !== "finished");
   }
 
-  public getRanking(): string[] {
-    const playerStats: any = {};
-    this.matches.forEach(match => {
-      if (!playerStats[match.players[0]]) {
-        playerStats[match.players[0]] = 0;
-      }
-      if (!playerStats[match.players[1]]) {
-        playerStats[match.players[1]] = 0;
-      }
-      // TODO Create stat calculator for matches
-      // const p0wins = match.stats.wins[0];
-      // const p1wins = match.stats.wins[1];
-      // if (p0wins === p1wins) {
-      //     return;
-      // }
-      // if (p0wins > p1wins) {
-      //     playerStats[match.players[0]]++;
-      // }
-      // if (p1wins > p0wins) {
-      //     playerStats[match.players[1]]++;
-      // }
-    });
-    return Object.keys(playerStats).map(token => ({
-      gamesWon: playerStats[token],
-      player: token,
-    })).sort(
-      (a: any, b: any) => b.gamesWon - a.gamesWon,
-    ).map(playerRank => playerRank.player,
-    );
+  private getPlayerScore(player: Player): number {
+    if (this.playerStats[player].uiWins + this.playerStats[player].uiLosses < 1) {
+      return 0;
+    }
+    return this.playerStats[player].uiWins / (this.playerStats[player].uiWins + this.playerStats[player].uiLosses);
+  }
+
+  private rankExplanation(player: Player): string {
+    const stats = this.playerStats[player];
+    return "W "+stats.uiWins+" - L "+stats.uiLosses;
+  }
+
+  public getRanking(): PlayerRank[] {
+    return this.players
+      .map(player => ({pl: player, score: this.getPlayerScore(player)})) // mapping to copy
+      .sort(
+        (a, b) => b.score - a.score,
+      ).map(player => new PlayerRank(player.pl, this.rankExplanation(player.pl)));
   }
 
   private playersAlreadyMatched(playerA: Player, playerB: Player) {

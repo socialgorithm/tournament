@@ -3,7 +3,7 @@ const debug = require("debug")("sg:tournamentRunner");
 
 import { v4 as uuid } from "uuid";
 
-import { Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
+import { Match, MatchOptions, Player, PlayerRank, Tournament, TournamentOptions } from "@socialgorithm/model";
 import { EVENTS } from "@socialgorithm/model/dist/LegacyEvents";
 import { Events } from "../../pub-sub";
 import PubSub from "../../pub-sub/PubSub";
@@ -99,9 +99,10 @@ export class TournamentRunner {
     this.sendStats();
   }
 
-  private onMatchEnd = () => {
+  private onMatchEnd = (match: Match) => {
     this.tournament.waiting = !this.tournament.options.autoPlay;
-
+    this.matchmaker.updateUIStats(match);
+    this.tournament.ranking = this.matchmaker.getRanking();
     this.sendStats();
 
     if (this.tournament.waiting) {
