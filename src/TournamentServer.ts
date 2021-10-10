@@ -39,7 +39,7 @@ export default class TournamentServer {
       debug("Listening on port %d", address.port);
     });
 
-    this.LobbyManager = new LobbyManager();
+    this.LobbyManager = new LobbyManager(options.fixedLobbyName);
   }
 }
 

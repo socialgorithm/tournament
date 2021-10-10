@@ -13,6 +13,7 @@ export interface IOptions {
   port?: number;
   version?: boolean;
   help?: number;
+  fixedLobbyName?: boolean;
 }
 
 export const DEFAULT_OPTIONS: IOptions = {
@@ -48,6 +49,11 @@ const optionDefinitions = [
     alias: "h",
     description: "Print this guide",
     name: "help",
+    type: Boolean,
+  },
+  {
+    description: "Harcode lobby name to aaaaa-bbbbb to help with local testing",
+    name: "fixedLobbyName",
     type: Boolean,
   },
 ];

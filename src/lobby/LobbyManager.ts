@@ -9,9 +9,11 @@ import { LobbyRunner } from "./LobbyRunner";
 export class LobbyManager {
     private lobbyRunners: LobbyRunner[] = [];
     private pubSub: PubSub;
+    private fixedLobbyName: boolean;
 
-    constructor() {
+    constructor(fixedLobbyName: boolean) {
         // Add PubSub listeners
+        this.fixedLobbyName = fixedLobbyName;
         this.pubSub = new PubSub();
         this.pubSub.subscribe(Events.LobbyCreate, this.createLobby);
         this.pubSub.subscribe(Events.LobbyJoin, this.checkLobby);
@@ -21,7 +23,7 @@ export class LobbyManager {
 
     private createLobby = (data: Messages.LOBBY_CREATE_MESSAGE) => {
         const admin = data.player;
-        const lobbyRunner = new LobbyRunner(admin);
+        const lobbyRunner = new LobbyRunner(admin, this.fixedLobbyName);
         this.lobbyRunners.push(lobbyRunner);
 
         // Join the lobby namespace

@@ -14,12 +14,12 @@ export class LobbyRunner {
   private expiresAt: Date;
   private adminConnected: boolean = false;
 
-  constructor(admin: Player) {
+  constructor(admin: Player, fixedLobbyName: boolean) {
     this.lobby = {
       admin,
       bannedPlayers: [],
       players: [],
-      token: `${randomWord()}-${randomWord()}`,
+      token: fixedLobbyName ? 'aaaaa-bbbbb' : `${randomWord()}-${randomWord()}`,
     };
 
     // Add PubSub listeners

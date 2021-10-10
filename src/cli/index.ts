@@ -11,5 +11,6 @@ export function toTournamentServerOptions(options: IOptions): ITournamentServerO
             return { tournamentServerAccessibleAddress, playerAccessibleAddress };
         }),
         port: options.port,
+        fixedLobbyName: options.fixedLobbyName,
     };
 }
