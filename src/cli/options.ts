@@ -52,7 +52,7 @@ const optionDefinitions = [
     type: Boolean,
   },
   {
-    description: "Harcode lobby name to aaaaa-bbbbb to help with local testing",
+    description: "Hardcode lobby name to aaaaa-bbbbb to help with local testing",
     name: "fixedLobbyName",
     type: Boolean,
   },
