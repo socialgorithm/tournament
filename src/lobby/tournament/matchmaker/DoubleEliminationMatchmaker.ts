@@ -7,8 +7,8 @@ type PlayerStats = {
   player: Player;
   wins: number;
   losses: number;
-  uiWins: number;
-  uiLosses: number;
+  realtimeWins: number;     //used to update the ranking on the UI after each match without interfering with the matchmaking process
+  realtimeLosses: number;
 };
 
 type MatchingResult = {
@@ -42,7 +42,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     this.ranking = this.players.map(player => new PlayerRank(player,""));
     this.playerStats = {};
     this.players.forEach(player => {
-      this.playerStats[player] = { player, wins: 0, losses: 0, uiWins: 0, uiLosses: 0 };
+      this.playerStats[player] = { player, wins: 0, losses: 0, realtimeWins: 0, realtimeLosses: 0 };
     });
     this.waitingForFinal = [];
   }
@@ -55,8 +55,8 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     if (match.winner !== RESULT_TIE) {
       const winner = match.players[match.winner];
       const loser = match.players[match.winner === 1 ? 0 : 1];
-      this.playerStats[winner].uiWins++;
-      this.playerStats[loser].uiLosses++;
+      this.playerStats[winner].realtimeWins++;
+      this.playerStats[loser].realtimeLosses++;
     }
     this.ranking = this.getUpdatedRanking();
   }
@@ -182,7 +182,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
 
   private rankExplanation(player: Player): string {
     const stats = this.playerStats[player];
-    return "W "+stats.uiWins+" - L "+stats.uiLosses;
+    return "W "+stats.realtimeWins+" - L "+stats.realtimeLosses;
   }
 
   private getUpdatedRanking(): PlayerRank[] {
@@ -194,10 +194,10 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
   }
 
   private getPlayerScore(player: Player): number {
-    if (this.playerStats[player].uiWins + this.playerStats[player].uiLosses < 1) {
+    if (this.playerStats[player].realtimeWins + this.playerStats[player].realtimeLosses < 1) {
       return 0;
     }
-    return this.playerStats[player].uiWins / (this.playerStats[player].uiWins + this.playerStats[player].uiLosses);
+    return this.playerStats[player].realtimeWins / (this.playerStats[player].realtimeWins + this.playerStats[player].realtimeLosses);
   }
 
   private shufflePlayers([...players]: Player[]): Player[] {

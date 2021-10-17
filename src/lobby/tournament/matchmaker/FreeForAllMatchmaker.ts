@@ -5,8 +5,8 @@ import IMatchmaker from "./MatchMaker";
 
 type PlayerStats = {
   player: Player;
-  uiWins: number;
-  uiLosses: number;
+  realtimeWins: number;
+  realtimeLosses: number;
 };
 
 const RESULT_TIE = -1;
@@ -28,7 +28,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
 
     this.playerStats = {};
     this.players.forEach(player => {
-      this.playerStats[player] = { player, uiWins: 0, uiLosses: 0 };
+      this.playerStats[player] = { player, realtimeWins: 0, realtimeLosses: 0 };
     });
 
     this.players.forEach(playerA => {
@@ -61,8 +61,8 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
     if (match.winner !== RESULT_TIE) {
       const winner = match.players[match.winner];
       const loser = match.players[match.winner === 1 ? 0 : 1];
-      this.playerStats[winner].uiWins++;
-      this.playerStats[loser].uiLosses++;
+      this.playerStats[winner].realtimeWins++;
+      this.playerStats[loser].realtimeLosses++;
     }
   }
 
@@ -75,15 +75,15 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
   }
 
   private getPlayerScore(player: Player): number {
-    if (this.playerStats[player].uiWins + this.playerStats[player].uiLosses < 1) {
+    if (this.playerStats[player].realtimeWins + this.playerStats[player].realtimeLosses < 1) {
       return 0;
     }
-    return this.playerStats[player].uiWins / (this.playerStats[player].uiWins + this.playerStats[player].uiLosses);
+    return this.playerStats[player].realtimeWins / (this.playerStats[player].realtimeWins + this.playerStats[player].realtimeLosses);
   }
 
   private rankExplanation(player: Player): string {
     const stats = this.playerStats[player];
-    return "W "+stats.uiWins+" - L "+stats.uiLosses;
+    return "W "+stats.realtimeWins+" - L "+stats.realtimeLosses;
   }
 
   public getRanking(): PlayerRank[] {
