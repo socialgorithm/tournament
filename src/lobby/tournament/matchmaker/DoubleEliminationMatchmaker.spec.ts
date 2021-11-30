@@ -112,7 +112,7 @@ describe("Double Elimination Matchmaker", () => {
         const sp5 = shuffledPlayers[4];
 
         // Round 1
-        expect(matchmaker.getRanking()).to.deep.equal(shuffledPlayers);
+        expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal(shuffledPlayers);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
         expect(matches).to.have.lengthOf(2);
@@ -122,8 +122,10 @@ describe("Double Elimination Matchmaker", () => {
         // Round 2
         matches[0].winner = 0; // sp1
         matches[1].winner = 0; // sp3
+        matchmaker.updateRealtimeStats(matches[0]);
+        matchmaker.updateRealtimeStats(matches[1]);
         matchmaker.updateStats(allMatches);
-        expect(matchmaker.getRanking()).to.deep.equal([sp1, sp3, sp2, sp4, sp5]);
+        expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal([sp1, sp3, sp2, sp4, sp5]);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
         expect(matches).to.have.lengthOf(2);
@@ -133,8 +135,10 @@ describe("Double Elimination Matchmaker", () => {
         // Round 3
         matches[0].winner = 0; // sp5
         matches[1].winner = 0; // sp2
+        matchmaker.updateRealtimeStats(matches[0]);
+        matchmaker.updateRealtimeStats(matches[1]);
         matchmaker.updateStats(allMatches);
-        expect(matchmaker.getRanking()).to.deep.equal([sp3, sp5, sp1, sp2, sp4]);
+        expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal([sp3, sp5, sp1, sp2, sp4]);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
         expect(matches).to.have.lengthOf(2);
@@ -144,8 +148,10 @@ describe("Double Elimination Matchmaker", () => {
         // Round 4
         matches[0].winner = 0; // sp3
         matches[1].winner = 0; // sp1
+        matchmaker.updateRealtimeStats(matches[0]);
+        matchmaker.updateRealtimeStats(matches[1]);
         matchmaker.updateStats(allMatches);
-        expect(matchmaker.getRanking()).to.deep.equal([sp3, sp1, sp5, sp2, sp4]);
+        expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal([sp3, sp1, sp5, sp2, sp4]);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
         expect(matches).to.have.lengthOf(1);
@@ -153,8 +159,9 @@ describe("Double Elimination Matchmaker", () => {
 
         // Round 5
         matches[0].winner = 0; // sp1
+        matchmaker.updateRealtimeStats(matches[0]);
         matchmaker.updateStats(allMatches);
-        expect(matchmaker.getRanking()).to.deep.equal([sp3, sp1, sp2, sp5, sp4]);
+        expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal([sp3, sp1, sp2, sp5, sp4]);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
         expect(matches).to.have.lengthOf(1);
@@ -162,6 +169,7 @@ describe("Double Elimination Matchmaker", () => {
 
         // Round 6
         matches[0].winner = 1; // sp1
+        matchmaker.updateRealtimeStats(matches[0]);
         matchmaker.updateStats(allMatches);
         matches = matchmaker.getRemainingMatches();
         allMatches.push(...matches);
@@ -169,7 +177,11 @@ describe("Double Elimination Matchmaker", () => {
         expect(matches).to.be.empty;
 
         // Test Ranking
-        expect(matchmaker.getRanking()).to.deep.equal([sp1, sp3, sp5, sp2, sp4]);
+        const ranking = matchmaker.getRanking().map(x=>x.player);
+        expect(ranking.slice(0,2)).to.deep.equal([sp1,sp3])
+        expect(ranking.slice(2,4).sort()).to.deep.equal([sp5,sp2].sort()) //could be in any order
+        expect(ranking.slice(4,5)).to.deep.equal([sp4])
+        //expect(matchmaker.getRanking().map(x=>x.player)).to.deep.equal([sp1, sp3, sp5, sp2, sp4]);
 
         done();
     });

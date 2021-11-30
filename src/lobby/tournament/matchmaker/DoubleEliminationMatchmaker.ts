@@ -51,7 +51,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     return this.finished;
   }
 
-  public updateUIStats(match: Match) {
+  public updateRealtimeStats(match: Match) {
     if (match.winner !== RESULT_TIE) {
       const winner = match.players[match.winner];
       const loser = match.players[match.winner === 1 ? 0 : 1];

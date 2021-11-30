@@ -8,7 +8,7 @@ import { Match, Player, PlayerRank } from "@socialgorithm/model";
  */
 export default interface IMatchMaker {
     isFinished(): boolean;
-    updateUIStats(match: Match): void;
+    updateRealtimeStats(match: Match): void;
     updateStats(allMatches: Match[], tournamentFinished?: boolean): Match[] | void;
     getRemainingMatches(): Match[];
     getRanking(): PlayerRank[];
