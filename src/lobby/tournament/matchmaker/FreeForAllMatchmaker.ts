@@ -74,6 +74,14 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
     return this.matches.filter(match => match.state !== "finished");
   }
 
+  public getRanking(): PlayerRank[] {
+    return this.players
+      .map(player => ({pl: player, score: this.getPlayerScore(player)})) // mapping to copy
+      .sort(
+        (a, b) => b.score - a.score,
+      ).map(player => new PlayerRank(player.pl, this.rankExplanation(player.pl)));
+  }
+
   private getPlayerScore(player: Player): number {
     if (this.playerStats[player].realtimeWins + this.playerStats[player].realtimeLosses < 1) {
       return 0;
@@ -83,15 +91,7 @@ export default class FreeForAllMatchmaker implements IMatchmaker {
 
   private rankExplanation(player: Player): string {
     const stats = this.playerStats[player];
-    return "W "+stats.realtimeWins+" - L "+stats.realtimeLosses;
-  }
-
-  public getRanking(): PlayerRank[] {
-    return this.players
-      .map(player => ({pl: player, score: this.getPlayerScore(player)})) // mapping to copy
-      .sort(
-        (a, b) => b.score - a.score,
-      ).map(player => new PlayerRank(player.pl, this.rankExplanation(player.pl)));
+    return "W " + stats.realtimeWins + " - L " + stats.realtimeLosses;
   }
 
   private playersAlreadyMatched(playerA: Player, playerB: Player) {

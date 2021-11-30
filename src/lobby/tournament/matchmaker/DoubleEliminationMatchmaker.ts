@@ -7,7 +7,7 @@ type PlayerStats = {
   player: Player;
   wins: number;
   losses: number;
-  realtimeWins: number;     //used to update the ranking on the UI after each match without interfering with the matchmaking process
+  realtimeWins: number;     // used to update the ranking on the UI after each match without interfering with the matchmaking process
   realtimeLosses: number;
 };
 
@@ -39,7 +39,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
     this.players = this.shufflePlayers(players);
     this.playedMatches = [];
     this.processedMatches = [];
-    this.ranking = this.players.map(player => new PlayerRank(player,""));
+    this.ranking = this.players.map(player => new PlayerRank(player, ""));
     this.playerStats = {};
     this.players.forEach(player => {
       this.playerStats[player] = { player, wins: 0, losses: 0, realtimeWins: 0, realtimeLosses: 0 };
@@ -182,7 +182,7 @@ export default class DoubleEliminationMatchmaker implements IMatchmaker {
 
   private rankExplanation(player: Player): string {
     const stats = this.playerStats[player];
-    return "W "+stats.realtimeWins+" - L "+stats.realtimeLosses;
+    return "W " + stats.realtimeWins + " - L " + stats.realtimeLosses;
   }
 
   private getUpdatedRanking(): PlayerRank[] {

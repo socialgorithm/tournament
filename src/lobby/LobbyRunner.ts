@@ -19,7 +19,7 @@ export class LobbyRunner {
       admin,
       bannedPlayers: [],
       players: [],
-      token: fixedLobbyName ? 'aaaaa-bbbbb' : `${randomWord()}-${randomWord()}`,
+      token: fixedLobbyName ? "aaaaa-bbbbb" : `${randomWord()}-${randomWord()}`,
     };
 
     // Add PubSub listeners
