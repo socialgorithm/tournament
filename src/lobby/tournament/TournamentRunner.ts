@@ -101,7 +101,7 @@ export class TournamentRunner {
 
   private onMatchEnd = (match: Match) => {
     this.tournament.waiting = !this.tournament.options.autoPlay;
-    this.matchmaker.updateUIStats(match);
+    this.matchmaker.updateRealtimeStats(match);
     this.tournament.ranking = this.matchmaker.getRanking();
     this.sendStats();
 
