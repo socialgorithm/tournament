@@ -6,6 +6,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap",
+    "bootstrap:ci": "lerna bootstrap --ci",
     "build": "lerna run build",
     "start": "lerna run start --stream",
     "test": "lerna run test",
