@@ -11,6 +11,7 @@
     "test": "lerna run test",
     "postinstall": "npm run bootstrap && npm run build",
     "publish": "lerna publish",
-    "publish:prerelease": "lerna publish --dist-tag prerelease"
+    "publish:prerelease": "lerna publish --dist-tag prerelease",
+    "version": "lerna version"
   }
 }
