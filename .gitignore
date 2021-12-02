@@ -1,5 +1,6 @@
 # Built
 dist/
+build/
 
 # Logs
 logs

@@ -10,20 +10,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v2
       with:
-        node-version: '12.x'
+        node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
     - name: npm install, build, and test
       run: |
+        npm install -g npm
         npm ci
+        npm run bootstrap:ci
         npm run build
         npm test
       env:
         CI: true
-    - name: npm publish
+    - name: lerna publish
       run: |
-        npm publish --access public
+        lerna publish from-package
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
