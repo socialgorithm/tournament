@@ -41,3 +41,6 @@ jspm_packages
 
 .idea
 ultimate-ttt-server.iml
+
+# we only push sass
+*.css

@@ -1,0 +1,77 @@
+{
+    "name": "@socialgorithm/ui",
+    "version": "10.5.1",
+    "description": "Socialgorithm Battle UI",
+    "private": true,
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "deploy": "npm run build && gh-pages -d build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/socialgorithm/ui.git"
+    },
+    "keywords": [
+        "ultimate",
+        "tic",
+        "tac",
+        "toe",
+        "web",
+        "algorithm",
+        "battle"
+    ],
+    "author": "Socialgorithm",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/socialgorithm/ui/issues"
+    },
+    "homepage": "https://play.socialgorithm.org",
+    "dependencies": {
+        "@socialgorithm/model": "^10.5.1",
+        "@socialgorithm/ultimate-ttt": "^10.0.2",
+        "classnames": "^2.3.1",
+        "connected-react-router": "^6.9.1",
+        "history": "^4.10.1",
+        "immutable": "^3.8.2",
+        "node-sass": "^6.0.1",
+        "prop-types": "^15.7.2",
+        "qs": "^6.10.1",
+        "rc-slider": "^9.7.2",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0",
+        "react-dropzone": "^11.3.4",
+        "react-flip-move": "^3.0.4",
+        "react-redux": "^7.2.5",
+        "react-router": "^5.2.1",
+        "react-router-dom": "^5.2.1",
+        "react-scroll-to-component": "^1.0.2",
+        "react-toastify": "^8.0.2",
+        "redux": "^4.1.1",
+        "redux-actions": "^2.6.5",
+        "redux-history-transitions": "^2.2.0",
+        "redux-immutable": "^4.0.0",
+        "reselect": "^4.0.0",
+        "semantic-ui-css": "^2.4.1",
+        "semantic-ui-react": "^2.0.3",
+        "socket.io-client": "^4.2.0",
+        "uuid": "^8.3.2"
+    },
+    "devDependencies": {
+        "gh-pages": "^3.2.3",
+        "react-scripts": "^4.0.3"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}

@@ -1,0 +1,169 @@
+$side-margin: 50px;
+$vertical-margin: 0.5em;
+$boxColor: #ccc;
+$lineColor: #87a3ab;
+$winnerColor: #509e00;
+$loserBackground: #efefef;
+$tieBackground: #ffea9d;
+$championColor: #ffe400;
+$championBackground: #3c4b64;
+
+.tournament-bracket {
+  display: flex;
+  justify-content: center;
+
+  .item {
+    display: flex;
+    flex-direction: row-reverse;
+
+    &-parent {
+      position: relative;
+      margin-left: $side-margin;
+      display: flex;
+      align-items: center;
+      &:after {
+        position: absolute;
+        content: "";
+        width: $side-margin/2;
+        height: 2px;
+        left: 0;
+        top: 50%;
+        background-color: $lineColor;
+        transform: translateX(-100%);
+      }
+    }
+    &-children {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &-child {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      margin-bottom: $vertical-margin;
+      position: relative;
+      &:before {
+        content: "";
+        position: absolute;
+        background-color: $lineColor;
+        right: 0;
+        top: 50%;
+        transform: translateX(100%);
+        width: 25px;
+        height: 2px;
+      }
+      &:after {
+        content: "";
+        position: absolute;
+        background-color: $lineColor;
+        right: -$side-margin / 2;
+        height: calc(50% + 22px);
+        width: 2px;
+        top: 50%;
+      }
+      &:last-child {
+        &:after {
+          transform: translateY(-100%);
+        }
+      }
+      &:only-child:after {
+        display: none;
+      }
+    }
+  }
+
+  .item-content {
+    padding: 1em;
+    margin: 0;
+    max-width: 300px;
+
+    text-align: center;
+
+    background: #ffffff;
+    -webkit-box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+    box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
+    border-radius: 0.28571429rem;
+    border: 1px solid rgba(34, 36, 38, 0.15);
+
+    &.winner {
+      border-color: $winnerColor;
+      border-bottom-width: 2px;
+      background-color: transparentize($winnerColor, 0.9);
+      color: $winnerColor;
+    }
+
+    &.loser {
+      background-color: $loserBackground;
+    }
+
+    &.tie {
+      background-color: $tieBackground;
+    }
+
+    &.champion {
+      background-color: $championBackground;
+      background-image: linear-gradient( 135deg, #3c4b64 10%, #434548 100%);
+      color: $championColor;
+      text-shadow: 0 0 15px rgba(255, 247, 0, 0.8);
+      box-shadow: 0 0 20px rgba(255, 200, 0, 0.5);
+
+      .champion-text {
+        font-size: 1.1em;
+      }
+
+      .top, .bottom {
+        padding: 0.1em 1.5em;
+        color: lighten($championBackground, 50);
+        letter-spacing: 0.2em;
+
+        span {
+          font-size: 0.7em;
+        }
+      }
+
+      .top {
+        margin-bottom: 1em;
+        border-bottom: 1px solid lighten($championBackground, 20);
+      }
+  
+      .bottom {
+        margin-top: 1em;
+        border-top: 1px solid lighten($championBackground, 20);
+      }
+    }
+
+    .top, .bottom {
+      text-transform: uppercase;
+      padding: 0 1.5em;
+      text-shadow: none;
+      color: #333;
+      white-space: nowrap;
+
+      span {
+        font-size: 0.6em;
+      }
+    }
+
+    .top {
+      margin: -1em -1em 0.3em;
+    }
+
+    .bottom {
+      margin: 0.3em -1em -1em;
+    }
+
+    .match {
+      margin: -1em;
+
+      .grid {
+        margin: 0;
+
+        .column {
+          padding-top: 0.5rem;
+          padding-bottom: 0.3rem;
+        }
+      }
+    }
+  }
+}

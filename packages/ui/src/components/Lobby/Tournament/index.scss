@@ -1,0 +1,74 @@
+$rankingSize: 200px;
+$marginTop: 1em;
+
+.tournament-page {
+    position: relative;
+}
+
+.ranking-container {
+    width: $rankingSize;
+    margin-top: $marginTop;
+    border-right: 1px solid #efefef;
+    padding-right: 1em;
+    float: left;
+}
+
+.tournament-container {
+    margin-top: $marginTop * 2;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.ranking {
+    padding-left: 1em;
+    position: relative;
+
+    .player {
+        position: relative;
+        margin-bottom: 1em;
+        padding: 0.5em 1em 0.5em 0.5em;
+        background: #fff;
+        border-radius: 2em;
+        border: solid 1px #ccc;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+
+        &:first-child {
+            background-color: #e5efe2;
+            color: #509e01;
+
+            .rank {
+                background: #509e01;
+            }
+        }
+
+        .name, .rank, .why {
+            display: inline-block;
+        }
+
+        .rank {
+            margin-right: 1em;
+            background: #3c4b64;
+            color: #fff;
+            border-radius: 100%;
+            padding: 0.5em 0.9em;
+        }
+
+        .why {
+            font-size: 0.6em;
+            text-align: center;
+        }
+
+    }
+}
+
+.ui.list .item.inactive {
+    color: #777;
+}
+
+.ui.list.draggable > .item {
+    cursor: move;
+    margin-left: -1em;
+    margin-right: -1em;
+    padding-left: 1em;
+    padding-right: 1em;
+}

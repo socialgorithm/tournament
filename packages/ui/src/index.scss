@@ -1,0 +1,90 @@
+@font-face { font-family: 'Catamaran'; font-style: normal; font-weight: 100; src: url('./assets/fonts/catamaran/catamaran-v4-latin-100.eot'); src: local('Catamaran Thin'), local('Catamaran-Thin'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.woff2') format('woff2'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.woff') format('woff'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.ttf') format('truetype'), url('./assets/fonts/catamaran/catamaran-v4-latin-100.svg#Catamaran') format('svg'); }
+@font-face { font-family: 'Catamaran'; font-style: normal; font-weight: 900; src: url('./assets/fonts/catamaran/catamaran-v4-latin-900.eot'); src: local('Catamaran Black'), local('Catamaran-Black'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.woff2') format('woff2'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.woff') format('woff'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.ttf') format('truetype'), url('./assets/fonts/catamaran/catamaran-v4-latin-900.svg#Catamaran') format('svg'); }
+
+@font-face { font-family: 'Lato'; font-style: normal; font-weight: 400; src: url('./assets/fonts/lato/lato-v14-latin-regular.eot'); src: local('Lato Regular'), local('Lato-Regular'), url('./assets/fonts/lato/lato-v14-latin-regular.eot?#iefix') format('embedded-opentype'), url('./assets/fonts/lato/lato-v14-latin-regular.woff2') format('woff2'), url('./assets/fonts/lato/lato-v14-latin-regular.woff') format('woff'), url('./assets/fonts/lato/lato-v14-latin-regular.ttf') format('truetype'), url('./assets/fonts/lato/lato-v14-latin-regular.svg#Lato') format('svg'); }
+
+html, body {
+    background: #f5f8f8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Muli,Helvetica,Arial,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .ui.header {
+    font-family: Catamaran,Helvetica,Arial,sans-serif;
+    font-weight: 200;
+    letter-spacing: 1px;
+}
+
+.ui.header:not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-size: 1.5em;
+}
+
+pre.code {
+    background: #efefef;
+    font-size: 0.9em;
+    padding: 0.5em 1em;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.socialgorithm-logo {
+    font-size: 1.1em !important;
+    height: 1em !important;
+    position: relative !important;
+    top: 0.4em !important;
+    background: linear-gradient(to left, #79f1a4,#52daf8) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+}
+
+.socialgorithm-logo:hover {
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.socialgorithm-hue-bg {
+  background: linear-gradient(to left, #79f1a4,#52daf8) !important;
+  color: white;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.animated-hue {
+    -webkit-animation: hue-animation 15s infinite;
+    animation: hue-animation 15s infinite;
+  }
+  
+  @-webkit-keyframes hue-animation {
+    0% {
+      -webkit-filter: hue-rotate(0deg);
+    }
+    
+    100% {
+      -webkit-filter: hue-rotate(360deg);
+    }
+  }
+  
+  @keyframes hue-animation {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+    
+    100% {
+      filter: hue-rotate(360deg);
+    }
+  }
+
+  button.link {
+    background: none;
+    border: none;
+    font-size: 1em;
+    font-family: inherit;
+    color: #4183C4;
+    cursor: pointer;
+
+    &:hover {
+      color: #1e70bf;
+    }
+  }

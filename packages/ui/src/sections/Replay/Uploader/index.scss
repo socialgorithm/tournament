@@ -1,0 +1,25 @@
+.dropzone {
+    width: 100%;
+    border: none;
+    background: none;
+}
+.ui.segment.upload-box {
+    border: dashed 2px #ccc;
+    box-shadow: none;
+    padding-top: 3em;
+    padding-bottom: 3em;
+    text-align: center;
+    transition: all ease-in-out 50ms;
+    font-size: 1.3em;
+    color: #ccc;
+}
+
+.ui.segment.attached.upload-box {
+    border-bottom: none;
+}
+
+.ui.segment.upload-box:hover {
+    border-color: #2185D0;
+    color: #333;
+    background-color: #d2e7ff;
+}
