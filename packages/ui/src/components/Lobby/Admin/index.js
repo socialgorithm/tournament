@@ -343,7 +343,7 @@ class LobbyAdmin extends React.PureComponent {
                                 label='Game'
                                 options={ availableGames }
                                 className={ this.invalidGameServerSelected() ? 'error' : '' }
-                                value={ this.state.tournamentOptions.gameAddress.tournamentServerAccessibleAddress }
+                                value={ this.state.tournamentOptions.gameAddress?.tournamentServerAccessibleAddress }
                                 onChange={ this.updateOption('gameAddress') }
                             />
                             <Form.Group widths='equal'>
@@ -436,7 +436,7 @@ class LobbyAdmin extends React.PureComponent {
     };
 
     invalidGameServerSelected = () => {
-        const currentGameAddress = this.state.tournamentOptions.gameAddress.tournamentServerAccessibleAddress
+        const currentGameAddress = this.state.tournamentOptions.gameAddress?.tournamentServerAccessibleAddress
         const currentGame = this.state.availableGames.find(game => game.address.tournamentServerAccessibleAddress === currentGameAddress )
         return currentGameAddress === undefined || currentGameAddress === null || currentGameAddress.length === 0 
             || currentGame === undefined || currentGame.healthy === false;
