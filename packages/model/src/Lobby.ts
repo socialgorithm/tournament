@@ -1,8 +1,10 @@
 import { Player } from "./Player";
+import { Tournament } from "./Tournament";
 
 export class Lobby {
   admin: Player;
-  token: string;
-  players: Player[];
   bannedPlayers: string[];
+  players: Player[];
+  token: string;
+  tournament?: Tournament
 }

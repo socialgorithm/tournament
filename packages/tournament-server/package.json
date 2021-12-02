@@ -14,8 +14,7 @@
     "test": "mocha -r ts-node/register src/**/*.spec.ts && npm run lint && npm run build",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
-    "docs": "typedoc --out docs/ --mode modules ./src --theme minimal",
-    "postinstall": "npm run build"
+    "docs": "typedoc --out docs/ --mode modules ./src --theme minimal"
   },
   "repository": {
     "type": "git",
@@ -37,7 +36,7 @@
   },
   "homepage": "https://github.com/socialgorithm/tournament-server#readme",
   "dependencies": {
-    "@socialgorithm/model": "^10.4.0",
+    "@socialgorithm/model": "^10.5.0",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
     "debug": "^4.3.2",
