@@ -23,7 +23,6 @@ export class TournamentRunner {
     this.tournament = {
       finished: false,
       lobby,
-      matches: null,
       options,
       players,
       ranking: [],
