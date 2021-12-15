@@ -57,6 +57,13 @@ export class LobbyManager {
                 },
                 player: data.player,
             });
+            this.pubSub.publish(Events.PlayerShouldDisconnect, {
+                event: LegacyEvents.LOBBY_EXCEPTION,
+                payload: {
+                    error: "Unable to join lobby, ensure token is correct",
+                },
+                player: data.player,
+            });
         }
     }
 

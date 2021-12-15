@@ -74,6 +74,7 @@ export class SocketServer {
     this.pubSub.subscribe(PubSubEvents.BroadcastNamespaced, this.sendMessageToNamespace);
     this.pubSub.subscribe(PubSubEvents.AddPlayerToNamespace, this.addPlayerToNamespace);
     this.pubSub.subscribe(PubSubEvents.GameList, this.sendGameListToEveryone);
+    this.pubSub.subscribe(PubSubEvents.PlayerShouldDisconnect, this.disconnectPlayer);
   }
 
   private addPlayerToNamespace = (data: Messages.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
@@ -134,6 +135,15 @@ export class SocketServer {
       case LegacyEvents.LOBBY_PLAYER_KICK:
         return PubSubEvents.LobbyPlayerKick;
     }
+  }
+
+  private disconnectPlayer = (data: Messages.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
+    if (!this.playerSockets[data.player]) {
+      debug("Error disconnecting player (%s), player socket does not exist", data.player);
+      return;
+    }
+    debug("Disconnecting player (%s)", data.player);
+    this.playerSockets[data.player].disconnect();
   }
 
   private onPlayerDisconnect = (player: Player) => () => {

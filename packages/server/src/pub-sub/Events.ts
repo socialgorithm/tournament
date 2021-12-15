@@ -13,4 +13,5 @@ export enum Events {
   LobbyPlayerBan = "LobbyPlayerBan",
   LobbyPlayerKick = "LobbyPlayerKick",
   PlayerDisconnected = "PlayerDisconnected",
+  PlayerShouldDisconnect = "PlayerShouldDisconnect",
 }
