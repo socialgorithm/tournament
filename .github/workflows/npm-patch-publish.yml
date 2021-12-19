@@ -24,8 +24,16 @@ jobs:
         npm test
       env:
         CI: true
-    - name: patch and publish
+    - name: create patch version
       run: |
-        npm run patch:publish
+        npm run version:patch
+    - name: commit and tag version
+      run: |
+        git commit
+        git push
+        git push --tags
+    - name: publish version
+      run: |
+        npm run publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
