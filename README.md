@@ -1,6 +1,6 @@
-# Socialgorithm Core Monorepo
+# Socialgorithm Server
 
-An monorepo containing the Socialgorithm data model and tournament server, used for running competitions.
+An monorepo containing the Socialgorithm data model, tournament server and UI, used for running competitions.
 
 Usage Guides:
 * [Model](packages/model/README.md)
