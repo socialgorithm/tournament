@@ -6,7 +6,7 @@ If this is your first time here, start with our [documentation](https://socialgo
 
 Usage Guides:
 * [Data Model](packages/model/README.md)
-* [Tournament Server](packages/tournament-server/README.md)
+* [Tournament Server](packages/server/README.md)
 * [UI](packages/ui/README.md)
 
 ## Developer Guide
