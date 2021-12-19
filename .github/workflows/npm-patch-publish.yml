@@ -33,7 +33,6 @@ jobs:
         npm run version:patch
     - name: commit and tag version
       run: |
-        git commit
         git push
         git push --tags
     - name: publish version
