@@ -1,4 +1,4 @@
-name: NPM/Lerna version - patch and publish
+name: Create patch and publish to NPM
 
 on:
   workflow_dispatch
