@@ -12,7 +12,7 @@
     "test": "lerna run test",
     "publish": "lerna publish",
     "publish:prerelease": "lerna publish --dist-tag prerelease",
-    "version": "lerna version",
+    "version:prompt": "lerna version",
     "version:patch": "lerna version patch -y"
   }
 }

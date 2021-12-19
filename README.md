@@ -45,7 +45,7 @@ If you are releasing a patch version (no breaking changes), trigger the `patch a
 
 Increment the version:
 ```
-npm run version
+npm run version:prompt
 ```
 
 This will prompt you to choose the type of the next version (e.g. patch, minor, major)
