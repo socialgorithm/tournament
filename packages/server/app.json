@@ -1,0 +1,9 @@
+{
+    "name": "SG Tournament Server",
+    "description": "Tournament Server for any Socialgorithm Game",
+    "repository": "https://github.com/socialgorithm/tournament",
+    "logo": "https://socialgorithm.org/assets/avatar.png",
+    "keywords": ["tournament", "game", "socialgorithm"],
+    "image": "heroku/nodejs",
+    "env": {}
+  }

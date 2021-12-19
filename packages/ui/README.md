@@ -2,7 +2,7 @@
 
 This is the web client that participants use to play, administer or spectate Socialgorithm games.
 
-It connects to a running [Tournament Server](https://github.com/socialgorithm/tournament-server/) and allows you to navigate the [Socialgorithm API](https://socialgorithm.org/docs/sections/architecture/api.html).
+It connects to a running [Tournament Server](https://github.com/socialgorithm/tournament/) and allows you to navigate the [Socialgorithm API](https://socialgorithm.org/docs/sections/architecture/api.html).
 
 ## Getting started
 
