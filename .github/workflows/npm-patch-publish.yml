@@ -15,6 +15,10 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
+    - name: set git author info
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
     - name: npm install, build, and test
       run: |
         npm install -g npm
