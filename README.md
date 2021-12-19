@@ -35,21 +35,27 @@ npm run build
 npm run test
 ```
 
-### Increment version
+### Publishing packages
 
+#### From Github Actions
+
+If you are releasing a patch version (no breaking changes), trigger the `patch and publish` Github actions workflow.
+
+#### From command line
+
+Increment the version:
 ```
 npm run version
 ```
 
 This will prompt you to choose the type of the next version (e.g. patch, minor, major)
 
-### Publishing NPM package
-
+Publish the new package:
 ```
 npm run publish
 ```
 
-This will publish to the latest tag in NPM.
+This will publish the version in NPM.
 
 You can also publish a prerelease tag to test changes:
 

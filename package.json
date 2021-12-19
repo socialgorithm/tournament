@@ -13,6 +13,6 @@
     "publish": "lerna publish",
     "publish:prerelease": "lerna publish --dist-tag prerelease",
     "version": "lerna version",
-    "patch:publish": "lerna version patch -y && lerna publish"
+    "version:patch": "lerna version patch -y"
   }
 }
