@@ -1,6 +1,6 @@
 {
     "name": "@socialgorithm/ui",
-    "version": "10.5.2",
+    "version": "10.5.3",
     "description": "Socialgorithm Battle UI",
     "private": true,
     "scripts": {
@@ -28,7 +28,7 @@
     },
     "homepage": "https://play.socialgorithm.org",
     "dependencies": {
-        "@socialgorithm/model": "^10.5.2",
+        "@socialgorithm/model": "^10.5.3",
         "@socialgorithm/ultimate-ttt": "^10.0.2",
         "classnames": "^2.3.1",
         "connected-react-router": "^6.9.1",
