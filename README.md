@@ -1,10 +1,13 @@
-# Socialgorithm Server
+# Socialgorithm Tournament Source
 
-An monorepo containing the Socialgorithm data model, tournament server and UI, used for running competitions.
+An monorepo containing the Socialgorithm tournament server, data model, and UI, used for running tournaments.
+
+If this is your first time here, start with our [documentation](https://socialgorithm.org/docs).
 
 Usage Guides:
-* [Model](packages/model/README.md)
+* [Data Model](packages/model/README.md)
 * [Tournament Server](packages/tournament-server/README.md)
+* [UI](packages/ui/README.md)
 
 ## Developer Guide
 
