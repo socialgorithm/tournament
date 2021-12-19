@@ -1,4 +1,4 @@
-name: NPM publish force (from package)
+name: Force publish to NPM (if missed publishing)
 
 on:
   workflow_dispatch
