@@ -10,7 +10,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/socialgorithm/ui.git"
+        "url": "git+https://github.com/socialgorithm/tournament.git"
     },
     "keywords": [
         "ultimate",
@@ -24,7 +24,7 @@
     "author": "Socialgorithm",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/socialgorithm/ui/issues"
+        "url": "https://github.com/socialgorithm/tournament/issues"
     },
     "homepage": "https://play.socialgorithm.org",
     "dependencies": {
