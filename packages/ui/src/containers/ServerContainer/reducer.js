@@ -6,7 +6,7 @@ import * as constants from './constants';
 
 const hosts = {
   local: 'http://localhost:3141',
-  online: 'https://sg-tournament.herokuapp.com',
+  online: 'https://server.socialgorithm.org',
 };
 
 export const initialState = Map({

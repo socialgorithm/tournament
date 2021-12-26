@@ -26,7 +26,7 @@
     "bugs": {
         "url": "https://github.com/socialgorithm/tournament/issues"
     },
-    "homepage": "https://play.socialgorithm.org",
+    "homepage": "https://tournaments.socialgorithm.org",
     "dependencies": {
         "@socialgorithm/model": "^10.5.4",
         "@socialgorithm/ultimate-ttt": "^10.0.2",
