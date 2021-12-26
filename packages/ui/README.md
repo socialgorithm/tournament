@@ -2,19 +2,11 @@
 
 This is the web client that participants use to play, administer or spectate Socialgorithm games.
 
-It connects to a running [Tournament Server](https://github.com/socialgorithm/tournament/) and allows you to navigate the [Socialgorithm API](https://socialgorithm.org/docs/sections/architecture/api.html).
+A version of this client is always running at [tournaments.socialgorithm.org](https://tournaments.socialgorithm.org), hosted on Netlify.
 
-## Getting started
-
-A version of this client is always running at [play.socialgorithm.org](https://play.socialgorithm.org)
+It connects to a running [Tournament Server](https://server.socialgorithm.org)([Source])(https://github.com/socialgorithm/tournament/) and allows you to navigate the [Socialgorithm API](https://socialgorithm.org/docs/sections/architecture/api.html).
 
 If you want to deploy your own version clone this repository and run `npm start`.
-
-## Dev stuff
-
-This client is built with React, and some other modern libraries. It was bootstrapped from [create-react-app](https://github.com/facebookincubator/create-react-app) so you may already be familiar with the structure.
-
-We use [Semantic UI](http://semantic-ui.com/) for the UI/UX.
 
 ### Running Locally
 
@@ -25,10 +17,8 @@ npm install
 npm run start
 ```
 
-### Deploying Changes
+## Dev stuff
 
-To deploy changes, run `npm run deploy`, then go to Settings > GitHub Pages > Custom Domain > Type 'play.socialgorithm.org'
+This client is built with React, and some other modern libraries. It was bootstrapped from [create-react-app](https://github.com/facebookincubator/create-react-app) so you may already be familiar with the structure.
 
-## Contributing
-
-Feel free to improve this in any way! You'll be added to the list of contributors here and you'll help people build awesome things :)
+We use [Semantic UI](http://semantic-ui.com/) for the UI/UX.

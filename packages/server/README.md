@@ -6,14 +6,14 @@ Game-agnostic tournament server
 
 ## Run
 
-An online version of this server is always running on [Heroku](https://sg-tournament.herokuapp.com/).
+An online version of this server is always running at [server.socialgorithm.org](https://server.socialgorithm.com/), deployed using DigitalOcean.
 
 To run locally:
 
 ```console
 $ npx @socialgorithm/tournament-server -h
 
-tournament-server v7.0.0
+tournament-server v10.0.0
 
   Socialgorithm Tournament Server
 
@@ -21,12 +21,6 @@ Options
 
 ...
 ```
-
-## Deploy
-
-You can directly deploy the server to Heroku for a quick start:
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/socialgorithm/tournament/packages/tournament-server/tree/master)
 
 ## Developer Guide
 
