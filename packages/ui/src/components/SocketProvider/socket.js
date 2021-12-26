@@ -7,6 +7,7 @@ export const connect = (props, state) => {
     }
     const socket = io(props.host, {
         reconnection: true,
+        transports: ['websocket'],
         timeout: 2000,
         query: {
             client: true,
