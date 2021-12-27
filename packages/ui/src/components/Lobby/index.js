@@ -21,15 +21,17 @@ export default (props) => {
     return (
         <Container textAlign='center' style={ dividerStyle }>
             <h1><Icon name='game'/> Tournaments</h1>
-            <Button
-                primary
-                icon='add'
-                content='Create'
-                onClick={ createTournament }
-            />
             <Grid columns={ 2 } textAlign='left' style={ dividerStyle }>
                 <Grid.Row>
                     <Grid.Column>
+                        <div textAlign='center'>
+                            <Button
+                                primary
+                                icon='add'
+                                content='Create'
+                                onClick={ createTournament }
+                            />
+                        </div>
                         <h2>Creating a Tournament</h2>
                         <p>Players play against each other by connecting to Tournaments.</p>
                         <p>When you create one, you'll be the <b>admin</b> for that tournament, which allows you to configure it, manage the list of players, and choose when it starts.</p>

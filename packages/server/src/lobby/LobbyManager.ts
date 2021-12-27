@@ -51,7 +51,7 @@ export class LobbyManager {
         if (!lobbyRunner) {
             // Joining a non-existing lobby
             this.pubSub.publish(Events.ServerToPlayer, {
-                event: LegacyEvents.EVENTS.LOBBY_EXCEPTION,
+                event: LegacyEvents.LOBBY_EXCEPTION,
                 payload: {
                     error: "Unable to join lobby, ensure token is correct",
                 },

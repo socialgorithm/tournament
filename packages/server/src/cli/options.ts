@@ -1,5 +1,6 @@
 import * as commandLineArgs from "command-line-args";
 import * as getUsage from "command-line-usage";
+import { ITournamentServerOptions } from "../TournamentServerOptions";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const info = require("../../package.json");
@@ -111,4 +112,13 @@ export default (): IOptions => {
   return options as IOptions;
 };
 
-// ------------------------------------------- //
+export function toTournamentServerOptions(options: IOptions): ITournamentServerOptions {
+  return  {
+      games: options.game.map(game => {
+          const [tournamentServerAccessibleAddress, playerAccessibleAddress] = game.split(",");
+          return { tournamentServerAccessibleAddress, playerAccessibleAddress };
+      }),
+      port: options.port,
+      fixedLobbyName: options.fixedLobbyName,
+  };
+}

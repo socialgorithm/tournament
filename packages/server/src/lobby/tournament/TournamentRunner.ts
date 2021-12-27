@@ -3,8 +3,7 @@ const debug = require("debug")("sg:tournamentRunner");
 
 import { v4 as uuid } from "uuid";
 
-import { Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
-import { EVENTS } from "@socialgorithm/model/dist/LegacyEvents";
+import { LegacyEvents, Match, MatchOptions, Player, Tournament, TournamentOptions } from "@socialgorithm/model";
 import { Events } from "../../pub-sub";
 import PubSub from "../../pub-sub/PubSub";
 import DoubleEliminationMatchmaker from "./matchmaker/DoubleEliminationMatchmaker";
@@ -71,7 +70,7 @@ export class TournamentRunner {
 
     // Notify
     this.pubSub.publish(Events.BroadcastNamespaced, {
-      event: EVENTS.LOBBY_TOURNAMENT_STARTED,
+      event: LegacyEvents.LOBBY_TOURNAMENT_STARTED,
       namespace: this.tournament.lobby,
       payload: {
         tournament: this.getTournament(),
@@ -145,7 +144,7 @@ export class TournamentRunner {
 
   private sendStats = (): void => {
     this.pubSub.publish(Events.BroadcastNamespaced, {
-      event: EVENTS.TOURNAMENT_STATS,
+      event: LegacyEvents.TOURNAMENT_STATS,
       namespace: this.tournament.lobby,
       payload: {
         ...this.getTournament(),
