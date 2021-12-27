@@ -12,6 +12,7 @@
     "test": "lerna run test",
     "publish": "lerna publish",
     "publish:prerelease": "lerna publish --dist-tag prerelease",
+    "publish:frompkg": "lerna publish -y from-package --no-verify-access",
     "version:prompt": "lerna version",
     "version:patch": "lerna version patch -y"
   }

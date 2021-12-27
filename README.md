@@ -42,7 +42,7 @@ npm run test
 
 #### From Github Actions
 
-If you are releasing a patch version (no breaking changes), simply trigger the [Create patch and publish to NPM](https://github.com/socialgorithm/server/actions/workflows/npm-patch-publish.yml) Github actions workflow.
+If you are releasing a patch version (no breaking changes), simply trigger the [Create patch and publish to NPM](https://github.com/socialgorithm/server/actions/workflows/npm_patch_and_publish.yml) Github actions workflow.
 
 #### From command line
 

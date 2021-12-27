@@ -1,4 +1,4 @@
-name: Publish to NPM
+name: Force publish to NPM (if missed publishing)
 
 on:
   workflow_dispatch
@@ -24,8 +24,8 @@ jobs:
         npm test
       env:
         CI: true
-    - name: lerna publish
+    - name: npm publish from packages/tags
       run: |
-        lerna publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+        npm run publish:frompkg
+      env: 
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
