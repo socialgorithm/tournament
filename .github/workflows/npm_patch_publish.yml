@@ -35,6 +35,4 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: push version commit and tag to github
-      run: |
-        git push
-        git push --tags
+      run: git push --follow-tags
