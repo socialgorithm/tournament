@@ -6,10 +6,11 @@
   "scripts": {
     "start": "node dist/index.js",
     "start:dev": "nodemon",
+    "build:assets": "copyfiles -f src/public/* dist/public",
     "debug": "npm run build && node --inspect-brk dist/index.js",
     "dev": "tsc && ts-node -r tsconfig-paths/register --files src/index.ts",
-    "start:opts": "tsc && ts-node bin/index.js",
-    "build": "tsc",
+    "start:opts": "tsc && ts-node dist/index.js",
+    "build": "tsc && npm run build:assets",
     "build:watch": "tsc -w",
     "test": "mocha -r ts-node/register src/**/*.spec.ts && npm run lint && npm run build",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
@@ -28,8 +29,11 @@
   "engines": {
     "node": ">= 16"
   },
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "tournament-server": "bin/index.js"
+    "tournament-server": "dist/index.js"
   },
   "bugs": {
     "url": "https://github.com/socialgorithm/tournament/issues"
@@ -57,6 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "chai": "^4.3.4",
+    "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",

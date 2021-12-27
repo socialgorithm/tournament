@@ -55,12 +55,12 @@ export class SocketServer {
 
       // Forward the socket events to the PubSub system
       const listenToEvents = [
-        LegacyEvents.EVENTS.LOBBY_CREATE,
-        LegacyEvents.EVENTS.LOBBY_TOURNAMENT_START,
-        LegacyEvents.EVENTS.LOBBY_TOURNAMENT_CONTINUE,
-        LegacyEvents.EVENTS.LOBBY_JOIN,
-        LegacyEvents.EVENTS.LOBBY_PLAYER_BAN,
-        LegacyEvents.EVENTS.LOBBY_PLAYER_KICK,
+        LegacyEvents.LOBBY_CREATE,
+        LegacyEvents.LOBBY_TOURNAMENT_START,
+        LegacyEvents.LOBBY_TOURNAMENT_CONTINUE,
+        LegacyEvents.LOBBY_JOIN,
+        LegacyEvents.LOBBY_PLAYER_BAN,
+        LegacyEvents.LOBBY_PLAYER_KICK,
       ];
       listenToEvents.forEach(event => {
         socket.on(event, this.onMessageFromSocket(player, event));
@@ -111,7 +111,7 @@ export class SocketServer {
   /**
    * Generic event forwarder from the socket to the pubsub bus
    */
-  private onMessageFromSocket = (player: Player, event: LegacyEvents.EVENTS) => (payload: unknown) => {
+  private onMessageFromSocket = (player: Player, event: LegacyEvents) => (payload: unknown) => {
     const data = {
       payload,
       player,
@@ -119,19 +119,19 @@ export class SocketServer {
     this.pubSub.publish(this.translateSocketMessageToPubSub(event), data);
   }
 
-  private translateSocketMessageToPubSub(socketEvent: LegacyEvents.EVENTS): PubSubEvents {
+  private translateSocketMessageToPubSub(socketEvent: LegacyEvents): PubSubEvents {
     switch (socketEvent) {
-      case LegacyEvents.EVENTS.LOBBY_CREATE:
+      case LegacyEvents.LOBBY_CREATE:
         return PubSubEvents.LobbyCreate;
-      case LegacyEvents.EVENTS.LOBBY_TOURNAMENT_START:
+      case LegacyEvents.LOBBY_TOURNAMENT_START:
         return PubSubEvents.LobbyTournamentStart;
-      case LegacyEvents.EVENTS.LOBBY_TOURNAMENT_CONTINUE:
+      case LegacyEvents.LOBBY_TOURNAMENT_CONTINUE:
         return PubSubEvents.LobbyTournamentContinue;
-      case LegacyEvents.EVENTS.LOBBY_JOIN:
+      case LegacyEvents.LOBBY_JOIN:
         return PubSubEvents.LobbyJoin;
-      case LegacyEvents.EVENTS.LOBBY_PLAYER_BAN:
+      case LegacyEvents.LOBBY_PLAYER_BAN:
         return PubSubEvents.LobbyPlayerBan;
-      case LegacyEvents.EVENTS.LOBBY_PLAYER_KICK:
+      case LegacyEvents.LOBBY_PLAYER_KICK:
         return PubSubEvents.LobbyPlayerKick;
     }
   }
@@ -149,7 +149,7 @@ export class SocketServer {
    * @param res
    */
   private handler(req: http.IncomingMessage, res: http.ServerResponse) {
-    fs.readFile(__dirname + "/../../public/index.html",
+    fs.readFile(__dirname + "/../public/index.html",
       (err: unknown, data: unknown) => {
         if (err) {
           res.writeHead(500);

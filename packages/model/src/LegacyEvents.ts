@@ -1,4 +1,4 @@
-export enum EVENTS {
+export const enum LegacyEvents {
   // PubSub Events
   BROADCAST = "BROADCAST",
   BROADCAST_NAMESPACED = "BROADCAST_NAMESPACED",

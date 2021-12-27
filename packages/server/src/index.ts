@@ -1,10 +1,9 @@
-import { toTournamentServerOptions } from "./cli";
-import getOptions, {DEFAULT_OPTIONS} from "./cli/options";
+import parseCommandLineOptions, { DEFAULT_OPTIONS, toTournamentServerOptions } from "./cli/options";
 import TournamentServer from "./TournamentServer";
 
 const options = {
     ...DEFAULT_OPTIONS,
-    ...getOptions(),
+    ...parseCommandLineOptions(),
 };
 
 new TournamentServer(toTournamentServerOptions(options));
