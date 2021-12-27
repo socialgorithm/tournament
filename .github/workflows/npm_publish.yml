@@ -1,4 +1,4 @@
-name: Force publish to NPM (if missed publishing)
+name: Publish to NPM
 
 on:
   workflow_dispatch
@@ -26,6 +26,6 @@ jobs:
         CI: true
     - name: lerna publish
       run: |
-        lerna publish -y from-package
+        lerna publish -y 
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
