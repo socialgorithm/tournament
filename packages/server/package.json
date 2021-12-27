@@ -7,10 +7,11 @@
     "start": "node dist/index.js",
     "start:dev": "nodemon",
     "build:assets": "copyfiles -f src/public/* dist/public",
+    "build:binary": "copyfiles -f src/bin/* dist/bin",
     "debug": "npm run build && node --inspect-brk dist/index.js",
     "dev": "tsc && ts-node -r tsconfig-paths/register --files src/index.ts",
     "start:opts": "tsc && ts-node dist/index.js",
-    "build": "tsc && npm run build:assets",
+    "build": "tsc && npm run build:assets && npm run build:binary",
     "build:watch": "tsc -w",
     "test": "mocha -r ts-node/register src/**/*.spec.ts && npm run lint && npm run build",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
@@ -33,7 +34,7 @@
     "dist"
   ],
   "bin": {
-    "tournament-server": "dist/index.js"
+    "tournament-server": "dist/bin/index.js"
   },
   "bugs": {
     "url": "https://github.com/socialgorithm/tournament/issues"
