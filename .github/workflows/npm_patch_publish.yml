@@ -29,14 +29,12 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
     - name: create patch version
-      run: |
-        npm run version:patch
-    - name: commit and tag version
+      run: npm run version:patch
+    - name: publish version
+      run: npm run publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: push version commit and tag to github
       run: |
         git push
         git push --tags
-    - name: publish version
-      run: |
-        npm run publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
