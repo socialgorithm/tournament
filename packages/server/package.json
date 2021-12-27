@@ -1,6 +1,6 @@
 {
   "name": "@socialgorithm/tournament-server",
-  "version": "10.5.9",
+  "version": "10.6.0-alpha.0",
   "description": "Socialgorithm Tournament Server",
   "main": "index.js",
   "scripts": {
@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/socialgorithm/tournament#readme",
   "dependencies": {
-    "@socialgorithm/model": "^10.5.9",
+    "@socialgorithm/model": "^10.6.0-alpha.0",
     "command-line-args": "^5.2.0",
     "command-line-usage": "^6.1.1",
     "debug": "^4.3.2",
