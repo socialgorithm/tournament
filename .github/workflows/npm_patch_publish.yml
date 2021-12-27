@@ -31,12 +31,12 @@ jobs:
     - name: create patch version
       run: |
         npm run version:patch
-    - name: commit and tag version
-      run: |
-        git push
-        git push --tags
+    - name: push version commit to github
+      run: git push
     - name: publish version
       run: |
         npm run publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: push version tag to github
+      run: git push --tags
