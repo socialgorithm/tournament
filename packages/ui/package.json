@@ -1,6 +1,6 @@
 {
     "name": "@socialgorithm/ui",
-    "version": "10.5.5",
+    "version": "10.5.6",
     "description": "Socialgorithm Battle UI",
     "private": true,
     "scripts": {
@@ -28,7 +28,7 @@
     },
     "homepage": "https://tournaments.socialgorithm.org",
     "dependencies": {
-        "@socialgorithm/model": "^10.5.5",
+        "@socialgorithm/model": "^10.5.6",
         "@socialgorithm/ultimate-ttt": "^10.0.2",
         "classnames": "^2.3.1",
         "connected-react-router": "^6.9.1",
