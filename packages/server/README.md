@@ -6,7 +6,7 @@ Game-agnostic tournament server
 
 ## Run
 
-An online version of this server is always running at [server.socialgorithm.org](https://server.socialgorithm.com/), deployed using DigitalOcean.
+An online version of this server is always running at [server.socialgorithm.org](https://server.socialgorithm.org/), deployed using DigitalOcean.
 
 To run locally:
 
