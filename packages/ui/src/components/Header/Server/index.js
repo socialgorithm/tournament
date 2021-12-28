@@ -38,12 +38,13 @@ class Server extends React.Component {
     if (this.props.status === 'disconnected' || this.props.status === 'connecting') {
       status = (
         <Popup
+          position='bottom center'
           content='Click to connect to a server'
           trigger={
-            <div>
+            <Grid.Column>
               <Icon name='plug' color='red'/>
               { this.props.content || 'Disconnected' }
-            </div>
+            </Grid.Column>
           }
         />
       );
