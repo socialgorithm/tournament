@@ -32,7 +32,7 @@ export const connect = (props, state) => {
     socket.on('lobby created', (data) => {
         const lobby = data.lobby;
         // Redirect to this token
-        props.history.push(`/tournament/${lobby.token}`);
+        props.history.push(`/${lobby.token}`);
     });
 
     socket.on('lobby exception', (data) => {

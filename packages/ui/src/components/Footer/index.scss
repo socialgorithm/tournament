@@ -1,9 +1,12 @@
 footer {
-    background-color: #222;
-    padding: 25px 0;
-    color: rgba(255,255,255,.3);
+    position: absolute;
+    bottom: 0;
+    height: 2.5em;
+    padding-top: 0.5em;
+    width: 100%;
+    background-color: #3c4b64;
+    color: #ffffff4d;
     text-align: center;
-    margin-top: 3em;
 }
 
 footer a {
