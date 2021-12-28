@@ -42,6 +42,7 @@ class LobbyAdmin extends React.PureComponent {
             connectedPlayersDrop: false,
             showTournament: true,
             joinCommandCopyIcon: 'copy',
+            lobbyNameCopyIcon: 'copy',
         };
     }
 
@@ -395,22 +396,33 @@ class LobbyAdmin extends React.PureComponent {
             padding: '1em 1em 0',
             fontSize: '0.9em',
         };
-        const joinCommandStyle= {
+        const copyableTextStyle= {
             marginLeft: '5px',
         }
         const host = this.props.socket.socket.io.uri;
         return (
             <div style={ connectStyle }>
-                <p>Connect your player:</p>
+                <p>Connect a player:</p>
                 <pre className='code'>
                     <Button
                     size='mini'
                     icon= { this.state.joinCommandCopyIcon }
-                    title='Click to copy'
+                    title='Click to copy join command'
                     onClick={ this.copyJoinCommandToClipboard }
                     />
-                    <span id='joincommand' style={ joinCommandStyle }>
-                       uabc --host "{host}" --lobby "{this.token()}" --token "your team name" -f "path/to/executable" 
+                    <span id='joincommand' style={ copyableTextStyle }>
+                       uabc --host "{host}" --lobby "{this.token()}" -f "path/to/executable" --token "your team name" 
+                    </span>
+                </pre>
+                <pre className='code'>
+                    <Button
+                    size='mini'
+                    icon= { this.state.lobbyNameCopyIcon }
+                    title='Click to copy lobby name'
+                    onClick={ this.copyLobbyNameToClipboard }
+                    />
+                    <span id='lobbyname' style={ copyableTextStyle }>
+                       {this.token()}
                     </span>
                 </pre>
             </div>
@@ -427,6 +439,18 @@ class LobbyAdmin extends React.PureComponent {
         document.execCommand("copy");
         this.setState({joinCommandCopyIcon: 'check'});
         setTimeout(() => { this.setState({joinCommandCopyIcon: 'copy'} ) }, 2000);
+    };
+
+    copyLobbyNameToClipboard = () => {
+        const textToCopy = document.getElementById('lobbyname').textContent;
+        const textArea = document.createElement('textarea');
+        textArea.textContent = textToCopy;
+        document.body.append(textArea);
+        textArea.select();
+        textArea.setSelectionRange(0, 99999); /*For mobile devices*/
+        document.execCommand("copy");
+        this.setState({lobbyNameCopyIcon: 'check'});
+        setTimeout(() => { this.setState({lobbyNameCopyIcon: 'copy'} ) }, 2000);
     };
 
     addAllConnectedPlayers = () => {
@@ -456,21 +480,6 @@ class LobbyAdmin extends React.PureComponent {
         const players = type === 'connected' ? this.state.lobby.players : this.state.activePlayers;
         players.sort();
         const playerDropKey = type + 'PlayersDrop';
-        
-        let addAll = (
-            <div style={ footerStyle }>
-                <a href={ window.location }><Icon name='copy outline' /> { this.token() }</a>
-            </div>
-        );
-        if (displayAddAll) {
-            addAll = (
-                <div style={ footerStyle }>
-					<button className="link" onClick={ this.addAllConnectedPlayers }>
-                        <Icon name='plus' /> Add All
-                    </button>
-				</div>
-            );
-        }
 
 		return (
 			<div style={ { paddingBottom: '2em', height: 'calc(100% - 2em)' } }>
@@ -505,7 +514,11 @@ class LobbyAdmin extends React.PureComponent {
 						<p style={{position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: '100%', textAlign: 'center'}}>{dropText}</p>
 					}
 				</div>
-				{ addAll }
+				{ displayAddAll && <div style={ footerStyle }>
+					<button className="link" onClick={ this.addAllConnectedPlayers }>
+                        Add All <Icon name='chevron right' />
+                    </button>
+				</div> }
 			</div>
 		);
 	};
@@ -541,7 +554,7 @@ class LobbyAdmin extends React.PureComponent {
 		                    { this.renderPlayers({titleText: 'Connected Players', type: 'connected', dropText: 'Exclude player from game', infoText: 'Players connected to the lobby', displayAddAll: true}) }
 	                    </Grid.Column>
 	                    <Grid.Column width={ 3 }>
-		                    { this.renderPlayers({titleText: 'Players', type: 'active', dropText: 'Include player in game', infoText: 'Players to be included in the tournament'}) }
+		                    { this.renderPlayers({titleText: 'Competing Players', type: 'active', dropText: 'Include player in game', infoText: 'Players to be included in tournament matchmaking'}) }
 	                    </Grid.Column>
                         <Grid.Column width={ 10 }>
                             { this.renderLoader() }
