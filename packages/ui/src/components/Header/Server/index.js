@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Popup, Grid, Label, Button, Form, Modal, Icon } from 'semantic-ui-react';
+import { Message, Popup, Grid, Label, Button, Form, Modal, Icon, Menu } from 'semantic-ui-react';
 
 class Server extends React.Component {
   constructor(props) {
@@ -41,8 +41,8 @@ class Server extends React.Component {
           content='Click to connect to a server'
           trigger={
             <div>
-              <Label circular color='red' empty style={ {marginRight: '10px'} }/>
-              { this.props.content || 'Connect' }
+              <Icon name='plug' color='red'/>
+              { this.props.content || 'Disconnected' }
             </div>
           }
         />
@@ -74,10 +74,10 @@ class Server extends React.Component {
       status = (
         <Popup
           trigger={
-            <div>
-              <Label circular color='green' empty style={ {marginRight: '10px'} }/>
+            <p>
+              <Icon name='plug' color='green'/>
               Connected
-            </div>
+            </p>
           }
         >
           <Popup.Content>
@@ -93,7 +93,7 @@ class Server extends React.Component {
       modalContent = (
         <Grid columns={ 2 }>
           <Grid.Column>
-            <Label circular color='green' empty style={ {marginRight: '10px'} }/>
+            <Label circular color='green' empty style={ {marginRight: '1em'} }/>
             Connected to { this.props.host }
           </Grid.Column>
           <Grid.Column>
@@ -104,13 +104,7 @@ class Server extends React.Component {
     }
 
     const button = (
-      <Button
-        basic
-        inverted={ this.props.inverted }
-        compact
-        className='as-text'
-        content={ status }
-      />
+      <a href>{ status }</a>
     );
 
     return (

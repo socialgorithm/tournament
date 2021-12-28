@@ -11,13 +11,7 @@ class Header extends React.Component {
 
     this.sections = [
       {
-        url: '/',
-        name: 'Home',
-        icon: 'home',
-        exact: true,
-      },
-      {
-        url: '/tournaments',
+        url: '/tournament',
         name: 'Tournaments',
         icon: 'game',
       },
@@ -55,18 +49,19 @@ class Header extends React.Component {
         }
         <Menu.Item href="https://socialgorithm.org/docs/" target='_blank'>
           <Icon name='book'/>
-          Docs
+          Documentation
         </Menu.Item>
 
         <Menu.Menu position='right'>
           <Menu.Item href="https://github.com/socialgorithm" target='_blank'>
             <Icon name='github'/>
+            Source Code
           </Menu.Item>
           <Menu.Item href="https://socialgorithm-slack.herokuapp.com" target='_blank'>
             <Icon name='slack hash'/>
-            Slack
+            Community
           </Menu.Item>
-          <Menu.Item>
+          <Menu.Item href>
             <ServerContainer inverted />
           </Menu.Item>
         </Menu.Menu>

@@ -3,11 +3,11 @@ import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import queryString from 'qs';
 import 'react-toastify/dist/ReactToastify.css';
+import { Grid } from 'semantic-ui-react';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import SocketContainer from '../../containers/SocketContainer';
-import Home from '../Home';
 import Tournaments from '../Tournaments';
 import Replay from '../Replay';
 import NotFound from '../NotFoundPage';
@@ -23,17 +23,21 @@ class App extends React.PureComponent {
     }
     return (
       <SocketContainer>
-        <Header />
         <ToastContainer />
-        <div className='main-content'>
-          <Switch>
-            <Route exact path='/' component={ Home } />
-            <Route path='/tournaments' component={ Tournaments } />
-            <Route path='/replay' component={ Replay } />
-            <Route path='' component={ NotFound } />
-          </Switch>
-        </div>
-        <Footer />
+        <Grid columns={ 1 } padded>
+          <Header />
+          <Grid.Row className='main-container'>
+            <Switch>
+              <Route exact path="/"><Redirect to="/tournament"/></Route>
+              <Route path='/tournament' component={ Tournaments } />
+              <Route path='/replay' component={ Replay } />
+              <Route path='' component={ NotFound } />
+            </Switch>
+          </Grid.Row>
+          <Grid.Row className='footer-container'>
+            <Footer />
+          </Grid.Row>
+        </Grid>
       </SocketContainer>
     );
   }
