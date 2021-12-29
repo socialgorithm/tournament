@@ -25,7 +25,7 @@ class Header extends React.Component {
 
   render() {
     return (
-      <Menu inverted className='main-header'>
+      <Menu stackable inverted className='main-header'>
         <Menu.Item header
                    as='a'
                    className='socialgorithm-logo animated-hue'
