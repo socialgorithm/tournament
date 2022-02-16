@@ -80,7 +80,7 @@ export default class MatchPage extends React.PureComponent {
     return (
       <Button
         icon='play'
-        content={this.props.tournament.matches.length > 0 ? 'Play Next Match' : 'Start Tournament'}
+        content={this.props.tournament.matches == null ? 'No matches to play' : this.props.tournament.matches.length > 0 ? 'Play next match' : 'Start Tournament'}
         onClick={this.props.continueMatches}
         disabled={ disabled }
         size='tiny'
