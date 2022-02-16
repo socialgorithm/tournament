@@ -61,6 +61,11 @@ export type ADD_PLAYER_TO_NAMESPACE_MESSAGE = {
   namespace: string,
 };
 
+export type PLAYER_ADVICE_MESSAGE = {
+  player: Player,
+  namespace: string,
+};
+
 export type LOBBY_JOIN_MESSAGE = {
   player: Player,
   payload: {

@@ -137,7 +137,7 @@ export class SocketServer {
     }
   }
 
-  private disconnectPlayer = (data: Messages.ADD_PLAYER_TO_NAMESPACE_MESSAGE) => {
+  private disconnectPlayer = (data: Messages.PLAYER_ADVICE_MESSAGE) => {
     if (!this.playerSockets[data.player]) {
       debug("Error disconnecting player (%s), player socket does not exist", data.player);
       return;
