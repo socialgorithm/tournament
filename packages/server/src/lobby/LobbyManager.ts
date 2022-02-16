@@ -60,7 +60,7 @@ export class LobbyManager {
             this.pubSub.publish(Events.PlayerShouldDisconnect, {
                 event: LegacyEvents.LOBBY_EXCEPTION,
                 payload: {
-                    error: "Unable to join lobby, ensure token is correct",
+                    error: "Unable to join lobby, ensure lobby name/token is correct",
                 },
                 player: data.player,
             });
